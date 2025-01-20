@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Roller;
+import frc.robot.subsystems.Shifter;
+
 
 public class RobotContainer 
 {
@@ -29,11 +31,13 @@ public class RobotContainer
 
     private boolean useDrivetrain           = false;
     private boolean useRoller               = false;
+    private boolean useShifter              = false;
 
     public final boolean fullRobot;
 
     private final Drivetrain drivetrain;
     private final Roller roller;
+    private final Shifter shifter;
 
     RobotContainer() 
     {
@@ -41,6 +45,7 @@ public class RobotContainer
         
         drivetrain          = (useFullRobot || useDrivetrain)        ? new Drivetrain()             : null;
         roller              = (useFullRobot || useRoller)            ? new Roller()                 : null;
+        shifter             = (useFullRobot || useShifter)           ? new Shifter()                : null;
 
         configureBindings();
     }
@@ -53,6 +58,11 @@ public class RobotContainer
     public Roller getRoller()
     {
         return roller;
+    }
+
+    public Shifter getShifter()
+    {
+        return shifter;
     }
 
     public BooleanSupplier isRedAllianceSupplier()

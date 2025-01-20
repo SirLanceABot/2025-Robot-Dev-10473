@@ -3,6 +3,7 @@ package frc.robot.tests;
 import java.lang.invoke.MethodHandles;
 
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Shifter;
 
 public class RobbieJTest implements Test
 {
@@ -25,6 +26,7 @@ public class RobbieJTest implements Test
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
+    private final Shifter shifter;
     // private final ExampleSubsystem exampleSubsystem;
 
 
@@ -40,6 +42,7 @@ public class RobbieJTest implements Test
         System.out.println("  Constructor Started:  " + fullClassName);
 
         this.robotContainer = robotContainer;
+        shifter = robotContainer.getShifter();
         // this.exampleSubsystem = robotContainer.exampleSubsystem;
 
         System.out.println("  Constructor Finished: " + fullClassName);
