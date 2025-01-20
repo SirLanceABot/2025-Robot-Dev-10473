@@ -5,6 +5,7 @@ import java.lang.invoke.MethodHandles;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Roller;
+import frc.robot.subsystems.Climb;
 
 public class BradyWTest implements Test
 {
@@ -28,6 +29,7 @@ public class BradyWTest implements Test
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
     private final Roller roller;
+    private final Climb climb;
     private final Joystick joystick = new Joystick(0);
 
     // private final ExampleSubsystem exampleSubsystem;
@@ -46,6 +48,7 @@ public class BradyWTest implements Test
 
         this.robotContainer = robotContainer;
         roller = robotContainer.getRoller();
+        climb = robotContainer.getClimb();
         // this.exampleSubsystem = robotContainer.exampleSubsystem;
 
         System.out.println("  Constructor Finished: " + fullClassName);
@@ -95,6 +98,31 @@ public class BradyWTest implements Test
         {
             roller.stopCommand().schedule();
         }
+
+        // if(joystick.getRawButton(1))
+        // {
+        //     climb.climbUp();
+        // }
+        // else if(joystick.getRawButton(2))
+        // {
+        //     climb.climbDown();
+        // }
+        // else if(joystick.getRawButton(3))
+        // {
+        //     climb.stop();
+        // }
+        // else if(joystick.getRawButton(4))
+        // {
+        //     climb.climbUpCommand().schedule();
+        // }
+        // else if(joystick.getRawButton(5))
+        // {
+        //     climb.climbDownCommand().schedule();
+        // }
+        // else if(joystick.getRawButton(6))
+        // {
+        //     climb.stopCommand().schedule();
+        // }
     }
     
     /**

@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.motors.SparkFlexLance;
 
@@ -29,7 +30,7 @@ public class Roller extends SubsystemLance
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final SparkFlexLance motor = new SparkFlexLance(4, Constants.ROBORIO, "Roller Motor");
+    private final SparkFlexLance motor = new SparkFlexLance(Constants.Roller.MOTOR_PORT, Constants.Roller.MOTOR_CAN_BUS, "Roller Motor");
 
     private final double GEAR_RATIO = 1.0 / 5.0; // Ask Build team 
     private final double WHEEL_DIAMETER_FEET = 2.25 / 12.0; // Ask Build Team
@@ -42,7 +43,7 @@ public class Roller extends SubsystemLance
     // Put all class constructors here
 
     /** 
-     * Creates a new ExampleSubsystem. 
+     * Creates a new Roller. 
      */
     public Roller()
     {
@@ -86,17 +87,17 @@ public class Roller extends SubsystemLance
 
     public Command intakeCommand()
     {
-        return run( () -> intake() );
+        return Commands.run( () -> intake(), this).withName("Intake Roller");
     }
 
     public Command ejectCommand()
     {
-        return run( () -> eject() );
+        return Commands.run( () -> eject(), this).withName("Eject Roller");
     }
 
     public Command stopCommand()
     {
-        return run( () -> stop() );
+        return Commands.run( () -> stop(), this).withName("Stop Roller");
     }
 
 

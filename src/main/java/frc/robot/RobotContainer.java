@@ -14,7 +14,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Shifter;
-
+import frc.robot.subsystems.Climb;
 
 public class RobotContainer 
 {
@@ -33,12 +33,14 @@ public class RobotContainer
     private boolean useDrivetrain           = false;
     private boolean useRoller               = false;
     private boolean useShifter              = false;
+    private boolean useClimb                = false;
 
     public final boolean fullRobot;
     private final Pivot pivot;
     private final Drivetrain drivetrain;
     private final Roller roller;
     private final Shifter shifter;
+    private final Climb climb;
 
     RobotContainer() 
     {
@@ -47,6 +49,7 @@ public class RobotContainer
         drivetrain          = (useFullRobot || useDrivetrain)        ? new Drivetrain()             : null;
         roller              = (useFullRobot || useRoller)            ? new Roller()                 : null;
         shifter             = (useFullRobot || useShifter)           ? new Shifter()                : null;
+        climb               = (useFullRobot || useClimb)             ? new Climb()                  : null;
 
         configureBindings();
     }
@@ -69,6 +72,11 @@ public class RobotContainer
     public Shifter getShifter()
     {
         return shifter;
+    }
+
+    public Climb getClimb()
+    {
+        return climb;
     }
 
     public BooleanSupplier isRedAllianceSupplier()
