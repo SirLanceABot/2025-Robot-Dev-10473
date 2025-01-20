@@ -1,15 +1,17 @@
 package frc.robot.subsystems;
 
 import java.lang.invoke.MethodHandles;
+import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.motors.SparkFlexLance;
+import frc.robot.motors.TalonFXLance;
 
 /**
  * This is an example of what a subsystem should look like.
  */
-public class Roller extends SubsystemLance
+public class Climb extends SubsystemLance
 {
     // This string gets the full name of the class, including the package name
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -29,13 +31,8 @@ public class Roller extends SubsystemLance
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final SparkFlexLance motor = new SparkFlexLance(4, Constants.ROBORIO, "Roller Motor");
-
-    private final double GEAR_RATIO = 1.0 / 5.0; // Ask Build team 
-    private final double WHEEL_DIAMETER_FEET = 2.25 / 12.0; // Ask Build Team
-    private final double MINUTES_TO_SECONDS = 1.0 / 60.0;
-    private final double RPM_TO_FPS = GEAR_RATIO * MINUTES_TO_SECONDS * Math.PI * WHEEL_DIAMETER_FEET;
-    private final double DEFAULT_VOLTAGE = 6.0;
+    private final TalonFXLance motor1 = new TalonFXLance(4, Constants.ROBORIO, "Motor 1");
+    private final TalonFXLance motor2 = new TalonFXLance(12, Constants.ROBORIO, "Motor 2");
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -44,9 +41,9 @@ public class Roller extends SubsystemLance
     /** 
      * Creates a new ExampleSubsystem. 
      */
-    public Roller()
+    public Climb()
     {
-        super("Roller");
+        super("Climb");
         System.out.println("  Constructor Started:  " + fullClassName);
 
         configMotors();
@@ -60,45 +57,35 @@ public class Roller extends SubsystemLance
 
     private void configMotors()
     {
-        motor.setupFactoryDefaults();
-        motor.setupVelocityConversionFactor(RPM_TO_FPS);
+        motor1.setupFactoryDefaults();
+        motor2.setupFactoryDefaults();
     }
 
     /**
      * This sets the speed of the motors.
      * @param speed The motor speed (-1.0 to 1.0)
      */
-
-    public void intake()
+    private void set(double speed)
     {
-        motor.setVoltage(DEFAULT_VOLTAGE);
-    }
-
-    public void eject()
-    {
-        motor.setVoltage(-DEFAULT_VOLTAGE);
+        motor1.set(speed);
+        motor2.set(speed);
     }
 
     public void stop()
     {
-        motor.setVoltage(0.0);
+        motor1.set(0.0);
+        motor2.set(0.0);
     }
 
-    public Command intakeCommand()
+    public Command onCommand()
     {
-        return run( () -> intake() );
+        return run( () -> set(0.25) );
     }
 
-    public Command ejectCommand()
+    public Command setCommand(DoubleSupplier speed)
     {
-        return run( () -> eject() );
+        return run( () -> set(MathUtil.clamp(speed.getAsDouble(), 0.0, 0.5)) );
     }
-
-    public Command stopCommand()
-    {
-        return run( () -> stop() );
-    }
-
 
     // Use a method reference instead of this method
     // public Command stopCommand()
@@ -121,6 +108,6 @@ public class Roller extends SubsystemLance
     @Override
     public String toString()
     {
-        return "Roller Velocity = " + motor.getVelocity();
+        return "";
     }
 }
