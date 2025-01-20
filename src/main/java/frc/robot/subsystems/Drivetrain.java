@@ -31,7 +31,7 @@ public class Drivetrain extends SubsystemLance
     private final TalonFXLance rightLeader = new TalonFXLance(Constants.Drivetrain.RIGHT_LEADER_PORT, Constants.Drivetrain.RIGHT_LEADER_CAN_BUS, "Right Leader");
     private final TalonFXLance rightFollower = new TalonFXLance(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, Constants.Drivetrain.RIGHT_FOLLOWER_CAN_BUS, "Right Follower");
 
-    private final DifferentialDrive drive = new DifferentialDrive(leftLeader, rightLeader);
+    private final DifferentialDrive differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
     
 
     // *** INNER ENUMS and INNER CLASSES ***
@@ -69,6 +69,9 @@ public class Drivetrain extends SubsystemLance
         rightLeader.setupCoastMode();
         rightFollower.setupCoastMode();
 
+        leftLeader.setupFollower(Constants.Drivetrain.LEFT_FOLLOWER_PORT, true);
+        rightLeader.setupFollower(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, true);
+
         leftFollower.setupInverted(true);
         rightFollower.setupInverted(true);
     }
@@ -91,6 +94,47 @@ public class Drivetrain extends SubsystemLance
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
     }
+
+    // public void arcadeDrive(double speed, double rotation, boolean squared)
+    // {
+    //     drive.arcadeDrive(speed, rotation, squared);
+    // }
+
+    // public void driveTank(double leftSpeed, double rightSpeed, boolean squared)
+    // {
+    //     drive.tankDrive(leftSpeed, rightSpeed, squared);
+    // }
+
+    public void arcadeDrive(DoubleSupplier speed, DoubleSupplier rotation, boolean squared)
+    {
+        differentialDrive.arcadeDrive(speed.getAsDouble(), rotation.getAsDouble(), squared);
+    }
+
+    public Command arcadeDriveCommand(DoubleSupplier speed, DoubleSupplier rotation, boolean squared)
+    {
+        return run( () -> arcadeDrive(speed, rotation, squared) );
+    }
+
+    public void tankDrive(DoubleSupplier speed, DoubleSupplier rotation, boolean squared)
+    {
+        differentialDrive.tankDrive(speed.getAsDouble(), rotation.getAsDouble(), squared);
+    }
+
+    public Command tankDriveCommand(DoubleSupplier speed, DoubleSupplier rotation, boolean squared)
+    {
+        return run( () -> tankDrive(speed, rotation, squared) );
+    }
+
+    public void stopDrive()
+    {
+        differentialDrive.stopMotor();
+    }
+
+    public Command stopDriveCommand()
+    {
+        return run( () -> stopDrive() );
+    }
+
 
     @Override
     public String toString()
