@@ -69,11 +69,11 @@ public class Drivetrain extends SubsystemLance
         rightLeader.setupCoastMode();
         rightFollower.setupCoastMode();
 
-        leftLeader.setupFollower(Constants.Drivetrain.LEFT_FOLLOWER_PORT, true);
-        rightLeader.setupFollower(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, true);
+        leftFollower.setupFollower(Constants.Drivetrain.LEFT_LEADER_PORT, true);
+        rightFollower.setupFollower(Constants.Drivetrain.RIGHT_LEADER_PORT, true);
 
-        leftFollower.setupInverted(true);
-        rightLeader.setupInverted(true);
+        leftLeader.setupInverted(true);
+        rightFollower.setupInverted(true);
     }
 
 
@@ -135,6 +135,19 @@ public class Drivetrain extends SubsystemLance
         return run( () -> stopDrive() );
     }
 
+    public Command autonomousDriveCommand(double driveSpeed, double driveTime)
+    {
+        return arcadeDriveCommand(() -> driveSpeed, () -> 0.0, false)
+            .withTimeout(driveTime)
+            .andThen(stopDriveCommand());
+    }
+
+    public Command autonomousTurnCommand(double turnSpeed, double driveTime)
+    {
+        return arcadeDriveCommand(() -> 0.0, () -> turnSpeed, false)
+            .withTimeout(driveTime)
+            .andThen(stopDriveCommand());
+    }
 
     @Override
     public String toString()
