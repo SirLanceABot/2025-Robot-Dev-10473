@@ -2,14 +2,15 @@
 package frc.robot.subsystems;
 
 import java.lang.invoke.MethodHandles;
-import java.util.function.DoubleSupplier;
+import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
-import frc.robot.motors.TalonFXLance;
 
 /**
  * Drivetrain Shifter subsystem.
@@ -26,19 +27,33 @@ public class Shifter extends SubsystemLance
         System.out.println("Loading: " + fullClassName);
     }
     
+    public enum shiftPosition
+    {
+        kHigh(Value.kForward),
+        kLow(Value.kReverse);
+
+        public final Value shifterValue;
+
+        private shiftPosition(Value shifterValue)
+        {
+            this.shifterValue = shifterValue;
+        }
+    }
 
     // *** INNER ENUMS and INNER CLASSES ***
     // Put all inner enums and inner classes here
 
 
-    
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
-        Constants.Shifter.FORWARD_CHANNEL_PORT, Constants.Shifter.REVERSE_CHANNEL_PORT);
 
+    private boolean isHighGear;
+    
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
+
+    private final DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
+    Constants.Shifter.FORWARD_CHANNEL_PORT, Constants.Shifter.REVERSE_CHANNEL_PORT);
 
     /** 
      * Creates a new Shifter. 
@@ -55,22 +70,37 @@ public class Shifter extends SubsystemLance
     // *** CLASS METHODS & INSTANCE METHODS ***
     // Put all class methods and instance methods here
 
+    public void shiftHigh()
+    {
+        solenoid.set(shiftPosition.kHigh.shifterValue);
+        isHighGear = true;
+    }
 
+    public void shiftLow()
+    {
+        solenoid.set(shiftPosition.kLow.shifterValue);
+        isHighGear = false;
+    }
 
-    /**
-     * This sets the speed of the motors.
-     * @param speed The motor speed (-1.0 to 1.0)
-     */
+    public boolean isHighGear()
+    {
+        return isHighGear;
+    }
 
+    public Command shiftHighCommand()
+    {
+        return Commands.runOnce(() -> shiftHigh(), this).withName("Shift High");
+    }
 
+    public Command shiftLowCommand()
+    {
+        return Commands.runOnce(() -> shiftLow(), this).withName("Shift Low");
+    }
 
-
-    // Use a method reference instead of this method
-    // public Command stopCommand()
-    // {
-    //     return run( () -> stop() );
-    // }
-
+    public BooleanSupplier isHighGearSupplier()
+    {
+        return () -> isHighGear();
+    }
 
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here
@@ -86,6 +116,6 @@ public class Shifter extends SubsystemLance
     @Override
     public String toString()
     {
-        return "";
+        return "Is High Gear:" + isHighGear;
     }
 }
