@@ -31,4 +31,10 @@ public final class Constants
     // These are the names of the CAN bus set on the roboRIO and CANivore
     public static final String CANIVORE = "CANivore";
     public static final String ROBORIO  = "rio";
+
+    public static class Shifter
+    {
+        public static final int FORWARD_CHANNEL_PORT                    = 0;
+        public static final int REVERSE_CHANNEL_PORT                    = 0;        
+    }
 }
