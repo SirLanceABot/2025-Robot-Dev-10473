@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.motors.TalonFXLance;
@@ -22,18 +23,19 @@ public class Drivetrain extends SubsystemLance
     {
         System.out.println("Loading: " + fullClassName);
     }
+
+    // *** CLASS VARIABLES & INSTANCE VARIABLES ***
+    // Put all class variables and instance variables here
+    // private final TalonFXLance leftLeader = new TalonFXLance(Constants.Drivetrain.LEFT_LEADER_PORT, Constants.Drivetrain.LEFT_LEADER_CAN_BUS, "Left Leader");
+    // private final TalonFXLance leftFollower = new TalonFXLance(Constants.Drivetrain.LEFT_FOLLOWER_PORT, Constants.Drivetrain.LEFT_FOLLOWER_CAN_BUS, "Left Follower");
+    // private final TalonFXLance rightLeader = new TalonFXLance(Constants.Drivetrain.RIGHT_LEADER_PORT, Constants.Drivetrain.RIGHT_LEADER_CAN_BUS, "Right Leader");
+    // private final TalonFXLance rightFollower = new TalonFXLance(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, Constants.Drivetrain.RIGHT_FOLLOWER_CAN_BUS, "Right Follower");
+
+    // private final DifferentialDrive drive = new DifferentialDrive(leftLeader, rightLeader);
     
 
     // *** INNER ENUMS and INNER CLASSES ***
     // Put all inner enums and inner classes here
-
-
-    
-    // *** CLASS VARIABLES & INSTANCE VARIABLES ***
-    // Put all class variables and instance variables here
-    private final TalonFXLance motor1 = new TalonFXLance(4, Constants.ROBORIO, "Motor 1");
-    private final TalonFXLance motor2 = new TalonFXLance(12, Constants.ROBORIO, "Motor 2");
-
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -57,35 +59,20 @@ public class Drivetrain extends SubsystemLance
 
     private void configMotors()
     {
-        motor1.setupFactoryDefaults();
-        motor2.setupFactoryDefaults();
+        // leftLeader.setupFactoryDefaults();
+        // leftFollower.setupFactoryDefaults();
+        // rightLeader.setupFactoryDefaults();
+        // rightFollower.setupFactoryDefaults();
+
+        // leftLeader.setupCoastMode();
+        // leftFollower.setupCoastMode();
+        // rightLeader.setupCoastMode();
+        // rightFollower.setupCoastMode();
+
+        // leftFollower.setupInverted(true);
+        // rightFollower.setupInverted(true);
     }
 
-    /**
-     * This sets the speed of the motors.
-     * @param speed The motor speed (-1.0 to 1.0)
-     */
-    private void set(double speed)
-    {
-        motor1.set(speed);
-        motor2.set(speed);
-    }
-
-    public void stop()
-    {
-        motor1.set(0.0);
-        motor2.set(0.0);
-    }
-
-    public Command onCommand()
-    {
-        return run( () -> set(0.25) );
-    }
-
-    public Command setCommand(DoubleSupplier speed)
-    {
-        return run( () -> set(MathUtil.clamp(speed.getAsDouble(), 0.0, 0.5)) );
-    }
 
     // Use a method reference instead of this method
     // public Command stopCommand()
