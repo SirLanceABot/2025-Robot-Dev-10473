@@ -26,12 +26,12 @@ public class Drivetrain extends SubsystemLance
 
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    // private final TalonFXLance leftLeader = new TalonFXLance(Constants.Drivetrain.LEFT_LEADER_PORT, Constants.Drivetrain.LEFT_LEADER_CAN_BUS, "Left Leader");
-    // private final TalonFXLance leftFollower = new TalonFXLance(Constants.Drivetrain.LEFT_FOLLOWER_PORT, Constants.Drivetrain.LEFT_FOLLOWER_CAN_BUS, "Left Follower");
-    // private final TalonFXLance rightLeader = new TalonFXLance(Constants.Drivetrain.RIGHT_LEADER_PORT, Constants.Drivetrain.RIGHT_LEADER_CAN_BUS, "Right Leader");
-    // private final TalonFXLance rightFollower = new TalonFXLance(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, Constants.Drivetrain.RIGHT_FOLLOWER_CAN_BUS, "Right Follower");
+    private final TalonFXLance leftLeader = new TalonFXLance(Constants.Drivetrain.LEFT_LEADER_PORT, Constants.Drivetrain.LEFT_LEADER_CAN_BUS, "Left Leader");
+    private final TalonFXLance leftFollower = new TalonFXLance(Constants.Drivetrain.LEFT_FOLLOWER_PORT, Constants.Drivetrain.LEFT_FOLLOWER_CAN_BUS, "Left Follower");
+    private final TalonFXLance rightLeader = new TalonFXLance(Constants.Drivetrain.RIGHT_LEADER_PORT, Constants.Drivetrain.RIGHT_LEADER_CAN_BUS, "Right Leader");
+    private final TalonFXLance rightFollower = new TalonFXLance(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, Constants.Drivetrain.RIGHT_FOLLOWER_CAN_BUS, "Right Follower");
 
-    // private final DifferentialDrive drive = new DifferentialDrive(leftLeader, rightLeader);
+    private final DifferentialDrive drive = new DifferentialDrive(leftLeader, rightLeader);
     
 
     // *** INNER ENUMS and INNER CLASSES ***
@@ -59,18 +59,18 @@ public class Drivetrain extends SubsystemLance
 
     private void configMotors()
     {
-        // leftLeader.setupFactoryDefaults();
-        // leftFollower.setupFactoryDefaults();
-        // rightLeader.setupFactoryDefaults();
-        // rightFollower.setupFactoryDefaults();
+        leftLeader.setupFactoryDefaults();
+        leftFollower.setupFactoryDefaults();
+        rightLeader.setupFactoryDefaults();
+        rightFollower.setupFactoryDefaults();
 
-        // leftLeader.setupCoastMode();
-        // leftFollower.setupCoastMode();
-        // rightLeader.setupCoastMode();
-        // rightFollower.setupCoastMode();
+        leftLeader.setupCoastMode();
+        leftFollower.setupCoastMode();
+        rightLeader.setupCoastMode();
+        rightFollower.setupCoastMode();
 
-        // leftFollower.setupInverted(true);
-        // rightFollower.setupInverted(true);
+        leftFollower.setupInverted(true);
+        rightFollower.setupInverted(true);
     }
 
 
