@@ -11,6 +11,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.TargetPosition;
+import frc.robot.motors.SparkFlexLance;
 import frc.robot.motors.SparkMaxLance;
 import frc.robot.motors.TalonFXLance;
 
@@ -40,7 +41,7 @@ public class Pivot extends SubsystemLance
     // private final TalonFXLance motor1 = new TalonFXLance(4, Constants.ROBORIO, "Motor 1");
     // private final TalonFXLance motor2 = new TalonFXLance(12, Constants.ROBORIO, "Motor 2");
 
-    private final SparkMaxLance pivotMotor = new SparkMaxLance(1, Constants.ROBORIO, "Motor 1");
+    private final SparkFlexLance pivotMotor = new SparkFlexLance(1, Constants.ROBORIO, "Motor 1");
     // private final SparkMaxLance motor2 = new SparkMaxLance(2, Constants.ROBORIO, "Motor 2");
 
     private SparkLimitSwitch forwardLimitSwitch;
@@ -119,33 +120,33 @@ public class Pivot extends SubsystemLance
         return pivotMotor.getPosition();
     }
 
-    // public void startingPosition()
-    // {
-    //     targetPosition = Constants.TargetPosition.kStartingPosition;
-    // }
+    public void startingPosition()
+    {
+        targetPosition = Constants.TargetPosition.kStartingPosition;
+    }
 
-    // public void grabAlgaePosition()
-    // {
-    //     targetPosition = Constants.TargetPosition.kGrabAlgaePosition;
-    // }
+    public void grabAlgaePosition()
+    {
+        targetPosition = Constants.TargetPosition.kGrabAlgaePosition;
+    }
 
-    // public void moveToSetPosition(Constants.TargetPosition targetPosition)
-    // {
-    //     if(getPosition() > targetPosition.pivot + threshold)
-    //     {
-    //         on(-0.5);
-    //     }
+    public void moveToSetPosition(Constants.TargetPosition targetPosition)
+    {
+        if(getPosition() > targetPosition.pivot + threshold)
+        {
+            on(-0.5);
+        }
 
-    //     else if(getPosition() > targetPosition.pivot - threshold)
-    //     {
-    //         on(0.5);
-    //     }
+        else if(getPosition() > targetPosition.pivot - threshold)
+        {
+            on(0.5);
+        }
 
-    //     else
-    //     {
-    //         hold();
-    //     }
-    // }    
+        else
+        {
+            hold();
+        }
+    }    
 
     // Use a method reference instead of this method
     // public Command stopCommand()
