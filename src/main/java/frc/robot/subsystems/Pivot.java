@@ -9,6 +9,7 @@ import com.revrobotics.spark.SparkLimitSwitch;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.Constants.TargetPosition;
 import frc.robot.motors.SparkFlexLance;
@@ -76,6 +77,7 @@ public class Pivot extends SubsystemLance
         pivotMotor.setupBrakeMode();
         pivotMotor.setupInverted(true);
         pivotMotor.setPosition(0.0);
+        pivotMotor.setSafetyEnabled(false);
         // motor2.setupFactoryDefaults();
 
         pivotMotor.setupForwardHardLimitSwitch(false, false);
@@ -89,7 +91,7 @@ public class Pivot extends SubsystemLance
      * This sets the speed of the motor.
      * @param speed The motor speed (-1.0 to 1.0)
      */
-    private void on(double speed)
+    public void on(double speed)
     {
         targetPosition = Constants.TargetPosition.kOverride;
         pivotMotor.set(speed);
@@ -147,6 +149,21 @@ public class Pivot extends SubsystemLance
             hold();
         }
     }    
+
+    public Command onCommand(double speed)
+    {
+        return Commands.run(() -> on(speed), this).withName("Turn On Pivot");
+    }
+
+    public Command holdCommand()
+    {
+        return Commands.run(() -> hold(), this).withName("Hold Pivot");
+    }
+
+    public Command moveToSetPositionCommand(Constants.TargetPosition targetPosition)
+    {
+        return Commands.run(() -> moveToSetPosition(targetPosition), this).withName("Move to Set Position Pivot"); 
+    }
 
     // Use a method reference instead of this method
     // public Command stopCommand()

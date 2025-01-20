@@ -2,7 +2,11 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
+import javax.lang.model.util.ElementScanner14;
+
+import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Pivot;
 
 public class GretaHTest implements Test
 {
@@ -25,6 +29,8 @@ public class GretaHTest implements Test
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
+    private final Joystick joystick = new Joystick(0);
+    private final Pivot pivot;
     // private final ExampleSubsystem exampleSubsystem;
 
 
@@ -40,6 +46,7 @@ public class GretaHTest implements Test
         System.out.println("  Constructor Started:  " + fullClassName);
 
         this.robotContainer = robotContainer;
+        pivot = robotContainer.getPivot();
         // this.exampleSubsystem = robotContainer.exampleSubsystem;
 
         System.out.println("  Constructor Finished: " + fullClassName);
@@ -64,7 +71,28 @@ public class GretaHTest implements Test
      * This method runs periodically (every 20ms).
      */
     public void periodic()
-    {}
+    {
+        if(joystick.getRawButton(1))
+        {
+            pivot.on(0.5);
+        }
+        else if(joystick.getRawButton(2))
+        {
+            pivot.on(-0.5);
+        }
+        else if(joystick.getRawButton(3))
+        {
+            pivot.onCommand(0.5).schedule();
+        }
+        else if(joystick.getRawButton(4))
+        {
+            pivot.onCommand(-0.5).schedule();
+        }
+        else
+        {
+            pivot.holdCommand().schedule();
+        }
+    }
     
     /**
      * This method runs one time after the periodic() method.
