@@ -73,7 +73,7 @@ public class Drivetrain extends SubsystemLance
         rightLeader.setupFollower(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, true);
 
         leftFollower.setupInverted(true);
-        rightFollower.setupInverted(true);
+        rightLeader.setupInverted(true);
     }
 
 

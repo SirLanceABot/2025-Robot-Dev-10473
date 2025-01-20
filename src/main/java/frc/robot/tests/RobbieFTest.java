@@ -2,7 +2,9 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Drivetrain;
 
 public class RobbieFTest implements Test
 {
@@ -25,6 +27,9 @@ public class RobbieFTest implements Test
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
+    private final Drivetrain driveTrain;
+
+    private final Joystick joystick = new Joystick(0);
     // private final ExampleSubsystem exampleSubsystem;
 
 
@@ -40,6 +45,7 @@ public class RobbieFTest implements Test
         System.out.println("  Constructor Started:  " + fullClassName);
 
         this.robotContainer = robotContainer;
+        driveTrain = robotContainer.getDrivetrain();
         // this.exampleSubsystem = robotContainer.exampleSubsystem;
 
         System.out.println("  Constructor Finished: " + fullClassName);
@@ -64,7 +70,9 @@ public class RobbieFTest implements Test
      * This method runs periodically (every 20ms).
      */
     public void periodic()
-    {}
+    {
+        driveTrain.arcadeDriveCommand(() -> joystick.getRawAxis(1), () -> joystick.getRawAxis(0), true).schedule();
+    }
     
     /**
      * This method runs one time after the periodic() method.
