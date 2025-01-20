@@ -5,7 +5,9 @@ import java.util.function.DoubleSupplier;
 
 import javax.lang.model.util.ElementScanner14;
 
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLimitSwitch;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,14 +41,8 @@ public class Pivot extends SubsystemLance
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    // private final TalonFXLance motor1 = new TalonFXLance(4, Constants.ROBORIO, "Motor 1");
-    // private final TalonFXLance motor2 = new TalonFXLance(12, Constants.ROBORIO, "Motor 2");
 
-    private final SparkFlexLance pivotMotor = new SparkFlexLance(1, Constants.ROBORIO, "Motor 1");
-    // private final SparkMaxLance motor2 = new SparkMaxLance(2, Constants.ROBORIO, "Motor 2");
-
-    private SparkLimitSwitch forwardLimitSwitch;
-    private SparkLimitSwitch reverseLimitSwitch;
+    private final SparkFlexLance pivotMotor = new SparkFlexLance(3, Constants.ROBORIO, "Motor 1");
 
     private TargetPosition targetPosition = TargetPosition.kOverride;
     private final double threshold = 0.1;
@@ -77,13 +73,13 @@ public class Pivot extends SubsystemLance
         pivotMotor.setupBrakeMode();
         pivotMotor.setupInverted(true);
         pivotMotor.setPosition(0.0);
-        pivotMotor.setSafetyEnabled(false);
-        // motor2.setupFactoryDefaults();
+        // // pivotMotor.setSafetyEnabled(false);
+        // // motor2.setupFactoryDefaults();
 
-        pivotMotor.setupForwardHardLimitSwitch(false, false);
-        pivotMotor.setupReverseHardLimitSwitch(false, false);
+        // pivotMotor.setupForwardHardLimitSwitch(false, false);
+        // pivotMotor.setupReverseHardLimitSwitch(false, false);
 
-        pivotMotor.setupPIDController(0,1,0,0);
+        // pivotMotor.setupPIDController(0,1,0,0);
 
     }
 
@@ -120,6 +116,7 @@ public class Pivot extends SubsystemLance
     public double getPosition()
     {
         return pivotMotor.getPosition();
+        // return 0.0;
     }
 
     public void startingPosition()
