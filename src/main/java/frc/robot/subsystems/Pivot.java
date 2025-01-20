@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkLimitSwitch;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.TargetPosition;
 import frc.robot.motors.SparkMaxLance;
 import frc.robot.motors.TalonFXLance;
 
@@ -44,6 +45,9 @@ public class Pivot extends SubsystemLance
 
     private SparkLimitSwitch forwardLimitSwitch;
     private SparkLimitSwitch reverseLimitSwitch;
+
+    private TargetPosition targetPosition = TargetPosition.kOverride;
+    private final double threshold = 0.1;
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -86,14 +90,14 @@ public class Pivot extends SubsystemLance
      */
     private void on(double speed)
     {
-        // targetPosition = Constants.TargetPosition.kOverride;
+        targetPosition = Constants.TargetPosition.kOverride;
         pivotMotor.set(speed);
         // motor2.set(speed);
     }
 
     public void hold()
     {
-        // targetPosition = Constants.TargetPosition.kOverride;
+        targetPosition = Constants.TargetPosition.kOverride;
         pivotMotor.set(0.0);
         // motor2.set(0.0);
     }

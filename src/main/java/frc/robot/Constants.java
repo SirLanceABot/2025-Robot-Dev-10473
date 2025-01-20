@@ -50,4 +50,27 @@ public final class Constants
         public static final String RIGHT_LEADER_CAN_BUS                 = CANIVORE;
         public static final String RIGHT_FOLLOWER_CAN_BUS               = CANIVORE;
     }
+
+    public static class Pivot
+    {
+        public static final int MOTOR_PORT                              = 0;
+        public static final String MOTOR_CAN_BUS                        = CANIVORE;
+
+        public static final double STARTING_POSITION                    = 0.0;
+        public static final double GRAB_ALGAE_POSITION                  = 0.0;
+    }
+
+    public enum TargetPosition
+    {
+        kStartingPosition(Constants.Pivot.STARTING_POSITION),
+        kGrabAlgaePosition(Constants.Pivot.GRAB_ALGAE_POSITION),
+        kOverride(-4237);
+
+        public final double pivot;
+
+        private TargetPosition(double pivot)
+        {
+            this.pivot = pivot;
+        }
+    }
 }
