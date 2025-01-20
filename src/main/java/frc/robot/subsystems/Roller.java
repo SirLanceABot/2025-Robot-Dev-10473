@@ -7,8 +7,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
-import frc.robot.motors.SparkMaxLance;
-import frc.robot.motors.TalonFXLance;
+import frc.robot.motors.SparkFlexLance;
 
 /**
  * This is an example of what a subsystem should look like.
@@ -33,8 +32,12 @@ public class Roller extends SubsystemLance
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final SparkMaxLance motor = new SparkMaxLance(4, Constants.ROBORIO, "Roller Motor");
+    private final SparkFlexLance motor = new SparkFlexLance(4, Constants.ROBORIO, "Roller Motor");
 
+    private final double GEAR_RATIO = 1.0 / 5.0; // Ask Build team 
+    private final double WHEEL_DIAMETER_FEET = 2.25 / 12.0; // Ask Build Team
+    private final double MINUTES_TO_SECONDS = 1.0 / 60.0;
+    private final double RPM_TO_FPS = GEAR_RATIO * MINUTES_TO_SECONDS * Math.PI * WHEEL_DIAMETER_FEET;
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -66,10 +69,6 @@ public class Roller extends SubsystemLance
      * This sets the speed of the motors.
      * @param speed The motor speed (-1.0 to 1.0)
      */
-    private void set(double speed)
-    {
-        motor.set(speed);
-    }
 
     public void intake()
     {
@@ -86,19 +85,19 @@ public class Roller extends SubsystemLance
         motor.set(0.0);
     }
 
-    public Command onCommand()
-    {
-        return run( () -> set(0.25) );
-    }
-
-    public Command setCommand(DoubleSupplier speed)
-    {
-        return run( () -> set(MathUtil.clamp(speed.getAsDouble(), 0.0, 0.5)) );
-    }
-
     public Command intakeCommand(DoubleSupplier speed)
     {
-        return Commands.none();
+        return run( () -> intake() );
+    }
+
+    public Command ejectCommand(DoubleSupplier speed)
+    {
+        return run( () -> eject() );
+    }
+
+    public Command stopCommand(DoubleSupplier speed)
+    {
+        return run( () -> stop() );
     }
 
 
