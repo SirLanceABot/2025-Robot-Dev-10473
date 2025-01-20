@@ -60,6 +60,13 @@ public final class Constants
         public static final double GRAB_ALGAE_POSITION                  = 0.0;
     }
 
+    public static class Roller
+    {
+        public static final int MOTOR_PORT                              = 0;
+
+        public static final String MOTOR_CAN_BUS                        = ROBORIO;
+    }
+
     public enum TargetPosition
     {
         kStartingPosition(Constants.Pivot.STARTING_POSITION),

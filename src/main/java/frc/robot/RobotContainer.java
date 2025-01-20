@@ -11,9 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Roller;
-import frc.robot.subsystems.Shifter;
 
 public class RobotContainer 
 {
@@ -30,26 +28,19 @@ public class RobotContainer
     private boolean useFullRobot            = false;
 
     private boolean useDrivetrain           = false;
-    private boolean usePivot                = false;
     private boolean useRoller               = false;
-    private boolean useShifter              = false;
-
 
     public final boolean fullRobot;
 
     private final Drivetrain drivetrain;
-    private final Pivot pivot;
     private final Roller roller;
-    private final Shifter shifter;
 
     RobotContainer() 
     {
         fullRobot           = (useFullRobot);
         
-        drivetrain          = (useFullRobot || useDrivetrain)        ? new Drivetrain()             : null; 
-        pivot               = (useFullRobot || usePivot)             ? new Pivot()                  : null;
+        drivetrain          = (useFullRobot || useDrivetrain)        ? new Drivetrain()             : null;
         roller              = (useFullRobot || useRoller)            ? new Roller()                 : null;
-        shifter             = (useFullRobot || useShifter)           ? new Shifter()                : null;
 
         configureBindings();
     }
@@ -59,19 +50,9 @@ public class RobotContainer
         return drivetrain;
     }
 
-    public Pivot getPivot()
-    {
-        return pivot;
-    }
-
     public Roller getRoller()
     {
         return roller;
-    }
-
-    public Shifter getShifter()
-    {
-        return shifter;
     }
 
     public BooleanSupplier isRedAllianceSupplier()

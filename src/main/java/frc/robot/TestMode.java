@@ -19,15 +19,11 @@ import frc.robot.tests.Test;
 // import frc.robot.tests.BradyWTest;
 // import frc.robot.tests.GretaHTest;
 // import frc.robot.tests.JacksonDTest;
-// import frc.robot.tests.LoganBTest;
 // import frc.robot.tests.MasonBTest;
-// import frc.robot.tests.MatthewFTest;
 // import frc.robot.tests.NiyatiPTest;
-// import frc.robot.tests.OwenDTest;
 // import frc.robot.tests.PoishaBTest;
 // import frc.robot.tests.RobbieFTest;
 // import frc.robot.tests.RobbieJTest;
-// import frc.robot.tests.TanishkaJTest;
 // import frc.robot.tests.YalinGTest;
 // import frc.robot.tests.YamanGTest;
 
@@ -61,15 +57,11 @@ public class TestMode
         // myTest = new BradyWTest(robotContainer);
         // myTest = new GretaHTest(robotContainer);
         // myTest = new JacksonDTest(robotContainer);
-        // myTest = new LoganBTest(robotContainer);
         // myTest = new MasonBTest(robotContainer);
-        // myTest = new MatthewFTest(robotContainer);
         // myTest = new NiyatiPTest(robotContainer);
-        // myTest = new OwenDTest(robotContainer);
         // myTest = new PoishaBTest(robotContainer);
         // myTest = new RobbieFTest(robotContainer);
         // myTest = new RobbieJTest(robotContainer);
-        // myTest = new TanishkaJTest(robotContainer);
         // myTest = new YalinGTest(robotContainer);
         // myTest = new YamanGTest(robotContainer);
 

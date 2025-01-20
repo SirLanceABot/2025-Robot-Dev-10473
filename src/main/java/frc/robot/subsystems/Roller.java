@@ -3,9 +3,7 @@ package frc.robot.subsystems;
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.motors.SparkFlexLance;
 
@@ -63,6 +61,7 @@ public class Roller extends SubsystemLance
     private void configMotors()
     {
         motor.setupFactoryDefaults();
+        motor.setupVelocityConversionFactor(RPM_TO_FPS);
     }
 
     /**
@@ -72,17 +71,17 @@ public class Roller extends SubsystemLance
 
     public void intake()
     {
-        motor.set(0.5);
+        motor.setVoltage(6.0);
     }
 
     public void eject()
     {
-        motor.set(-0.5);
+        motor.setVoltage(-6.0);
     }
 
     public void stop()
     {
-        motor.set(0.0);
+        motor.setVoltage(0.0);
     }
 
     public Command intakeCommand(DoubleSupplier speed)
@@ -122,6 +121,6 @@ public class Roller extends SubsystemLance
     @Override
     public String toString()
     {
-        return "";
+        return "Roller Velocity = " + motor.getVelocity();
     }
 }
