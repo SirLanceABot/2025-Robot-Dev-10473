@@ -2,6 +2,7 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Shifter;
 
@@ -27,6 +28,9 @@ public class RobbieJTest implements Test
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
     private final Shifter shifter;
+
+    private final Joystick joystick = new Joystick(0);
+
     // private final ExampleSubsystem exampleSubsystem;
 
 
@@ -67,7 +71,23 @@ public class RobbieJTest implements Test
      * This method runs periodically (every 20ms).
      */
     public void periodic()
-    {}
+    {
+        if(joystick.getRawButton(1))
+        {
+            shifter.shiftHighCommand().schedule();
+        }
+
+        if(joystick.getRawButton(2))
+        {
+            shifter.shiftLowCommand().schedule();
+        }
+        
+        if(joystick.getRawButton(3))
+        {
+            shifter.shiftToggleCommand().schedule();
+        }
+
+    }
     
     /**
      * This method runs one time after the periodic() method.

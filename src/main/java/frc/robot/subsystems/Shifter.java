@@ -62,7 +62,7 @@ public class Shifter extends SubsystemLance
     {
         super("Shifter");
         System.out.println("  Constructor Started:  " + fullClassName);
-
+        setDefaultCommand(shiftHighCommand());
         System.out.println("  Constructor Finished: " + fullClassName);
     }
 
@@ -87,6 +87,18 @@ public class Shifter extends SubsystemLance
         return isHighGear;
     }
 
+    public void shiftToggle()
+    {
+        if(isHighGear())
+        {
+            shiftLowCommand().schedule();
+        }
+        else
+        {
+            shiftHighCommand().schedule();
+        }
+    }
+
     public Command shiftHighCommand()
     {
         return Commands.runOnce(() -> shiftHigh(), this).withName("Shift High");
@@ -95,6 +107,11 @@ public class Shifter extends SubsystemLance
     public Command shiftLowCommand()
     {
         return Commands.runOnce(() -> shiftLow(), this).withName("Shift Low");
+    }
+
+    public Command shiftToggleCommand()
+    {
+        return Commands.runOnce(() -> shiftToggle(), this).withName("Shift toggle");
     }
 
     public BooleanSupplier isHighGearSupplier()
