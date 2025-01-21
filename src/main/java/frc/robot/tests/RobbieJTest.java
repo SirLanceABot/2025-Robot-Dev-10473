@@ -72,14 +72,19 @@ public class RobbieJTest implements Test
      */
     public void periodic()
     {
+        System.out.println(shifter.isHighGear());
+
         if(joystick.getRawButton(1))
         {
             shifter.shiftHighCommand().schedule();
+            // shifter.shiftHigh();
         }
 
         if(joystick.getRawButton(2))
         {
             shifter.shiftLowCommand().schedule();
+            // shifter.shiftLow();
+
         }
         
         if(joystick.getRawButton(3))

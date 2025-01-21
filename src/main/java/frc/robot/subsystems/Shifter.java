@@ -1,4 +1,3 @@
-
 package frc.robot.subsystems;
 
 import java.lang.invoke.MethodHandles;
@@ -52,7 +51,7 @@ public class Shifter extends SubsystemLance
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
 
-    private final DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH,
+    private final DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,
     Constants.Shifter.FORWARD_CHANNEL_PORT, Constants.Shifter.REVERSE_CHANNEL_PORT);
 
     /** 
@@ -62,7 +61,7 @@ public class Shifter extends SubsystemLance
     {
         super("Shifter");
         System.out.println("  Constructor Started:  " + fullClassName);
-        setDefaultCommand(shiftHighCommand());
+        // setDefaultCommand(shiftHighCommand());
         System.out.println("  Constructor Finished: " + fullClassName);
     }
 
@@ -80,6 +79,8 @@ public class Shifter extends SubsystemLance
     {
         solenoid.set(shiftPosition.kLow.shifterValue);
         isHighGear = false;
+        System.out.println("shiftLow");
+
     }
 
     public boolean isHighGear()
@@ -92,10 +93,12 @@ public class Shifter extends SubsystemLance
         if(isHighGear())
         {
             shiftLowCommand().schedule();
+            isHighGear = false;
         }
         else
         {
             shiftHighCommand().schedule();
+            isHighGear = true;
         }
     }
 
