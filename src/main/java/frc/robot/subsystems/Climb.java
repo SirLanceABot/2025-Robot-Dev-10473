@@ -78,14 +78,14 @@ public class Climb extends SubsystemLance
      * @param speed sets speed from -1.0 to 1.0
      */
 
-    public void climbUp()
+    public void climbUp(double speed)
     {
-        motor.set(0.1);
+        motor.set(speed);
     }
 
-    public void climbDown()
+    public void climbDown(double speed)
     {
-        motor.set(-0.1);
+        motor.set(-speed);
     }
 
     public void stop()
@@ -98,14 +98,14 @@ public class Climb extends SubsystemLance
      * @param speed the speed of the motor from -1.0 to 1.0
      */
 
-    public Command climbUpCommand()
+    public Command climbUpCommand(double speed, double time)
     {
-        return Commands.run(() -> climbUp(), this).withName("Climb Up").withTimeout(3.0);
+        return Commands.run(() -> climbUp(speed), this).withTimeout(time).withName("Climb Up");
     }
 
-    public Command climbDownCommand()
+    public Command climbDownCommand(double speed, double time)
     {
-        return Commands.run(() -> climbDown(), this).withName("Climb Down").withTimeout(2.0);
+        return Commands.run(() -> climbDown(speed), this).withTimeout(time).withName("Climb Down");
     }
 
     public Command stopCommand()

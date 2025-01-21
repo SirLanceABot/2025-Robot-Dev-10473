@@ -74,31 +74,31 @@ public class BradyWTest implements Test
      */
     public void periodic()
     {
-        // if(joystick.getRawButton(1))
-        // {
-        //     roller.intakeCommand().schedule();
-        // }
-        // else if(joystick.getRawButton(2))
-        // {
-        //     roller.ejectCommand().schedule();
-        // }
-        // else
-        // {
-        //     roller.stopCommand().schedule();
-        // }
-
         if(joystick.getRawButton(1))
         {
-            climb.climbUpCommand().schedule();
+            roller.intakeCommand(0.5, 1.5).schedule();
         }
         else if(joystick.getRawButton(2))
         {
-            climb.climbDownCommand().schedule();
+            roller.ejectCommand(0.5, 1.0).schedule();
         }
         else
         {
-            climb.stopCommand().schedule();
+            roller.stopCommand().schedule();
         }
+
+        // if(joystick.getRawButton(1))
+        // {
+        //     climb.climbUpCommand(0.1, 5.0).schedule();
+        // }
+        // else if(joystick.getRawButton(2))
+        // {
+        //     climb.climbDownCommand(0.1, 3.0).schedule();
+        // }
+        // else
+        // {
+        //     climb.stopCommand().schedule();
+        // }
     }
     
     /**

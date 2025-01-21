@@ -36,7 +36,6 @@ public class Roller extends SubsystemLance
     private final double WHEEL_DIAMETER_FEET = 2.25 / 12.0; // Ask Build Team
     private final double MINUTES_TO_SECONDS = 1.0 / 60.0;
     private final double RPM_TO_FPS = GEAR_RATIO * MINUTES_TO_SECONDS * Math.PI * WHEEL_DIAMETER_FEET;
-    private final double DEFAULT_VOLTAGE = 6.0;
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -70,29 +69,29 @@ public class Roller extends SubsystemLance
      * @param speed The motor speed (-1.0 to 1.0)
      */
 
-    public void intake()
+    public void intake(double speed)
     {
-        motor.setVoltage(DEFAULT_VOLTAGE);
+        motor.set(speed);
     }
 
-    public void eject()
+    public void eject(double speed)
     {
-        motor.setVoltage(-DEFAULT_VOLTAGE);
+        motor.set(-speed);
     }
 
     public void stop()
     {
-        motor.setVoltage(0.0);
+        motor.set(0.0);
     }
 
-    public Command intakeCommand()
+    public Command intakeCommand(double speed, double time)
     {
-        return Commands.run( () -> intake(), this).withName("Intake Roller").withTimeout(1.0);
+        return Commands.run( () -> intake(speed), this).withTimeout(time).withName("Intake Roller");
     }
 
-    public Command ejectCommand()
+    public Command ejectCommand(double speed, double time)
     {
-        return Commands.run( () -> eject(), this).withName("Eject Roller").withTimeout(1.0);
+        return Commands.run( () -> eject(speed), this).withTimeout(time).withName("Eject Roller");
     }
 
     public Command stopCommand()
