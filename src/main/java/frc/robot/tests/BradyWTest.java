@@ -74,55 +74,31 @@ public class BradyWTest implements Test
      */
     public void periodic()
     {
-        if(joystick.getRawButton(1))
-        {
-            roller.intake();
-        }
-        else if(joystick.getRawButton(2))
-        {
-            roller.eject();
-        }
-        else if(joystick.getRawButton(3))
-        {
-            roller.stop();
-        }
-        else if(joystick.getRawButton(4))
-        {
-            roller.intakeCommand().schedule();
-        }
-        else if(joystick.getRawButton(5))
-        {
-            roller.ejectCommand().schedule();
-        }
-        else if(joystick.getRawButton(6))
-        {
-            roller.stopCommand().schedule();
-        }
-
         // if(joystick.getRawButton(1))
         // {
-        //     climb.climbUp();
+        //     roller.intakeCommand().schedule();
         // }
         // else if(joystick.getRawButton(2))
         // {
-        //     climb.climbDown();
+        //     roller.ejectCommand().schedule();
         // }
-        // else if(joystick.getRawButton(3))
+        // else
         // {
-        //     climb.stop();
+        //     roller.stopCommand().schedule();
         // }
-        // else if(joystick.getRawButton(4))
-        // {
-        //     climb.climbUpCommand().schedule();
-        // }
-        // else if(joystick.getRawButton(5))
-        // {
-        //     climb.climbDownCommand().schedule();
-        // }
-        // else if(joystick.getRawButton(6))
-        // {
-        //     climb.stopCommand().schedule();
-        // }
+
+        if(joystick.getRawButton(1))
+        {
+            climb.climbUpCommand().schedule();
+        }
+        else if(joystick.getRawButton(2))
+        {
+            climb.climbDownCommand().schedule();
+        }
+        else
+        {
+            climb.stopCommand().schedule();
+        }
     }
     
     /**

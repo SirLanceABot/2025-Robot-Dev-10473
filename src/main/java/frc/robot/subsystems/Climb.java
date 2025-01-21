@@ -100,12 +100,12 @@ public class Climb extends SubsystemLance
 
     public Command climbUpCommand()
     {
-        return Commands.run(() -> climbUp(), this).withName("Climb Up");
+        return Commands.run(() -> climbUp(), this).withName("Climb Up").withTimeout(3.0);
     }
 
     public Command climbDownCommand()
     {
-        return Commands.run(() -> climbDown(), this).withName("Climb Down");
+        return Commands.run(() -> climbDown(), this).withName("Climb Down").withTimeout(2.0);
     }
 
     public Command stopCommand()

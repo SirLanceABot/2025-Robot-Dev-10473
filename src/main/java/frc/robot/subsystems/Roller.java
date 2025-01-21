@@ -87,12 +87,12 @@ public class Roller extends SubsystemLance
 
     public Command intakeCommand()
     {
-        return Commands.run( () -> intake(), this).withName("Intake Roller");
+        return Commands.run( () -> intake(), this).withName("Intake Roller").withTimeout(1.0);
     }
 
     public Command ejectCommand()
     {
-        return Commands.run( () -> eject(), this).withName("Eject Roller");
+        return Commands.run( () -> eject(), this).withName("Eject Roller").withTimeout(1.0);
     }
 
     public Command stopCommand()
