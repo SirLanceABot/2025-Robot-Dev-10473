@@ -42,9 +42,9 @@ public class Pivot extends SubsystemLance
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
 
-    private final SparkFlexLance pivotMotor = new SparkFlexLance(3, Constants.ROBORIO, "Motor 1");
+    private final SparkFlexLance pivotMotor = new SparkFlexLance(2, Constants.ROBORIO, "Pivot Motor");
 
-    private TargetPosition targetPosition = TargetPosition.kOverride;
+    // private TargetPosition targetPosition = TargetPosition.kOverride;
     private final double threshold = 0.1;
 
     // *** CLASS CONSTRUCTORS ***
@@ -79,7 +79,7 @@ public class Pivot extends SubsystemLance
         // pivotMotor.setupForwardHardLimitSwitch(false, false);
         // pivotMotor.setupReverseHardLimitSwitch(false, false);
 
-        // pivotMotor.setupPIDController(0,1,0,0);
+        pivotMotor.setupPIDController(0, 0.5, 0, 0);
 
     }
 
@@ -89,14 +89,14 @@ public class Pivot extends SubsystemLance
      */
     public void on(double speed)
     {
-        targetPosition = Constants.TargetPosition.kOverride;
+        // targetPosition = Constants.TargetPosition.kOverride;
         pivotMotor.set(speed);
         // motor2.set(speed);
     }
 
     public void hold()
     {
-        targetPosition = Constants.TargetPosition.kOverride;
+        // targetPosition = Constants.TargetPosition.kOverride;
         pivotMotor.set(0.0);
         // motor2.set(0.0);
     }
@@ -119,33 +119,33 @@ public class Pivot extends SubsystemLance
         // return 0.0;
     }
 
-    public void startingPosition()
-    {
-        targetPosition = Constants.TargetPosition.kStartingPosition;
-    }
+    // public void startingPosition()
+    // {
+    //     targetPosition = Constants.TargetPosition.kStartingPosition;
+    // }
 
-    public void grabAlgaePosition()
-    {
-        targetPosition = Constants.TargetPosition.kGrabAlgaePosition;
-    }
+    // public void grabAlgaePosition()
+    // {
+    //     targetPosition = Constants.TargetPosition.kGrabAlgaePosition;
+    // }
 
-    public void moveToSetPosition(Constants.TargetPosition targetPosition)
-    {
-        if(getPosition() > targetPosition.pivot + threshold)
-        {
-            on(-0.5);
-        }
+    // public void moveToSetPosition(Constants.TargetPosition targetPosition)
+    // {
+    //     if(getPosition() > targetPosition.pivot + threshold)
+    //     {
+    //         on(-0.5);
+    //     }
 
-        else if(getPosition() > targetPosition.pivot - threshold)
-        {
-            on(0.5);
-        }
+    //     else if(getPosition() > targetPosition.pivot - threshold)
+    //     {
+    //         on(0.5);
+    //     }
 
-        else
-        {
-            hold();
-        }
-    }    
+    //     else
+    //     {
+    //         hold();
+    //     }
+    // }    
 
     public Command onCommand(double speed)
     {
@@ -159,7 +159,8 @@ public class Pivot extends SubsystemLance
 
     public Command moveToSetPositionCommand(Constants.TargetPosition targetPosition)
     {
-        return Commands.run(() -> moveToSetPosition(targetPosition), this).withName("Move to Set Position Pivot"); 
+        return run(() -> pivotMotor.setControlPosition(targetPosition.pivot));
+        // return Commands.run(() -> moveToSetPosition(targetPosition), this).withName("Move to Set Position Pivot"); 
     }
 
     // Use a method reference instead of this method

@@ -5,6 +5,7 @@ import java.lang.invoke.MethodHandles;
 import javax.lang.model.util.ElementScanner14;
 
 import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Pivot;
 
@@ -72,26 +73,36 @@ public class GretaHTest implements Test
      */
     public void periodic()
     {
-        if(joystick.getRawButton(1))
+        // if(joystick.getRawButton(1))
+        // {
+        //     pivot.onCommand(0.5).schedule();
+        // }
+        // else if(joystick.getRawButton(2))
+        // {
+        //     pivot.onCommand(-0.5).schedule();
+        // }
+        // else
+        // {
+        //     pivot.holdCommand().schedule();
+        // }
+
+        // good test
+
+        if (joystick.getRawButton(1))
         {
-            pivot.on(0.5);
+            pivot.moveToSetPositionCommand(Constants.TargetPosition.kStartingPosition).schedule();
+            // pivot.setPosition(0.0);  // add something that resets the value while its at a position
         }
         else if(joystick.getRawButton(2))
         {
-            pivot.on(-0.5);
+            pivot.moveToSetPositionCommand(Constants.TargetPosition.kGrabAlgaePosition).schedule();
         }
         else if(joystick.getRawButton(3))
         {
-            pivot.onCommand(0.5).schedule();
-        }
-        else if(joystick.getRawButton(4))
-        {
-            pivot.onCommand(-0.5).schedule();
-        }
-        else
-        {
             pivot.holdCommand().schedule();
         }
+        System.out.println(pivot.getPosition());
+    
     }
     
     /**
