@@ -68,7 +68,7 @@ public class RobbieFTest implements Test
 
     /**
      * This method runs periodically (every 20ms).
-     */
+     */ 
     public void periodic()
     {
         // driveTrain.arcadeDriveCommand(() -> joystick.getRawAxis(1) / 2, () -> joystick.getRawAxis(0) / 2, true).schedule();
@@ -76,7 +76,7 @@ public class RobbieFTest implements Test
         if(joystick.getRawButton(1))
         {
             System.out.println("A Button");
-            driveTrain.autonomousDriveCommand(0.25, 5.0).schedule();
+            driveTrain.autonomousDriveCommand(0.1, 5.0).schedule();
             // driveTrain.arcadeDriveCommand(() -> 0.25, () -> 0.0, false).schedule();
         }
         // else

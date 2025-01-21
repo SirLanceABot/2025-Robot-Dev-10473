@@ -95,63 +95,126 @@ public class Drivetrain extends SubsystemLance
         // Use this for data that needs to be logged.
     }
 
-    // public void arcadeDrive(double speed, double rotation, boolean squared)
-    // {
-    //     drive.arcadeDrive(speed, rotation, squared);
-    // }
-
-    // public void driveTank(double leftSpeed, double rightSpeed, boolean squared)
-    // {
-    //     drive.tankDrive(leftSpeed, rightSpeed, squared);
-    // }
-
+    /**
+     * @param speed
+     * sets drivetrain speed
+     * @param rotation
+     * sets drivetrain rotation speed
+     * @param squared
+     * boolean for squaring the outputs to limit drivetrain sensitivity 
+     */
     public void arcadeDrive(DoubleSupplier speed, DoubleSupplier rotation, boolean squared)
     {
         differentialDrive.arcadeDrive(speed.getAsDouble(), rotation.getAsDouble(), squared);
     }
 
+    /**
+     * @param speed
+     * sets motor speed of arcadeDrive method
+     * @param rotation
+     * sets rotation speed of arcadeDrive method
+     * @param squared
+     * determines if outputs are squared
+     * @return
+     * Command returning the arcadeDrive method
+     */
     public Command arcadeDriveCommand(DoubleSupplier speed, DoubleSupplier rotation, boolean squared)
     {
         return run( () -> arcadeDrive(speed, rotation, squared) );
     }
 
-    public void tankDrive(DoubleSupplier speed, DoubleSupplier rotation, boolean squared)
+    /**
+     * @param driveSpeed
+     * sets drivetrain speed
+     * @param rotationSpeed
+     * sets drivetrain rotation speed
+     * @param squared
+     * boolean for squaring the outputs to limit drivetrain sensitivity 
+     */
+    public void tankDrive(DoubleSupplier driveSpeed, DoubleSupplier rotationSpeed, boolean squared)
     {
-        differentialDrive.tankDrive(speed.getAsDouble(), rotation.getAsDouble(), squared);
+        differentialDrive.tankDrive(driveSpeed.getAsDouble(), rotationSpeed.getAsDouble(), squared);
     }
 
-    public Command tankDriveCommand(DoubleSupplier speed, DoubleSupplier rotation, boolean squared)
+    /**
+     * @param driveSpeed
+     * sets motor speed of arcadeDrive method
+     * @param rotationSpeed
+     * sets rotation speed of arcadeDrive method
+     * @param squared
+     * determines if outputs are squared
+     * @return
+     * Command returning the tankDrive method
+     */
+    public Command tankDriveCommand(DoubleSupplier driveSpeed, DoubleSupplier rotationSpeed, boolean squared)
     {
-        return run( () -> tankDrive(speed, rotation, squared) );
+        return run( () -> tankDrive(driveSpeed, rotationSpeed, squared) );
     }
 
+    /**
+     * stops the drivetrain motors
+     */
     public void stopDrive()
     {
         differentialDrive.stopMotor();
     }
 
+    /**
+     * @return
+     * returns the stopDrive method as a Command
+     */
     public Command stopDriveCommand()
     {
-        return run( () -> stopDrive() );
+        return run( () -> stopDrive() ).withName("Stop Drive");
     }
 
+    /**
+     * @param driveSpeed
+     * sets speed of arcadeDriveCommand
+     * @param driveTime
+     * time for which the Command will run
+     * @return
+     */
     public Command autonomousDriveCommand(double driveSpeed, double driveTime)
     {
         return arcadeDriveCommand(() -> driveSpeed, () -> 0.0, false)
             .withTimeout(driveTime)
-            .andThen(stopDriveCommand());
+            .andThen(stopDriveCommand())
+            .withName("Autonomous Drive Command");
     }
 
-    public Command autonomousTurnCommand(double turnSpeed, double driveTime)
+    /**
+     * 
+     * @param rotationSpeed
+     * @param driveTime
+     * @return
+     */
+    public Command autonomousTurnCommand(double rotationSpeed, double driveTime)
     {
-        return arcadeDriveCommand(() -> 0.0, () -> turnSpeed, false)
+        return arcadeDriveCommand(() -> 0.0, () -> rotationSpeed, false)
             .withTimeout(driveTime)
-            .andThen(stopDriveCommand());
+            .andThen(stopDriveCommand())
+            .withName("Autonomous Turn Command");
+    }
+
+    /**
+     * 
+     * @param driveSpeed
+     * @param rotationSpeed
+     * @param driveTime
+     * @return
+     */
+    public Command autonomousTurnAndDriveCommand(double driveSpeed, double rotationSpeed, double driveTime)
+    {
+        return arcadeDriveCommand(() -> driveSpeed, () -> rotationSpeed, false)
+            .withTimeout(driveTime)
+            .andThen(stopDriveCommand())
+            .withName("Autonomous Turn And Drive Command");
     }
 
     @Override
     public String toString()
     {
-        return "";
+        return "Left Leader Motor Velo = " + leftLeader.getVelocity() + "Left Follower Motor Velo = " + leftFollower.getVelocity() + "Right Leader Motor Velo = " + rightLeader.getVelocity() + "Right Follower Motor Velo = " + rightFollower.getVelocity();
     }
 }
