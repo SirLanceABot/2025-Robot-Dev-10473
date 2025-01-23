@@ -42,7 +42,7 @@ public class Pivot extends SubsystemLance
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
 
-    private final SparkFlexLance pivotMotor = new SparkFlexLance(2, Constants.ROBORIO, "Pivot Motor");
+    private final SparkFlexLance motor = new SparkFlexLance(2, Constants.ROBORIO, "Pivot Motor");
 
     // private TargetPosition targetPosition = TargetPosition.kOverride;
     private final double threshold = 0.1;
@@ -69,35 +69,40 @@ public class Pivot extends SubsystemLance
 
     private void configMotor()
     {
-        pivotMotor.setupFactoryDefaults();
-        pivotMotor.setupBrakeMode();
-        pivotMotor.setupInverted(true);
-        pivotMotor.setPosition(0.0);
+        motor.setupFactoryDefaults();
+        motor.setupBrakeMode();
+        motor.setupInverted(true);
+        motor.setPosition(0.0);
         // // pivotMotor.setSafetyEnabled(false);
         // // motor2.setupFactoryDefaults();
 
         // pivotMotor.setupForwardHardLimitSwitch(false, false);
         // pivotMotor.setupReverseHardLimitSwitch(false, false);
 
-        pivotMotor.setupPIDController(0, 0.5, 0, 0);
+        motor.setupPIDController(0, 0.5, 0, 0);
 
+    }
+
+    private void set(double speed)
+    {
+        set( MathUtil.clamp(speed, -1.0, 1.0));
     }
 
     /**
      * This sets the speed of the motor.
      * @param speed The motor speed (-1.0 to 1.0)
      */
-    public void on(double speed)
+    private void on(double speed)
     {
         // targetPosition = Constants.TargetPosition.kOverride;
-        pivotMotor.set(speed);
+        set(speed);
         // motor2.set(speed);
     }
 
-    public void hold()
+    private void hold()
     {
         // targetPosition = Constants.TargetPosition.kOverride;
-        pivotMotor.set(0.0);
+        set(0.0);
         // motor2.set(0.0);
     }
 
@@ -110,12 +115,12 @@ public class Pivot extends SubsystemLance
 
     public Command setCommand(DoubleSupplier speed)
     {
-        return run( () -> on(MathUtil.clamp(speed.getAsDouble(), 0.0, 0.5)) );
+        return run( () -> on(speed.getAsDouble()) );
     }
 
     public double getPosition()
     {
-        return pivotMotor.getPosition();
+        return motor.getPosition();
         // return 0.0;
     }
 
@@ -149,17 +154,17 @@ public class Pivot extends SubsystemLance
 
     public Command onCommand(double speed)
     {
-        return Commands.run(() -> on(speed), this).withName("Turn On Pivot");
+        return run(() -> on(speed)).withName("Turn On Pivot");
     }
 
     public Command holdCommand()
     {
-        return Commands.run(() -> hold(), this).withName("Hold Pivot");
+        return run(() -> hold()).withName("Hold Pivot");
     }
 
     public Command moveToSetPositionCommand(Constants.TargetPosition targetPosition)
     {
-        return run(() -> pivotMotor.setControlPosition(targetPosition.pivot));
+        return run(() -> motor.setControlPosition(targetPosition.pivot));
         // return Commands.run(() -> moveToSetPosition(targetPosition), this).withName("Move to Set Position Pivot"); 
     }
 
