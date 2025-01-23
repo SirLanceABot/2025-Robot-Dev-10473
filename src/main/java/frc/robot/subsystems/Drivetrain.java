@@ -3,15 +3,18 @@ package frc.robot.subsystems;
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.math.MathUtil;
+// import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.motors.TalonFXLance;
 
 /**
- * This is an example of what a subsystem should look like.
+ * @author Robbie Frank & Aditya Yadav
+ * 
+ * creates new drivetrain
  */
+
 public class Drivetrain extends SubsystemLance
 {
     // This string gets the full name of the class, including the package name
@@ -69,11 +72,12 @@ public class Drivetrain extends SubsystemLance
         rightLeader.setupCoastMode();
         rightFollower.setupCoastMode();
 
-        leftFollower.setupFollower(Constants.Drivetrain.LEFT_LEADER_PORT, true);
-        rightFollower.setupFollower(Constants.Drivetrain.RIGHT_LEADER_PORT, true);
+        leftFollower.setupFollower(Constants.Drivetrain.LEFT_LEADER_PORT, false);
+        rightFollower.setupFollower(Constants.Drivetrain.RIGHT_LEADER_PORT, false);
 
-        leftLeader.setupInverted(true);
-        rightFollower.setupInverted(true);
+        // all motors should be running in the same direction
+        leftLeader.setupInverted(false);
+        rightFollower.setupInverted(false);
     }
 
 
@@ -174,6 +178,7 @@ public class Drivetrain extends SubsystemLance
      * @param driveTime
      * time for which the Command will run
      * @return
+     * the command
      */
     public Command autonomousDriveCommand(double driveSpeed, double driveTime)
     {
@@ -186,8 +191,11 @@ public class Drivetrain extends SubsystemLance
     /**
      * 
      * @param rotationSpeed
+     * sets the rotation speed of the motors
      * @param driveTime
+     * the amount of time for which the motors will run
      * @return
+     * the command
      */
     public Command autonomousTurnCommand(double rotationSpeed, double driveTime)
     {
@@ -200,9 +208,13 @@ public class Drivetrain extends SubsystemLance
     /**
      * 
      * @param driveSpeed
+     * sewts the forward speed of the motors
      * @param rotationSpeed
+     * sets the rotation speed of the motors
      * @param driveTime
+     * the amount of time for which the motors will run
      * @return
+     * the commmand
      */
     public Command autonomousTurnAndDriveCommand(double driveSpeed, double rotationSpeed, double driveTime)
     {
