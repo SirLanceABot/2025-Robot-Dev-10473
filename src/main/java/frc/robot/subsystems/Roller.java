@@ -110,10 +110,10 @@ public class Roller extends SubsystemLance
         return run( () -> stop() ).withName("Stop Roller");
     }
 
-    public Command intakeUntilDetectedCommand()
+    public Command intakeUntilDetectedCommand(double speed)
     {
         return 
-        runOnce( () -> intake(0.25) )
+        runOnce( () -> intake(speed) )
         .andThen(Commands.waitUntil(sensor.isDetectedSupplier()) )
         .andThen(stopCommand());
     }
