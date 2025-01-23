@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
@@ -78,19 +79,25 @@ public class Climb extends SubsystemLance
      * @param speed sets speed from -1.0 to 1.0
      */
 
-    public void climbUp(double speed)
+    private void set(double speed)
     {
-        motor.set(speed);
+       motor.set(MathUtil.clamp(speed, -0.25, 0.25));
+    }
+    
+    // Robot is moving upward
+    private void climbUp(double speed)
+    {
+        set(speed);
     }
 
-    public void climbDown(double speed)
+    private void climbDown(double speed)
     {
-        motor.set(-speed);
+        set(-speed);
     }
 
     public void stop()
     {
-        motor.set(0.0);
+        set(0.0);
     }
 
      /**
