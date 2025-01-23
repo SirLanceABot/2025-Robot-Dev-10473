@@ -1,3 +1,9 @@
+
+/**
+ * @author
+ * Mason Bellinger
+ * Brady Woodard
+ */
 package frc.robot.subsystems;
 
 import java.lang.invoke.MethodHandles;
@@ -68,29 +74,44 @@ public class Roller extends SubsystemLance
 
     /**
      * This sets the speed of the motors.
-     * @param speed The motor speed (-1.0 to 1.0)
+     * @param speed The motor speed
      */
-
     private void set(double speed)
     {
         motor.set(speed);
     }
     
+    /**
+     * Makes the rollers intake
+     * @param speed The motor speed
+     */
     public void intake(double speed)
     {
         set(speed);
     }
 
+    /**
+     * Makes the rollers eject
+     * @param speed The motor speed
+     */
     public void eject(double speed)
     {
         set(-speed);
     }
 
+    /**
+     * Makes the rollers stop
+     */
     public void stop()
     {
         set(0.0);
     }
 
+    /**
+     * Command to make the rollers intake
+     * @param speed Speed of the motors
+     * @return Returns intake command
+     */
     public Command intakeCommand(double speed)
     {
         return run( () -> intake(speed) )
@@ -98,6 +119,12 @@ public class Roller extends SubsystemLance
         .withName("Intake Roller");
     }
 
+    /**
+     * Command to make the rollers eject
+     * @param speed Speed of the motors
+     * @param time  How long the motors run (seconds)
+     * @return Returns eject command
+     */
     public Command ejectCommand(double speed, double time)
     {
         return run( () -> eject(speed) )
@@ -105,11 +132,20 @@ public class Roller extends SubsystemLance
         .withName("Eject Roller");
     }
 
+    /**
+     * Command to make the rollers stop
+     * @return Returns stop command
+     */
     public Command stopCommand()
     {
         return run( () -> stop() ).withName("Stop Roller");
     }
 
+    /**
+     * Command to make the rollers intake until algae is in robot
+     * @param speed Speed of the motors
+     * @return Returns intake until detected command
+     */
     public Command intakeUntilDetectedCommand(double speed)
     {
         return 
