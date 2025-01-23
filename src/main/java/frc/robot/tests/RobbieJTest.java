@@ -3,6 +3,8 @@ package frc.robot.tests;
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Shifter;
 
@@ -29,14 +31,15 @@ public class RobbieJTest implements Test
     private final RobotContainer robotContainer;
     private final Shifter shifter;
 
-    private final Joystick joystick = new Joystick(0);
+    // private final Joystick joystick = new Joystick(0);
+    private final CommandXboxController controller = new CommandXboxController(0);
 
     // private final ExampleSubsystem exampleSubsystem;
 
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
-
+     
     /**
      * Use this class to test your code using Test mode
      * @param robotContainer The container of all robot components
@@ -65,32 +68,38 @@ public class RobbieJTest implements Test
      * This method runs one time before the periodic() method.
      */
     public void init()
-    {}
+    {
+        controller.x().onTrue(shifter.shiftToggleCommand());
+        controller.a().onTrue(shifter.shiftLowCommand());
+        controller.b().onTrue(shifter.shiftHighCommand());
+    }
 
     /**
      * This method runs periodically (every 20ms).
      */
     public void periodic()
     {
-        System.out.println(shifter.isHighGear());
+        // System.out.println(shifter.isHighGear());
 
-        if(joystick.getRawButton(1))
-        {
-            shifter.shiftHighCommand().schedule();
-            // shifter.shiftHigh();
-        }
+        // if(joystick.getRawButton(1))
+        // {
+        //     shifter.shiftHighCommand().schedule();
+        //     // shifter.shiftHigh();
+            
+        // }
 
-        if(joystick.getRawButton(2))
-        {
-            shifter.shiftLowCommand().schedule();
-            // shifter.shiftLow();
+        // if(joystick.getRawButton(2))
+        // {
+        //     shifter.shiftLowCommand().schedule();
+        //     // shifter.shiftLow();
 
-        }
+        // }
         
-        if(joystick.getRawButton(3))
-        {
-            shifter.shiftToggleCommand().schedule();
-        }
+        
+        // if(joystick.getRawButton(3))
+        // {
+        //     shifter.shiftToggleCommand().schedule();
+        // }
 
     }
     

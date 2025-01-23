@@ -25,19 +25,6 @@ public class Shifter extends SubsystemLance
     {
         System.out.println("Loading: " + fullClassName);
     }
-    
-    public enum shiftPosition
-    {
-        kHigh(Value.kForward),
-        kLow(Value.kReverse);
-
-        public final Value shifterValue;
-
-        private shiftPosition(Value shifterValue)
-        {
-            this.shifterValue = shifterValue;
-        }
-    }
 
     // *** INNER ENUMS and INNER CLASSES ***
     // Put all inner enums and inner classes here
@@ -45,14 +32,13 @@ public class Shifter extends SubsystemLance
 
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-
+    private final DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,
+    Constants.Shifter.FORWARD_CHANNEL_PORT, Constants.Shifter.REVERSE_CHANNEL_PORT);
     private boolean isHighGear;
     
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
 
-    private final DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,
-    Constants.Shifter.FORWARD_CHANNEL_PORT, Constants.Shifter.REVERSE_CHANNEL_PORT);
 
     /** 
      * Creates a new Shifter. 
@@ -60,8 +46,9 @@ public class Shifter extends SubsystemLance
     public Shifter()
     {
         super("Shifter");
-        System.out.println("  Constructor Started:  " + fullClassName);
-        // setDefaultCommand(shiftHighCommand());
+        System.out.println("  Constructor Started:  " + fullClassName); 
+        // setDefaultCommand(shiftHighCommand());   
+        shiftHighCommand();
         System.out.println("  Constructor Finished: " + fullClassName);
     }
 
@@ -71,16 +58,14 @@ public class Shifter extends SubsystemLance
 
     public void shiftHigh()
     {
-        solenoid.set(shiftPosition.kHigh.shifterValue);
+        solenoid.set(Value.kForward);
         isHighGear = true;
     }
 
     public void shiftLow()
     {
-        solenoid.set(shiftPosition.kLow.shifterValue);
+        solenoid.set(Value.kReverse);
         isHighGear = false;
-        System.out.println("shiftLow");
-
     }
 
     public boolean isHighGear()
@@ -92,29 +77,27 @@ public class Shifter extends SubsystemLance
     {
         if(isHighGear())
         {
-            shiftLowCommand().schedule();
-            isHighGear = false;
+            shiftLow();
         }
         else
         {
-            shiftHighCommand().schedule();
-            isHighGear = true;
+            shiftHigh();
         }
     }
 
     public Command shiftHighCommand()
     {
-        return Commands.runOnce(() -> shiftHigh(), this).withName("Shift High");
+        return runOnce(() -> shiftHigh()).withName("Shift High");
     }
 
     public Command shiftLowCommand()
     {
-        return Commands.runOnce(() -> shiftLow(), this).withName("Shift Low");
+        return runOnce(() -> shiftLow()).withName("Shift Low");
     }
 
     public Command shiftToggleCommand()
     {
-        return Commands.runOnce(() -> shiftToggle(), this).withName("Shift toggle");
+        return runOnce(() -> shiftToggle()).withName("Shift toggle");
     }
 
     public BooleanSupplier isHighGearSupplier()
