@@ -12,7 +12,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 
 /**
- * Drivetrain Shifter subsystem.
+ * this class creates a shifter subsystem
+ * @author Jackson D.
+ * @author Robbie J.
  */
 public class Shifter extends SubsystemLance
 {
