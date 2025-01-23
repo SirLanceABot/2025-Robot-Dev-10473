@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.motors.SparkFlexLance;
+import frc.robot.sensors.Proximity;
 
 /**
  * This is an example of what a subsystem should look like.
@@ -31,6 +32,7 @@ public class Roller extends SubsystemLance
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
     private final SparkFlexLance motor = new SparkFlexLance(Constants.Roller.MOTOR_PORT, Constants.Roller.MOTOR_CAN_BUS, "Roller Motor");
+    private final Proximity sensor = new Proximity(0);
 
     private final double GEAR_RATIO = 1.0 / 5.0; // Ask Build team 
     private final double WHEEL_DIAMETER_FEET = 2.25 / 12.0; // Ask Build Team
@@ -69,34 +71,51 @@ public class Roller extends SubsystemLance
      * @param speed The motor speed (-1.0 to 1.0)
      */
 
-    public void intake(double speed)
+    private void set(double speed)
     {
         motor.set(speed);
+    }
+    
+    public void intake(double speed)
+    {
+        set(speed);
     }
 
     public void eject(double speed)
     {
-        motor.set(-speed);
+        set(-speed);
     }
 
     public void stop()
     {
-        motor.set(0.0);
+        set(0.0);
     }
 
-    public Command intakeCommand(double speed, double time)
+    public Command intakeCommand(double speed)
     {
-        return Commands.run( () -> intake(speed), this).withTimeout(time).withName("Intake Roller");
+        return run( () -> intake(speed) )
+        // .withTimeout(time)
+        .withName("Intake Roller");
     }
 
     public Command ejectCommand(double speed, double time)
     {
-        return Commands.run( () -> eject(speed), this).withTimeout(time).withName("Eject Roller");
+        return run( () -> eject(speed) )
+        .withTimeout(time)
+        .withName("Eject Roller");
     }
 
     public Command stopCommand()
     {
-        return Commands.run( () -> stop(), this).withName("Stop Roller");
+        return run( () -> stop() ).withName("Stop Roller");
+    }
+
+    public Command intakeUntilDetectedCommand()
+    {
+        return 
+        runOnce( () -> intake(0.25) )
+        .andThen(Commands.waitUntil(sensor.isDetectedSupplier()) )
+        .andThen(stopCommand());
     }
 
 
