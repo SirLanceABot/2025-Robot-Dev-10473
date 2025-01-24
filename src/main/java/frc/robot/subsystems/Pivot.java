@@ -42,7 +42,7 @@ public class Pivot extends SubsystemLance
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
 
-    private final SparkFlexLance motor = new SparkFlexLance(2, Constants.ROBORIO, "Pivot Motor");
+    private final SparkFlexLance motor = new SparkFlexLance(Constants.Pivot.MOTOR_PORT, Constants.ROBORIO, "Pivot Motor");
 
     // private TargetPosition targetPosition = TargetPosition.kOverride;
     private final double threshold = 0.1;
@@ -85,19 +85,19 @@ public class Pivot extends SubsystemLance
 
     private void set(double speed)
     {
-        set( MathUtil.clamp(speed, -1.0, 1.0));
+        motor.set( MathUtil.clamp(speed, -0.3, 0.3));
     }
 
     /**
      * This sets the speed of the motor.
      * @param speed The motor speed (-1.0 to 1.0)
      */
-    private void on(double speed)
-    {
-        // targetPosition = Constants.TargetPosition.kOverride;
-        set(speed);
-        // motor2.set(speed);
-    }
+    // private void on(double speed)
+    // {
+    //     // targetPosition = Constants.TargetPosition.kOverride;
+    //     set(speed);
+    //     // motor2.set(speed);
+    // }
 
     private void hold()
     {
@@ -108,15 +108,15 @@ public class Pivot extends SubsystemLance
 
 
 
-    public Command onCommand()
-    {
-        return run( () -> on(0.25) );
-    }
+    // public Command onCommand()
+    // {
+    //     return run( () -> set(0.25) );
+    // }
 
-    public Command setCommand(DoubleSupplier speed)
-    {
-        return run( () -> on(speed.getAsDouble()) );
-    }
+    // public Command setCommand(DoubleSupplier speed)
+    // {
+    //     return run( () -> set(speed.getAsDouble()) );
+    // }
 
     public double getPosition()
     {
@@ -154,7 +154,7 @@ public class Pivot extends SubsystemLance
 
     public Command onCommand(double speed)
     {
-        return run(() -> on(speed)).withName("Turn On Pivot");
+        return run(() -> set(speed)).withName("Turn On Pivot");
     }
 
     public Command holdCommand()
