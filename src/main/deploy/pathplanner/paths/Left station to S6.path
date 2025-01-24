@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.89,
-        "y": 6.522
+        "x": 1.745,
+        "y": 7.262
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3750085979184021,
-        "y": 6.21846723643606
+        "x": 1.2300085979184023,
+        "y": 6.958467236436059
       },
       "isLocked": true,
-      "linkedName": null
+      "linkedName": "Left Station"
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "S6"
     }
   ],
   "rotationTargets": [],
