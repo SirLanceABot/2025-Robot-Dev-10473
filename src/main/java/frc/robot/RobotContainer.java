@@ -10,6 +10,7 @@ import java.util.function.BooleanSupplier;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Roller;
@@ -29,9 +30,9 @@ public class RobotContainer
     }
 
     private boolean useFullRobot            = false;
-    private boolean usePivot                = false;
+    private boolean usePivot                = true;
     private boolean useDrivetrain           = false;
-    private boolean useRoller               = false;
+    private boolean useRoller               = true;
     private boolean useShifter              = false;
     private boolean useClimb                = false;
 
@@ -41,6 +42,8 @@ public class RobotContainer
     private final Roller roller;
     private final Shifter shifter;
     private final Climb climb;
+    private final CommandXboxController operatorController = new CommandXboxController(0);
+
 
     RobotContainer() 
     {
@@ -77,6 +80,11 @@ public class RobotContainer
     public Climb getClimb()
     {
         return climb;
+    }
+
+    public CommandXboxController getOperatorController()
+    {
+        return operatorController;
     }
 
     public BooleanSupplier isRedAllianceSupplier()

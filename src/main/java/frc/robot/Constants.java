@@ -53,8 +53,8 @@ public final class Constants
 
     public static class Pivot
     {
-        public static final int MOTOR_PORT                              = 0;
-        public static final String MOTOR_CAN_BUS                        = CANIVORE;
+        public static final int MOTOR_PORT                              = 2;
+        public static final String MOTOR_CAN_BUS                        = ROBORIO;
 
         public static final double STARTING_POSITION                    = 0.0;
         public static final double GRAB_ALGAE_POSITION                  = 0.0;
@@ -62,7 +62,7 @@ public final class Constants
 
     public static class Roller
     {
-        public static final int MOTOR_PORT                              = 0;
+        public static final int MOTOR_PORT                              = 3;
 
         public static final String MOTOR_CAN_BUS                        = ROBORIO;
     }

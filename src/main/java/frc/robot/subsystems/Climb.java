@@ -1,3 +1,8 @@
+/**
+ * @author
+ * Brady Woodard
+ * Mason Bellinger
+ */
 package frc.robot.subsystems;
 
 import java.lang.invoke.MethodHandles;
@@ -75,49 +80,69 @@ public class Climb extends SubsystemLance
 
 
     /**
-     * sets the motor to the speed passed to the function
-     * @param speed sets speed from -1.0 to 1.0
+     * Sets the motor to the speed passed to the function
+     * @param speed Sets speed from -0.25 to 0.25
      */
-
     private void set(double speed)
     {
        motor.set(MathUtil.clamp(speed, -0.25, 0.25));
     }
     
-    // Robot is moving upward
+    /**
+     * Pulls the robot up
+     * @param speed Speed of the motor
+     */
     private void climbUp(double speed)
     {
         set(speed);
     }
 
+    /**
+     * Brings the robot down
+     * @param speed Speed of the motor
+     */
     private void climbDown(double speed)
     {
         set(-speed);
     }
 
+    /**
+     * Stops the climb motor
+     */
     public void stop()
     {
         set(0.0);
     }
 
-     /**
-     * gets the encoder position of the motor
-     * @param speed the speed of the motor from -1.0 to 1.0
+    /**
+     * Pulls the robot up
+     * @param speed Speed of the motors
+     * @param time How long the motors are on for
+     * @return Returns the climb up command
      */
-
     public Command climbUpCommand(double speed, double time)
     {
-        return Commands.run(() -> climbUp(speed), this).withTimeout(time).withName("Climb Up");
+        return run(() -> climbUp(speed) ).withTimeout(time).withName("Climb Up");
     }
 
+    /**
+     * Brings the robot down
+     * @param speed Speed of the motors
+     * @param time How long the motors are on for
+     * @return Returns the climb down command
+     */
     public Command climbDownCommand(double speed, double time)
     {
-        return Commands.run(() -> climbDown(speed), this).withTimeout(time).withName("Climb Down");
+        return run(() -> climbDown(speed) ).withTimeout(time).withName("Climb Down");
     }
 
+    /**
+     * Stops the climb motor
+     * @return Returns the stop command
+     */
     public Command stopCommand()
     {
-        return Commands.runOnce(() -> stop(), this).withName("Stops Climb");
+        return runOnce(() -> stop() ).withName("Stops Climb");
     }
     
     // *** OVERRIDEN METHODS ***
