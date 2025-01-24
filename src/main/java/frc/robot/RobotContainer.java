@@ -15,6 +15,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Shifter;
+import frc.robot.commands.GeneralCommands;
 import frc.robot.subsystems.Climb;
 
 public class RobotContainer 
@@ -30,9 +31,9 @@ public class RobotContainer
     }
 
     private boolean useFullRobot            = false;
-    private boolean usePivot                = true;
+    private boolean usePivot                = false;
     private boolean useDrivetrain           = false;
-    private boolean useRoller               = true;
+    private boolean useRoller               = false;
     private boolean useShifter              = false;
     private boolean useClimb                = false;
 
@@ -106,6 +107,7 @@ public class RobotContainer
 
     public Command getAutonomousCommand() 
     {
-        return Commands.print("No autonomous command configured");
+        // return Commands.print("No autonomous command configured");
+        return GeneralCommands.intakeAlgaeCommand();
     }
 }

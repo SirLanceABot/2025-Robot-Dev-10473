@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Pivot.TargetPosition;
 
 public class GretaHTest implements Test
 {
@@ -90,12 +91,12 @@ public class GretaHTest implements Test
 
         if (joystick.getRawButton(1))
         {
-            pivot.moveToSetPositionCommand(Constants.TargetPosition.kStartingPosition).schedule();
+            pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition).schedule();
             // pivot.setPosition(0.0);  // add something that resets the value while its at a position
         }
         else if(joystick.getRawButton(2))
         {
-            pivot.moveToSetPositionCommand(Constants.TargetPosition.kGrabAlgaePosition).schedule();
+            pivot.moveToSetPositionCommand(TargetPosition.kGrabAlgaePosition).schedule();
         }
         else if(joystick.getRawButton(3))
         {

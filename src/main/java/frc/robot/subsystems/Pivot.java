@@ -13,7 +13,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
-import frc.robot.Constants.TargetPosition;
 import frc.robot.motors.SparkFlexLance;
 import frc.robot.motors.SparkMaxLance;
 import frc.robot.motors.TalonFXLance;
@@ -36,13 +35,25 @@ public class Pivot extends SubsystemLance
 
     // *** INNER ENUMS and INNER CLASSES ***
     // Put all inner enums and inner classes here
+    public enum TargetPosition
+    {
+        kStartingPosition(0.0),
+        kGrabAlgaePosition(10.0),
+        kOverride(-4237);
 
+        public final double pivot;
+
+        private TargetPosition(double pivot)
+        {
+            this.pivot = pivot;
+        }
+    }
 
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
 
-    private final SparkFlexLance motor = new SparkFlexLance(Constants.Pivot.MOTOR_PORT, Constants.ROBORIO, "Pivot Motor");
+    private final SparkFlexLance motor = new SparkFlexLance(Constants.Pivot.MOTOR_PORT, Constants.Pivot.MOTOR_CAN_BUS, "Pivot Motor");
 
     // private TargetPosition targetPosition = TargetPosition.kOverride;
     private final double threshold = 0.1;
@@ -73,7 +84,7 @@ public class Pivot extends SubsystemLance
         motor.setupBrakeMode();
         motor.setupInverted(true);
         motor.setPosition(0.0);
-        // // pivotMotor.setSafetyEnabled(false);
+        motor.setSafetyEnabled(false);
         // // motor2.setupFactoryDefaults();
 
         // pivotMotor.setupForwardHardLimitSwitch(false, false);
@@ -162,7 +173,7 @@ public class Pivot extends SubsystemLance
         return run(() -> hold()).withName("Hold Pivot");
     }
 
-    public Command moveToSetPositionCommand(Constants.TargetPosition targetPosition)
+    public Command moveToSetPositionCommand(TargetPosition targetPosition)
     {
         return run(() -> motor.setControlPosition(targetPosition.pivot));
         // return Commands.run(() -> moveToSetPosition(targetPosition), this).withName("Move to Set Position Pivot"); 

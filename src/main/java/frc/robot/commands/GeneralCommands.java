@@ -3,9 +3,11 @@ package frc.robot.commands;
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.TargetPosition;
+
 import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Pivot.TargetPosition;
 import frc.robot.subsystems.Roller;
 
 
@@ -35,9 +37,12 @@ public abstract class GeneralCommands
 
     public static Command intakeAlgaeCommand()
     {
+        // TODO: moveToSetPositionCommand does't ending
         return
-        pivot.moveToSetPositionCommand(TargetPosition.kGrabAlgaePosition)
-        .andThen(roller.intakeUntilDetectedCommand(0.5))
+        Commands.parallel(
+            pivot.moveToSetPositionCommand(TargetPosition.kGrabAlgaePosition),
+            roller.intakeCommand(0.5)
+        )
         .andThen(pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition));
     }
 }

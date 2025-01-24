@@ -55,9 +55,6 @@ public final class Constants
     {
         public static final int MOTOR_PORT                              = 2;
         public static final String MOTOR_CAN_BUS                        = ROBORIO;
-
-        public static final double STARTING_POSITION                    = 0.0;
-        public static final double GRAB_ALGAE_POSITION                  = 0.0;
     }
 
     public static class Roller
@@ -71,23 +68,5 @@ public final class Constants
     {
         public static final int MOTOR_PORT                              = 0;
         public static final String MOTOR_CAN_BUS                        = ROBORIO;
-
-        public static final double CLIMB_UP_POSITION                    = 50.0;
-        public static final double CLIMB_DOWN_POSITION                  = 10.0;
-    }
-
-
-    public enum TargetPosition
-    {
-        kStartingPosition(Constants.Pivot.STARTING_POSITION),
-        kGrabAlgaePosition(Constants.Pivot.GRAB_ALGAE_POSITION),
-        kOverride(-4237);
-
-        public final double pivot;
-
-        private TargetPosition(double pivot)
-        {
-            this.pivot = pivot;
-        }
     }
 }

@@ -70,6 +70,8 @@ public class Roller extends SubsystemLance
     {
         motor.setupFactoryDefaults();
         motor.setupVelocityConversionFactor(RPM_TO_FPS);
+
+        motor.setSafetyEnabled(false);
     }
 
     /**
