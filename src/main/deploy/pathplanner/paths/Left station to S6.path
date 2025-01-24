@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2300085979184023,
+        "x": 1.2300085979184021,
         "y": 6.958467236436059
       },
       "isLocked": true,
@@ -45,7 +45,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Left Station Starts",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

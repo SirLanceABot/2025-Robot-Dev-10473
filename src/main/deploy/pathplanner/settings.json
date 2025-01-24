@@ -2,7 +2,15 @@
   "robotWidth": 0.9,
   "robotLength": 0.9,
   "holonomicMode": false,
-  "pathFolders": [],
+  "pathFolders": [
+    "Left Station Starts",
+    "Left Wall Starts",
+    "Middle Starts",
+    "Barge Starts",
+    "Reef Starts",
+    "Right Station Starts",
+    "Right Wall Starts"
+  ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
