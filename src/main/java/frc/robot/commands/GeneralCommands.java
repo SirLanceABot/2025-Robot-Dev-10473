@@ -38,11 +38,18 @@ public abstract class GeneralCommands
     public static Command intakeAlgaeCommand()
     {
         // TODO: moveToSetPositionCommand does't ending
-        return
-        Commands.parallel(
-            pivot.moveToSetPositionCommand(TargetPosition.kGrabAlgaePosition),
-            roller.intakeCommand(0.5)
+        if(pivot != null && roller != null)
+        {
+            return
+            Commands.parallel(
+            roller.intakeCommand(0.5),
+            pivot.moveToSetPositionCommand(TargetPosition.kGrabAlgaePosition)
         )
         .andThen(pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition));
+        }
+        else
+        {
+            return Commands.none();
+        }
     }
 }

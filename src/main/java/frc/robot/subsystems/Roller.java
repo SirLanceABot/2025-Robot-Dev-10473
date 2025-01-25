@@ -7,6 +7,7 @@
 package frc.robot.subsystems;
 
 import java.lang.invoke.MethodHandles;
+import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -116,7 +117,7 @@ public class Roller extends SubsystemLance
      */
     public Command intakeCommand(double speed)
     {
-        return run( () -> intake(speed) )
+        return runOnce( () -> intake(speed) )
         // .withTimeout(time)
         .withName("Intake Roller");
     }
@@ -129,7 +130,7 @@ public class Roller extends SubsystemLance
      */
     public Command ejectCommand(double speed, double time)
     {
-        return run( () -> eject(speed) )
+        return runOnce( () -> eject(speed) )
         .withTimeout(time)
         .withName("Eject Roller");
     }
@@ -140,7 +141,7 @@ public class Roller extends SubsystemLance
      */
     public Command stopCommand()
     {
-        return run( () -> stop() ).withName("Stop Roller");
+        return runOnce( () -> stop() ).withName("Stop Roller");
     }
 
     /**

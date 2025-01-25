@@ -41,7 +41,7 @@ public abstract class OperatorBindings
         controller = robotContainer.getOperatorController();
     }
 
-    private static void configAButton()
+    public static void configAButton()
     {
         Trigger aButtonTrigger = controller.a();
         aButtonTrigger

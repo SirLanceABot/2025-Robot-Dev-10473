@@ -72,7 +72,9 @@ public class Robot extends TimedRobot
 
     @Override
     public void teleopPeriodic() 
-    {}
+    {
+        OperatorBindings.configAButton();
+    }
 
     @Override
     public void teleopExit() 
