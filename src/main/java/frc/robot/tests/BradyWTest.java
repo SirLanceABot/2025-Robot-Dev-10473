@@ -93,11 +93,11 @@ public class BradyWTest implements Test
 
         // if(joystick.getRawButton(1))
         // {
-        //     climb.climbUpCommand(0.1, 5.0).schedule();
+        //     climb.climbUpCommand().schedule();
         // }
         // else if(joystick.getRawButton(2))
         // {
-        //     climb.climbDownCommand(0.1, 3.0).schedule();
+        //     climb.climbDownCommand().schedule();
         // }
         // else
         // {

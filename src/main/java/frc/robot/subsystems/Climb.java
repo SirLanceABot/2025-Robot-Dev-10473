@@ -113,24 +113,24 @@ public class Climb extends SubsystemLance
 
     /**
      * Pulls the robot up
-     * @param speed Speed of the motors
-     * @param time How long the motors are on for
      * @return Returns the climb up command
      */
-    public Command climbUpCommand(double speed, double time)
+    public Command climbUpCommand()
     {
-        return run(() -> climbUp(speed) ).withTimeout(time).withName("Climb Up");
+        return run(() -> climbUp(0.1) )
+        .withTimeout(5.0)
+        .withName("Climb Up");
     }
 
     /**
      * Brings the robot down
-     * @param speed Speed of the motors
-     * @param time How long the motors are on for
      * @return Returns the climb down command
      */
-    public Command climbDownCommand(double speed, double time)
+    public Command climbDownCommand()
     {
-        return run(() -> climbDown(speed) ).withTimeout(time).withName("Climb Down");
+        return run(() -> climbDown(0.1) )
+        .withTimeout(3.0)
+        .withName("Climb Down");
     }
 
     /**
