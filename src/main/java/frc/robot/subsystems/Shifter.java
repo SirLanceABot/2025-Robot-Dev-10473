@@ -36,7 +36,7 @@ public class Shifter extends SubsystemLance
     // Put all class variables and instance variables here
     private final DoubleSolenoid solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM,
     Constants.Shifter.FORWARD_CHANNEL_PORT, Constants.Shifter.REVERSE_CHANNEL_PORT);
-    private boolean isHighGear;
+    private static boolean isHighGear;
     
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -70,7 +70,7 @@ public class Shifter extends SubsystemLance
         isHighGear = false;
     }
 
-    public boolean isHighGear()
+    public static boolean isHighGear()
     {
         return isHighGear;
     }
