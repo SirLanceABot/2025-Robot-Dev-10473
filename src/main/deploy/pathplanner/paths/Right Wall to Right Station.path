@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 3.7856770833333324,
-        "y": 2.8789930555555556
+        "x": 1.716,
+        "y": 0.759
       },
       "prevControl": {
-        "x": 3.2856770833333324,
-        "y": 2.012967651771117
+        "x": 2.569392123287671,
+        "y": 2.469841609589041
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "S3"
+      "linkedName": "Right Station"
     }
   ],
   "rotationTargets": [],

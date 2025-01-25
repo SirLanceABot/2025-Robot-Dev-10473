@@ -8,24 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.176,
-        "y": 0.6030000000000001
+        "x": 6.175556506847758,
+        "y": 0.38127140410235577
       },
       "isLocked": false,
       "linkedName": "Right Wall"
     },
     {
       "anchor": {
-        "x": 3.7856770833333324,
-        "y": 2.8789930555555556
+        "x": 5.709760273971045,
+        "y": 6.481699486294137
       },
       "prevControl": {
-        "x": 3.2856770833333324,
-        "y": 2.012967651771117
+        "x": 6.359856084913074,
+        "y": 5.72184723973852
+      },
+      "nextControl": {
+        "x": 4.552782534245017,
+        "y": 7.8340111301297535
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.125,
+        "y": 3.95
+      },
+      "prevControl": {
+        "x": 2.223801369863014,
+        "y": 3.867230308219178
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "S3"
+      "linkedName": "S4"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +58,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -173.98344983000774
   },
   "reversed": false,
   "folder": "Right Wall Starts",
