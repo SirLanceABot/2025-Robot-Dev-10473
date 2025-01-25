@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.GeneralCommands;
+import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
 
 public class Robot extends TimedRobot 
@@ -22,6 +23,7 @@ public class Robot extends TimedRobot
         robotContainer = new RobotContainer();
         GeneralCommands.createGeneralCommands(robotContainer);
         OperatorBindings.createButtonBindings(robotContainer);
+        DriverBindings.createBindings(robotContainer);
     }
 
     @Override
