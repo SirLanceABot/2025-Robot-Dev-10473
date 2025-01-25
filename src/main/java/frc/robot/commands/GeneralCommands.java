@@ -37,15 +37,21 @@ public abstract class GeneralCommands
 
     public static Command intakeAlgaeCommand()
     {
-        // TODO: moveToSetPositionCommand does't ending
         if(pivot != null && roller != null)
         {
             return
             Commands.parallel(
-            roller.intakeCommand(0.5),
-            pivot.moveToSetPositionCommand(TargetPosition.kGrabAlgaePosition)
-        )
-        .andThen(pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition));
+                roller.intakeCommand(0.5),
+                pivot.moveToSetPositionCommand(TargetPosition.kGrabAlgaePosition)
+                    .until( () -> Math.abs(TargetPosition.kGrabAlgaePosition.pivot - pivot.getPosition()) < 0.1)
+                    .withTimeout(2.0)
+            )
+            .andThen(Commands.waitUntil(roller.isDetectedSupplier()))
+            .andThen(roller.stopCommand())
+            .andThen(pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
+                .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1)
+                .withTimeout(2.0)            
+            );
         }
         else
         {

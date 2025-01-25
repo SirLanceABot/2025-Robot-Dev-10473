@@ -157,6 +157,10 @@ public class Roller extends SubsystemLance
         .andThen(stopCommand());
     }
 
+    public BooleanSupplier isDetectedSupplier()
+    {
+        return sensor.isDetectedSupplier();
+    }
 
     // Use a method reference instead of this method
     // public Command stopCommand()
