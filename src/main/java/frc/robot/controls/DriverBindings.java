@@ -3,6 +3,7 @@ package frc.robot.controls;
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
 
 public final class DriverBindings
@@ -30,12 +31,90 @@ public final class DriverBindings
 
     public static void createBindings(RobotContainer robotContainer)
     {
+        controller = robotContainer.getDriverController();
 
+        configSuppliers();
+        configAButton();
+        configBButton();
+        configXButton();
+        configYButton();
+        configLeftBumper();
+        configRightBumper();
+        configBackButton();
+        configStartButton();
+        configLeftStick();
+        configRightStick();
+        configLeftTrigger();
+        configRightTrigger();
+        configDpadUp();
+        configDpadDown();
     }
 
     private static void configSuppliers()
+    {}
+
+    private static void configAButton()
     {
-        
+        Trigger aButtonTrigger = controller.a();
     }
+
+    private static void configBButton()
+    {
+        Trigger bButtonTrigger = controller.b();
+    }
+
+    private static void configXButton()
+    {
+        Trigger xButtonTrigger = controller.x();
+    }
+
+    private static void configYButton()
+    {
+        Trigger yButtonTrigger = controller.y();
+    }
+
+    private static void configLeftBumper()
+    {
+        Trigger leftBumperTrigger = controller.leftBumper();
+    }
+
+    private static void configRightBumper()
+    {
+        Trigger rightBumperTrigger = controller.rightBumper();
+    }
+
+    private static void configBackButton()
+    {
+        Trigger backButtonTrigger = controller.back();
+    }
+
+    private static void configStartButton()
+    {
+        Trigger startButtonTrigger = controller.start();
+    }
+
+    private static void configLeftStick()
+    {
+        Trigger leftStickTrigger = controller.leftStick();
+    }
+
+    private static void configRightStick()
+    {
+        Trigger rightStickTrigger = controller.rightStick();
+    }
+
+    private static void configLeftTrigger()
+    {}
+
+    private static void configRightTrigger()
+    {}
+
+    private static void configDpadUp()
+    {}
+
+    private static void configDpadDown()
+    {}
+
+
 
 }
