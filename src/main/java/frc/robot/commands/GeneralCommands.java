@@ -47,7 +47,7 @@ public abstract class GeneralCommands
         {
             return
             Commands.parallel(
-                roller.intakeCommand(0.5),
+                roller.intakeCommand(),
                 pivot.moveToSetPositionCommand(TargetPosition.kGrabAlgaePosition)
                     .until( () -> Math.abs(TargetPosition.kGrabAlgaePosition.pivot - pivot.getPosition()) < 0.1)
                     .withTimeout(2.0)
@@ -58,6 +58,21 @@ public abstract class GeneralCommands
                 .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1)
                 .withTimeout(2.0)            
             );
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    public static Command scoreCoralCommand()
+    {
+        if(roller != null)
+        {
+            return
+            roller.ejectCoralCommand()
+            .andThen(Commands.waitSeconds(2.0))
+            .andThen(roller.stopCommand());
         }
         else
         {

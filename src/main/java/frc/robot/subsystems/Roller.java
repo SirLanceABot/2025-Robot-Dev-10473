@@ -84,7 +84,7 @@ public class Roller extends SubsystemLance
      * Makes the rollers intake
      * @param speed The motor speed
      */
-    public void intake(double speed)
+    private void intake(double speed)
     {
         set(speed);
     }
@@ -93,7 +93,7 @@ public class Roller extends SubsystemLance
      * Makes the rollers eject
      * @param speed The motor speed
      */
-    public void eject(double speed)
+    private void eject(double speed)
     {
         set(-speed);
     }
@@ -101,7 +101,7 @@ public class Roller extends SubsystemLance
     /**
      * Makes the rollers stop
      */
-    public void stop()
+    private void stop()
     {
         set(0.0);
     }
@@ -111,10 +111,9 @@ public class Roller extends SubsystemLance
      * @param speed Speed of the motors
      * @return Returns intake command
      */
-    public Command intakeCommand(double speed)
+    public Command intakeCommand()
     {
-        return runOnce( () -> intake(speed) )
-        // .withTimeout(time)
+        return runOnce( () -> intake(0.5) )
         .withName("Intake Roller");
     }
 
@@ -124,10 +123,9 @@ public class Roller extends SubsystemLance
      * @param time  How long the motors run (seconds)
      * @return Returns eject command
      */
-    public Command ejectCommand(double speed, double time)
+    public Command ejectCoralCommand()
     {
-        return runOnce( () -> eject(speed) )
-        .withTimeout(time)
+        return runOnce( () -> eject(0.5) )
         .withName("Eject Roller");
     }
 
@@ -145,10 +143,10 @@ public class Roller extends SubsystemLance
      * @param speed Speed of the motors
      * @return Returns intake until detected command
      */
-    public Command intakeUntilDetectedCommand(double speed)
+    public Command intakeUntilDetectedCommand()
     {
         return 
-        runOnce( () -> intake(speed) )
+        runOnce( () -> intake(0.5) )
         .andThen(Commands.waitUntil(sensor.isDetectedSupplier()) )
         .andThen(stopCommand());
     }

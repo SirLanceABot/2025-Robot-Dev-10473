@@ -76,15 +76,15 @@ public class BradyWTest implements Test
     {
         if(joystick.getRawButton(1))
         {
-            roller.intakeCommand(0.5).schedule();
+            roller.intakeCommand().schedule();
         }
         else if(joystick.getRawButton(2))
         {
-            roller.ejectCommand(0.5, 1.5).schedule();
+            roller.ejectCoralCommand().schedule();
         }
         else if(joystick.getRawButton(3))
         {
-            roller.intakeUntilDetectedCommand(0.5).schedule();
+            roller.intakeUntilDetectedCommand().schedule();
         }
         else if(joystick.getRawButton(4))
         {

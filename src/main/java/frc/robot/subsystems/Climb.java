@@ -1,8 +1,3 @@
-/**
- * @author
- * Brady Woodard
- * Mason Bellinger
- */
 package frc.robot.subsystems;
 
 import java.lang.invoke.MethodHandles;
@@ -16,6 +11,8 @@ import frc.robot.motors.TalonFXLance;
 
 /**
  * Creates a new climb subsystem with one Kraken motor
+ * @author Brady Woodard
+ * @author Mason Bellinger
  */
 public class Climb extends SubsystemLance
 {
