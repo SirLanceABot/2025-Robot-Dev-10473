@@ -22,8 +22,8 @@ public class Robot extends TimedRobot
     {
         robotContainer = new RobotContainer();
         GeneralCommands.createGeneralCommands(robotContainer);
-        OperatorBindings.createButtonBindings(robotContainer);
         DriverBindings.createBindings(robotContainer);
+        OperatorBindings.createBindings(robotContainer);
     }
 
     @Override

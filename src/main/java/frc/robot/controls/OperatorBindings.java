@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
 import frc.robot.commands.GeneralCommands;
 
-public abstract class OperatorBindings 
+public final class OperatorBindings 
 {
     // This string gets the full name of the class, including the package name
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -29,22 +29,45 @@ public abstract class OperatorBindings
 
 
     private OperatorBindings()
+    {}
+
+    public static void createBindings(RobotContainer robotContainer)
     {
-        System.out.println("  Constructor Started:  " + fullClassName);
+        System.out.println("Creating Operator Bindings: " + fullClassName);
 
-
-        System.out.println("  Constructor Finished: " + fullClassName);
-    }
-
-    public static void createButtonBindings(RobotContainer robotContainer)
-    {
         controller = robotContainer.getOperatorController();
+
+        configAButton();
+        configBButton();
+        configXButton();
+        configYButton();
     }
 
-    public static void configAButton()
+    private static void configSuppliers()
+    {
+
+    }
+
+    private static void configAButton()
     {
         Trigger aButtonTrigger = controller.a();
         aButtonTrigger
             .onTrue( GeneralCommands.intakeAlgaeCommand() );
     }
+    private static void configBButton()
+    {
+        Trigger bButtonTrigger = controller.b();
+    }
+
+    private static void configXButton()
+    {
+        Trigger xButtonTrigger = controller.x();
+
+    }
+
+    private static void configYButton()
+    {
+        Trigger yButtonTrigger = controller.y();
+    }
 }
+
