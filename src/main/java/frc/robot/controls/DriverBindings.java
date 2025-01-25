@@ -31,6 +31,7 @@ public final class DriverBindings
     // Put all class constructors here
 
     /**
+     * Button bindings for the driver
      * @author Jackson D.
      */
 

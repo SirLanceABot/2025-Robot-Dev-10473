@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 
 /**
- * this class creates a shifter subsystem
+ * This class creates a shifter subsystem
  * @author Jackson D.
  * @author Robbie J.
  */
@@ -48,8 +48,7 @@ public class Shifter extends SubsystemLance
     public Shifter()
     {
         super("Shifter");
-        System.out.println("  Constructor Started:  " + fullClassName); 
-        // setDefaultCommand(shiftHighCommand());   
+        System.out.println("  Constructor Started:  " + fullClassName);  
         shiftHighCommand();
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -109,14 +108,6 @@ public class Shifter extends SubsystemLance
 
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here
-
-    @Override
-    public void periodic()
-    {
-        // This method will be called once per scheduler run
-        // Use this for sensors that need to be read periodically.
-        // Use this for data that needs to be logged.
-    }
 
     @Override
     public String toString()
