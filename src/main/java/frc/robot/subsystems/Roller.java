@@ -1,9 +1,3 @@
-
-/**
- * @author
- * Mason Bellinger
- * Brady Woodard
- */
 package frc.robot.subsystems;
 
 import java.lang.invoke.MethodHandles;
@@ -17,6 +11,8 @@ import frc.robot.sensors.Proximity;
 
 /**
  * This is an example of what a subsystem should look like.
+ * @author Brady Woodard
+ * @author Mason Bellinger
  */
 public class Roller extends SubsystemLance
 {

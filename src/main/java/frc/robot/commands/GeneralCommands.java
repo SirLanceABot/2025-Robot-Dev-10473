@@ -35,6 +35,12 @@ public abstract class GeneralCommands
         roller = robotContainer.getRoller();
     }
 
+    /**
+     * Command to intake algae from ground
+     * @return Command to intake algae
+     * @author Mason Bellinger
+     * @author Brady Woodard
+     */
     public static Command intakeAlgaeCommand()
     {
         if(pivot != null && roller != null)
