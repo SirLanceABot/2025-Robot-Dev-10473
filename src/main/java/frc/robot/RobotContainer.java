@@ -16,6 +16,7 @@ import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Shifter;
 import frc.robot.commands.GeneralCommands;
+import frc.robot.controls.DriverController;
 import frc.robot.subsystems.Climb;
 
 public class RobotContainer 
@@ -37,25 +38,31 @@ public class RobotContainer
     private boolean useShifter              = false;
     private boolean useClimb                = false;
 
+    private boolean useDriverController     = false;
+    private boolean useOperatorController   = false;
+
     public final boolean fullRobot;
     private final Pivot pivot;
     private final Drivetrain drivetrain;
     private final Roller roller;
     private final Shifter shifter;
     private final Climb climb;
-    private final CommandXboxController operatorController = new CommandXboxController(0);
+
+    private final CommandXboxController operatorController;
+    private final CommandXboxController driverController;
 
 
     RobotContainer() 
     {
         fullRobot           = (useFullRobot);
-        pivot               = (useFullRobot || usePivot)             ? new Pivot()                  : null;
-        drivetrain          = (useFullRobot || useDrivetrain)        ? new Drivetrain()             : null;
-        roller              = (useFullRobot || useRoller)            ? new Roller()                 : null;
-        shifter             = (useFullRobot || useShifter)           ? new Shifter()                : null;
-        climb               = (useFullRobot || useClimb)             ? new Climb()                  : null;
+        pivot               = (useFullRobot || usePivot)                ? new Pivot()                                                                                                  : null;
+        drivetrain          = (useFullRobot || useDrivetrain)           ? new Drivetrain()                                                                                             : null;
+        roller              = (useFullRobot || useRoller)               ? new Roller()                                                                                                 : null;
+        shifter             = (useFullRobot || useShifter)              ? new Shifter()                                                                                                : null;
+        climb               = (useFullRobot || useClimb)                ? new Climb()                                                                                                  : null;
 
-        configureBindings();
+        driverController    = (useFullRobot || useDriverController)     ? new CommandXboxController(Constants.Controllers.DRIVER_CONTROLLER_PORT)                                      : null;
+        operatorController  = (useFullRobot || useOperatorController)   ? new CommandXboxController(Constants.Controllers.OPERATOR_CONTROLLER_PORT)                                    : null;
     }
 
     public Drivetrain getDrivetrain()
@@ -88,6 +95,11 @@ public class RobotContainer
         return operatorController;
     }
 
+    public CommandXboxController getDriverController()
+    {
+        return driverController;
+    }
+
     public BooleanSupplier isRedAllianceSupplier()
     {
         return () ->
@@ -101,9 +113,6 @@ public class RobotContainer
             return false;
         };
     }
-
-    private void configureBindings() 
-    {}
 
     public Command getAutonomousCommand() 
     {
