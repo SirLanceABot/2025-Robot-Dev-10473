@@ -1,7 +1,10 @@
 package frc.robot.controls;
 
 import java.lang.invoke.MethodHandles;
+import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
@@ -25,12 +28,17 @@ public final class DriverBindings
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
 
+    /*
+     * @author Jackson D.
+     */
 
     private DriverBindings()
     {}
 
     public static void createBindings(RobotContainer robotContainer)
     {
+        System.out.println("Creating Driver Bindings:" + fullClassName);
+        
         controller = robotContainer.getDriverController();
 
         configSuppliers();
@@ -115,6 +123,17 @@ public final class DriverBindings
     private static void configDpadDown()
     {}
 
+    private static BooleanSupplier teleopEnabledSupplier()
+    {
+        return () -> DriverStation.isTeleopEnabled();
+    } 
 
-
+    // private static void configRumble(int time)
+    // {
+    //     Trigger rumbleTrigger = (teleopEnabledSupplier());
+    //     rumbleTrigger
+    //         .onTrue(controller.getHID().setRumble(RumbleType.kBothRumble, 1));
+    //         .onFalse(controller.getHID().setRumble(RumbleType.kBothRumble, 0));
+    // }
+    
 }
