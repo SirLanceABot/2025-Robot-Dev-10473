@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.126,
-        "y": 7.428
+        "x": 3.125,
+        "y": 3.95
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.6148062331622,
-        "y": 7.428
+        "x": 1.7170774647887312,
+        "y": 3.84075704225352
       },
       "isLocked": false,
-      "linkedName": "Left Wall"
+      "linkedName": "S4"
     },
     {
       "anchor": {
-        "x": 5.965885416666667,
-        "y": 3.158506944444444
+        "x": 3.125,
+        "y": 3.95
       },
       "prevControl": {
-        "x": 7.330070825955657,
-        "y": 4.429953205050803
-      },
-      "nextControl": {
-        "x": 4.766643636181137,
-        "y": 2.0407912241480775
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.8021126760563368,
-        "y": 0.7086267605633781
-      },
-      "prevControl": {
-        "x": 2.649586432208154,
-        "y": 1.7108731804366444
+        "x": 1.0226232394366184,
+        "y": 3.7840669014084503
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Station"
+      "linkedName": "S4"
     }
   ],
   "rotationTargets": [],
@@ -58,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -173.98344983000774
   },
-  "reversed": false,
-  "folder": "Left Wall Starts",
+  "reversed": true,
+  "folder": "Reef Back Out",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -173.98344983000774
   },
   "useDefaultConstraints": true
 }

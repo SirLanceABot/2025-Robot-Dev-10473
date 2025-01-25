@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.283,
-        "y": 4.026
+        "x": 5.826128472222222,
+        "y": 3.997048611111111
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.874305555555555,
-        "y": 0.1397569444444433
+        "x": 6.826128472222222,
+        "y": 3.997048611111111
       },
       "isLocked": false,
-      "linkedName": "Middle"
+      "linkedName": "S1"
     },
     {
       "anchor": {
-        "x": 3.7856770833333324,
-        "y": 2.8789930555555556
+        "x": 4.551584507042253,
+        "y": 5.768221830985915
       },
       "prevControl": {
-        "x": 3.268576388888888,
-        "y": 2.138281249999999
+        "x": 5.546233671924279,
+        "y": 5.871532231234257
+      },
+      "nextControl": {
+        "x": 2.1836267605633783,
+        "y": 5.522271126760562
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.8021126760563368,
+        "y": 0.7086267605633781
+      },
+      "prevControl": {
+        "x": 2.7669225352112656,
+        "y": 1.8487464788732362
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "S3"
+      "linkedName": "Right Station"
     }
   ],
   "rotationTargets": [],
@@ -45,7 +61,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Middle Starts",
+  "folder": "Reef Sarts",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

@@ -3,11 +3,12 @@
   "robotLength": 0.9,
   "holonomicMode": false,
   "pathFolders": [
+    "Barge Starts",
     "Left Station Starts",
     "Left Wall Starts",
     "Middle Starts",
-    "Barge Starts",
-    "Reef Starts",
+    "Reef Sarts",
+    "Reef Back Out",
     "Right Station Starts",
     "Right Wall Starts"
   ],

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.126,
-        "y": 7.428
+        "x": 5.679708904109589,
+        "y": 2.8905607876712325
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.6148062331622,
-        "y": 7.428
+        "x": 6.308978873239437,
+        "y": 1.6865316901408436
       },
       "isLocked": false,
-      "linkedName": "Left Wall"
+      "linkedName": "S2"
     },
     {
       "anchor": {
-        "x": 5.965885416666667,
-        "y": 3.158506944444444
+        "x": 4.976760563380281,
+        "y": 5.79656690140845
       },
       "prevControl": {
-        "x": 7.330070825955657,
-        "y": 4.429953205050803
+        "x": 7.338455877399839,
+        "y": 5.612059455000672
       },
       "nextControl": {
-        "x": 4.766643636181137,
-        "y": 2.0407912241480775
+        "x": 1.3485915492957732,
+        "y": 6.080017605633803
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 0.7086267605633781
       },
       "prevControl": {
-        "x": 2.649586432208154,
-        "y": 1.7108731804366444
+        "x": 2.6677147887323924,
+        "y": 1.7495387323943634
       },
       "nextControl": null,
       "isLocked": false,
@@ -61,7 +61,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Left Wall Starts",
+  "folder": "Reef Sarts",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
