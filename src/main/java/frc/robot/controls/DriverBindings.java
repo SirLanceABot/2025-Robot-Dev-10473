@@ -30,7 +30,7 @@ public final class DriverBindings
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
 
-    /*
+    /**
      * @author Jackson D.
      */
 
@@ -127,6 +127,10 @@ public final class DriverBindings
     private static void configDpadDown()
     {}
 
+    /**
+     *@author Jackson D
+     *@author Robbie J
+    */ 
     private static void configRumble(int time)
     {
         BooleanSupplier supplier = () -> DriverStation.isTeleopEnabled() && Math.abs(DriverStation.getMatchTime() - time) < 0.5;

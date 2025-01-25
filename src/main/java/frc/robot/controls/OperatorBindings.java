@@ -80,6 +80,12 @@ public final class OperatorBindings
         Trigger yButtonTrigger = controller.y();
     }
 
+
+    
+    /**
+     *@author Jackson D
+     *@author Robbie J
+    */ 
     private static void configRumble(int time)
     {
         BooleanSupplier supplier = () -> DriverStation.isTeleopEnabled() && Math.abs(DriverStation.getMatchTime() - time) < 0.5;
