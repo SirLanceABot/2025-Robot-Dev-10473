@@ -35,6 +35,9 @@ public class Drivetrain extends SubsystemLance
     private final TalonFXLance rightFollower = new TalonFXLance(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, Constants.Drivetrain.RIGHT_FOLLOWER_CAN_BUS, "Right Follower");
 
     private final DifferentialDrive differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
+
+    private final double MAXLOWGEARSPEED = 0.5;
+    private double speedDivisor;
     
 
     // *** INNER ENUMS and INNER CLASSES ***
@@ -67,10 +70,10 @@ public class Drivetrain extends SubsystemLance
         rightLeader.setupFactoryDefaults();
         rightFollower.setupFactoryDefaults();
 
-        leftLeader.setupCoastMode();
-        leftFollower.setupCoastMode();
-        rightLeader.setupCoastMode();
-        rightFollower.setupCoastMode();
+        leftLeader.setupBrakeMode();
+        leftFollower.setupBrakeMode();
+        rightLeader.setupBrakeMode();
+        rightFollower.setupBrakeMode();
 
         leftFollower.setupFollower(Constants.Drivetrain.LEFT_LEADER_PORT, false);
         rightFollower.setupFollower(Constants.Drivetrain.RIGHT_LEADER_PORT, false);
@@ -79,6 +82,8 @@ public class Drivetrain extends SubsystemLance
         leftLeader.setupInverted(false);
         rightFollower.setupInverted(false);
     }
+
+    
 
 
     // Use a method reference instead of this method
@@ -111,6 +116,26 @@ public class Drivetrain extends SubsystemLance
     {
         differentialDrive.arcadeDrive(speed.getAsDouble(), rotation.getAsDouble(), squared);
     }
+
+    /**
+     * stops the drivetrain motors
+     */
+    public void stopDrive()
+    {
+        differentialDrive.stopMotor();
+    }
+
+    public void slowToShift()
+    {}
+
+    public void shiftOnFly()
+    {
+        leftLeader.setupCoastMode();
+        rightLeader.setupCoastMode();
+
+
+    }
+
 
     /**
      * @param speed
@@ -156,14 +181,6 @@ public class Drivetrain extends SubsystemLance
     }
 
     /**
-     * stops the drivetrain motors
-     */
-    public void stopDrive()
-    {
-        differentialDrive.stopMotor();
-    }
-
-    /**
      * @return
      * returns the stopDrive method as a Command
      */
@@ -182,14 +199,13 @@ public class Drivetrain extends SubsystemLance
      */
     public Command autonomousDriveCommand(double driveSpeed, double driveTime)
     {
-        return arcadeDriveCommand(() -> driveSpeed, () -> 0.0, false)
+        return arcadeDriveCommand(() -> driveSpeed / speedDivisor, () -> 0.0, false)
             .withTimeout(driveTime)
             .andThen(stopDriveCommand())
             .withName("Autonomous Drive Command");
     }
 
     /**
-     * 
      * @param rotationSpeed
      * sets the rotation speed of the motors
      * @param driveTime
@@ -206,7 +222,6 @@ public class Drivetrain extends SubsystemLance
     }
 
     /**
-     * 
      * @param driveSpeed
      * sewts the forward speed of the motors
      * @param rotationSpeed
