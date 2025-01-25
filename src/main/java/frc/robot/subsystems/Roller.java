@@ -108,7 +108,6 @@ public class Roller extends SubsystemLance
 
     /**
      * Command to make the rollers intake
-     * @param speed Speed of the motors
      * @return Returns intake command
      */
     public Command intakeCommand()
@@ -118,12 +117,20 @@ public class Roller extends SubsystemLance
     }
 
     /**
-     * Command to make the rollers eject
-     * @param speed Speed of the motors
-     * @param time  How long the motors run (seconds)
-     * @return Returns eject command
+     * Command to eject coral
+     * @return Returns eject coral command
      */
     public Command ejectCoralCommand()
+    {
+        return runOnce( () -> eject(-0.5) )
+        .withName("Eject Roller");
+    }
+
+    /**
+     * Command to eject algae
+     * @return Returns eject algae command
+     */
+    public Command ejectAlgaeCommand()
     {
         return runOnce( () -> eject(0.5) )
         .withName("Eject Roller");

@@ -57,12 +57,15 @@ public final class OperatorBindings
     private static void configBButton()
     {
         Trigger bButtonTrigger = controller.b();
+        bButtonTrigger
+            .onTrue( GeneralCommands.scoreCoralCommand() );
     }
 
     private static void configXButton()
     {
         Trigger xButtonTrigger = controller.x();
-
+        xButtonTrigger
+            .onTrue( GeneralCommands.scoreAlgaeCommand() );
     }
 
     private static void configYButton()

@@ -79,4 +79,20 @@ public abstract class GeneralCommands
             return Commands.none();
         }
     }
+
+    public static Command scoreAlgaeCommand()
+    {
+        if(roller != null)
+        {
+            return
+            roller.ejectAlgaeCommand()
+            .andThen()
+            .andThen(Commands.waitSeconds(2.0))
+            .andThen(roller.stopCommand());
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
 }
