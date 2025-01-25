@@ -1,7 +1,11 @@
 package frc.robot.controls;
 
 import java.lang.invoke.MethodHandles;
+import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
@@ -41,6 +45,9 @@ public final class OperatorBindings
         configBButton();
         configXButton();
         configYButton();
+
+        configRumble(5);
+        configRumble(15);
     }
 
     private static void configSuppliers()
@@ -71,6 +78,15 @@ public final class OperatorBindings
     private static void configYButton()
     {
         Trigger yButtonTrigger = controller.y();
+    }
+
+    private static void configRumble(int time)
+    {
+        BooleanSupplier supplier = () -> DriverStation.isTeleopEnabled() && Math.abs(DriverStation.getMatchTime() - time) < 0.5;
+        Trigger rumbleTrigger = new Trigger(supplier);
+        rumbleTrigger
+            .onTrue(Commands.runOnce(() -> controller.getHID().setRumble(RumbleType.kBothRumble, 1)))
+            .onFalse(Commands.runOnce(() -> controller.getHID().setRumble(RumbleType.kBothRumble, 0)));
     }
 }
 
