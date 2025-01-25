@@ -5,6 +5,8 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
@@ -41,21 +43,23 @@ public final class DriverBindings
         
         controller = robotContainer.getDriverController();
 
-        configSuppliers();
-        configAButton();
-        configBButton();
-        configXButton();
-        configYButton();
-        configLeftBumper();
-        configRightBumper();
-        configBackButton();
-        configStartButton();
-        configLeftStick();
-        configRightStick();
-        configLeftTrigger();
-        configRightTrigger();
-        configDpadUp();
-        configDpadDown();
+        // configSuppliers();
+        // configAButton();
+        // configBButton();
+        // configXButton();
+        // configYButton();
+        // configLeftBumper();
+        // configRightBumper();
+        // configBackButton();
+        // configStartButton();
+        // configLeftStick();
+        // configRightStick();
+        // configLeftTrigger();
+        // configRightTrigger();
+        // configDpadUp();
+        // configDpadDown();
+        configRumble(10);
+        configRumble(5);
     }
 
     private static void configSuppliers()
@@ -123,17 +127,13 @@ public final class DriverBindings
     private static void configDpadDown()
     {}
 
-    private static BooleanSupplier teleopEnabledSupplier()
+    private static void configRumble(int time)
     {
-        return () -> DriverStation.isTeleopEnabled();
-    } 
+        BooleanSupplier supplier = () -> DriverStation.isTeleopEnabled() && Math.abs(DriverStation.getMatchTime() - time) < 0.5;
+        Trigger rumbleTrigger = new Trigger(supplier);
+        rumbleTrigger
+            .onTrue(Commands.runOnce(() -> controller.getHID().setRumble(RumbleType.kBothRumble, 1)))
+            .onFalse(Commands.runOnce(() -> controller.getHID().setRumble(RumbleType.kBothRumble, 0)));
+    }
 
-    // private static void configRumble(int time)
-    // {
-    //     Trigger rumbleTrigger = (teleopEnabledSupplier());
-    //     rumbleTrigger
-    //         .onTrue(controller.getHID().setRumble(RumbleType.kBothRumble, 1));
-    //         .onFalse(controller.getHID().setRumble(RumbleType.kBothRumble, 0));
-    // }
-    
 }
