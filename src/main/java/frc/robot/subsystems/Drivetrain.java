@@ -37,7 +37,7 @@ public class Drivetrain extends SubsystemLance
     private final DifferentialDrive differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
 
     private final double MAXLOWGEARSPEED = 0.5;
-    private double speedDivisor;
+    private double divisor = 1;
     
 
     // *** INNER ENUMS and INNER CLASSES ***
@@ -114,7 +114,36 @@ public class Drivetrain extends SubsystemLance
      */
     public void arcadeDrive(DoubleSupplier speed, DoubleSupplier rotation, boolean squared)
     {
-        differentialDrive.arcadeDrive(speed.getAsDouble(), rotation.getAsDouble(), squared);
+        differentialDrive.arcadeDrive(speed.getAsDouble() / divisor, rotation.getAsDouble() / divisor, squared);
+    }   
+    
+    /**
+     * @param driveSpeed
+     * sets drivetrain speed
+     * @param rotationSpeed
+     * sets drivetrain rotation speed
+     * @param squared
+     * boolean for squaring the outputs to limit drivetrain sensitivity 
+     */
+    public void tankDrive(DoubleSupplier driveSpeed, DoubleSupplier rotationSpeed, boolean squared)
+    {
+        differentialDrive.tankDrive(driveSpeed.getAsDouble() / divisor, rotationSpeed.getAsDouble() / divisor, squared);
+    }
+
+    public void prepareShiftToLow()
+    {
+        leftLeader.setupCoastMode();
+        rightLeader.setupCoastMode();
+
+        divisor = 2;
+    }
+
+    public void postShiftToLow()
+    {
+        leftLeader.setupBrakeMode();
+        rightLeader.setupBrakeMode();
+
+        divisor = 1;
     }
 
     /**
@@ -124,18 +153,6 @@ public class Drivetrain extends SubsystemLance
     {
         differentialDrive.stopMotor();
     }
-
-    public void slowToShift()
-    {}
-
-    public void shiftOnFly()
-    {
-        leftLeader.setupCoastMode();
-        rightLeader.setupCoastMode();
-
-
-    }
-
 
     /**
      * @param speed
@@ -150,19 +167,6 @@ public class Drivetrain extends SubsystemLance
     public Command arcadeDriveCommand(DoubleSupplier speed, DoubleSupplier rotation, boolean squared)
     {
         return run( () -> arcadeDrive(speed, rotation, squared) );
-    }
-
-    /**
-     * @param driveSpeed
-     * sets drivetrain speed
-     * @param rotationSpeed
-     * sets drivetrain rotation speed
-     * @param squared
-     * boolean for squaring the outputs to limit drivetrain sensitivity 
-     */
-    public void tankDrive(DoubleSupplier driveSpeed, DoubleSupplier rotationSpeed, boolean squared)
-    {
-        differentialDrive.tankDrive(driveSpeed.getAsDouble(), rotationSpeed.getAsDouble(), squared);
     }
 
     /**
@@ -199,7 +203,7 @@ public class Drivetrain extends SubsystemLance
      */
     public Command autonomousDriveCommand(double driveSpeed, double driveTime)
     {
-        return arcadeDriveCommand(() -> driveSpeed / speedDivisor, () -> 0.0, false)
+        return arcadeDriveCommand(() -> driveSpeed, () -> 0.0, false)
             .withTimeout(driveTime)
             .andThen(stopDriveCommand())
             .withName("Autonomous Drive Command");
