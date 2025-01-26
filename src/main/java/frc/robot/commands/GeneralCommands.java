@@ -11,7 +11,7 @@ import frc.robot.subsystems.Pivot.TargetPosition;
 import frc.robot.subsystems.Roller;
 
 
-public abstract class GeneralCommands 
+public final class GeneralCommands 
 {
     // This string gets the full name of the class, including the package name
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();

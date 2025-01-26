@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.lang.invoke.MethodHandles;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -13,12 +15,24 @@ import frc.robot.controls.OperatorBindings;
 
 public class Robot extends TimedRobot 
 {
-    private Command m_autonomousCommand;
+    // This string gets the full name of the class, including the package name
+    private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
+
+    // *** STATIC INITIALIZATION BLOCK ***
+    // This block of code is run first when the class is loaded
+    static
+    {
+        System.out.println("Loading: " + fullClassName);
+    }
 
     private final RobotContainer robotContainer;
+    private Command autonomousCommand = null;
     private TestMode testMode = null;
 
-    public Robot() 
+    /** 
+     * Uses the default access modifier so that the Robot object can only be constructed in this same package.
+     */
+    Robot() 
     {
         robotContainer = new RobotContainer();
         GeneralCommands.createGeneralCommands(robotContainer);
@@ -26,56 +40,94 @@ public class Robot extends TimedRobot
         OperatorBindings.createBindings(robotContainer);
     }
 
+    /**
+     * This method runs periodically (20ms) regardless of the mode.
+     */
     @Override
     public void robotPeriodic() 
     {
+        // Run periodic tasks
+        PeriodicTask.runAllPeriodicTasks();
+
+        // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
+        // commands, running already-scheduled commands, removing finished or interrupted commands,
+        // and running subsystem periodic() methods.  This must be called from the robot's periodic
+        // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
     }
 
+    /**
+     * This method runs one time when the robot enters disabled mode.
+     */
     @Override
     public void disabledInit() 
     {}
 
+    /**
+     * This method runs periodically (20ms) during disabled mode.
+     */
     @Override
     public void disabledPeriodic() 
     {}
 
+    /**
+     * This method runs one time when the robot exits disabled mode.
+     */
     @Override
     public void disabledExit() 
     {}
 
+    /**
+     * This method runs one time when the robot enters autonomous mode.
+     */
     @Override
     public void autonomousInit() 
     {
-        m_autonomousCommand = robotContainer.getAutonomousCommand();
+        autonomousCommand = robotContainer.getAutonomousCommand();
 
-        if (m_autonomousCommand != null) 
+        if (autonomousCommand != null) 
         {
-            m_autonomousCommand.schedule();
+            autonomousCommand.schedule();
         }
     }
 
+    /**
+     * This method runs periodically (20ms) during autonomous mode.
+     */
     @Override
     public void autonomousPeriodic() 
     {}
 
+    /**
+     * This method runs one time when the robot exits autonomous mode.
+     */
     @Override
     public void autonomousExit() 
     {}
 
+    /**
+     * This method runs one time when the robot enters teleop mode.
+     */
     @Override
     public void teleopInit() 
     {
-        if (m_autonomousCommand != null) 
+        if (autonomousCommand != null) 
         {
-            m_autonomousCommand.cancel();
+            autonomousCommand.cancel();
+            autonomousCommand = null;
         }
     }
 
+    /**
+     * This method runs periodically (20ms) during teleop mode.
+     */
     @Override
     public void teleopPeriodic() 
     {}
 
+    /**
+     * This method runs one time when the robot exits teleop mode.
+     */
     @Override
     public void teleopExit() 
     {}
