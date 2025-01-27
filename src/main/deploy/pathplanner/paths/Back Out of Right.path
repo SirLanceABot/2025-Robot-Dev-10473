@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 2.673590177919295,
-        "y": 1.7941419975422124
+        "y": 1.7941419975422126
       },
       "isLocked": true,
       "linkedName": "Right Station"
@@ -45,7 +45,7 @@
     "rotation": 0.0
   },
   "reversed": true,
-  "folder": "Right Station Starts",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
