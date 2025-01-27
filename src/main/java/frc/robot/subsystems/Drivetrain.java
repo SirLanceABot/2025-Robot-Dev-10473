@@ -37,7 +37,7 @@ public class Drivetrain extends SubsystemLance
     private final DifferentialDrive differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
 
     private final double MAXLOWGEARSPEED = 0.5;
-    private double divisor = 1;
+    private double divisor = 1.0;
     
 
     // *** INNER ENUMS and INNER CLASSES ***
@@ -130,20 +130,46 @@ public class Drivetrain extends SubsystemLance
         differentialDrive.tankDrive(driveSpeed.getAsDouble() / divisor, rotationSpeed.getAsDouble() / divisor, squared);
     }
 
+    /*
+     * limits velocity when in high gear to allow shifting to low gear while moving (divisor)
+     * temporaily sets motors to coast mode for smoother transition
+     */
     public void prepareShiftToLow()
     {
         leftLeader.setupCoastMode();
         rightLeader.setupCoastMode();
 
-        divisor = 2;
+        divisor = 2.0;  // change this so that it limits the high gear velocity to the max for low gear
     }
 
+    /*
+     * resets the velocity limitations (divisor)
+     * resets motors back to brake mode
+     */
     public void postShiftToLow()
     {
         leftLeader.setupBrakeMode();
         rightLeader.setupBrakeMode();
 
-        divisor = 1;
+        divisor = 1.0;
+    }
+
+    /*
+     * temporaily sets motors to coast mode for smoother transition
+     */
+    public void prepareShiftToHigh()
+    {
+        leftLeader.setupCoastMode();
+        rightLeader.setupCoastMode();
+    }
+
+    /*
+     * resets motors back to brake mode
+     */
+    public void postShiftToHigh()
+    {
+        leftLeader.setupBrakeMode();
+        rightLeader.setupBrakeMode();
     }
 
     /**
@@ -166,7 +192,7 @@ public class Drivetrain extends SubsystemLance
      */
     public Command arcadeDriveCommand(DoubleSupplier speed, DoubleSupplier rotation, boolean squared)
     {
-        return run( () -> arcadeDrive(speed, rotation, squared) );
+        return run( () -> arcadeDrive(speed, rotation, squared) ).withName("Arcade Drive");
     }
 
     /**
@@ -181,7 +207,7 @@ public class Drivetrain extends SubsystemLance
      */
     public Command tankDriveCommand(DoubleSupplier driveSpeed, DoubleSupplier rotationSpeed, boolean squared)
     {
-        return run( () -> tankDrive(driveSpeed, rotationSpeed, squared) );
+        return run( () -> tankDrive(driveSpeed, rotationSpeed, squared) ).withName("Tank Drive");
     }
 
     /**
@@ -207,6 +233,38 @@ public class Drivetrain extends SubsystemLance
             .withTimeout(driveTime)
             .andThen(stopDriveCommand())
             .withName("Autonomous Drive Command");
+    }
+
+    /*
+     * runs the prepareShiftToLow() method
+     */
+    public Command prepareShiftToLowCommand()
+    {
+        return run( () -> prepareShiftToLow()).withName("Prepare Shift to Low");
+    }
+
+    /*
+     * runs the postShiftToLow() method
+     */
+    public Command postShiftToLowCommand()
+    {
+        return run( () -> postShiftToLow()).withName("Shifted to Low");
+    }
+
+    /*
+     * runs the prepareShiftToHigh() method
+     */
+    public Command prepareShiftToHighCommmand()
+    {
+        return run( () -> prepareShiftToHigh()).withName("Prepare Shift to High");
+    }
+
+    /*
+     * runs the postShiftToHigh() method
+     */
+    public Command postShiftToHighCommand()
+    {
+        return run( () -> postShiftToHigh()).withName("Shifted to High");
     }
 
     /**
@@ -246,6 +304,6 @@ public class Drivetrain extends SubsystemLance
     @Override
     public String toString()
     {
-        return "Left Leader Motor Velo = " + leftLeader.getVelocity() + "Left Follower Motor Velo = " + leftFollower.getVelocity() + "Right Leader Motor Velo = " + rightLeader.getVelocity() + "Right Follower Motor Velo = " + rightFollower.getVelocity();
+        return "Left Leader Motor Velo = " + leftLeader.getVelocity() + " Left Follower Motor Velo = " + leftFollower.getVelocity() + " Right Leader Motor Velo = " + rightLeader.getVelocity() + " Right Follower Motor Velo = " + rightFollower.getVelocity();
     }
 }
