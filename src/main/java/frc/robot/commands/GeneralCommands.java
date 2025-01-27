@@ -35,6 +35,21 @@ public final class GeneralCommands
         roller = robotContainer.getRoller();
     }
 
+    // public static Command intakeCoralFromStationCommand()
+    // {
+    //     if(pivot != null)
+    //     {
+    //         return
+    //             pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
+    //                 .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1)
+    //                 .withTimeout(2.0);
+    //     }
+    //     else
+    //     {
+    //         return Commands.none();
+    //     }
+    // }
+
     /**
      * Command to intake algae from ground
      * @return Command to intake algae
