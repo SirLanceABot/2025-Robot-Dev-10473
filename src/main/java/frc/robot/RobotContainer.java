@@ -7,7 +7,10 @@ package frc.robot;
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -34,17 +37,21 @@ public class RobotContainer
     private boolean usePivot                = false;
     private boolean useDrivetrain           = false;
     private boolean useRoller               = false;
-    private boolean useShifter              = false;
+    private boolean useShifter              = true;
+    private boolean usePneumaticHub         = true;
+    private boolean useCompressor           = true;
     private boolean useClimb                = false;
 
-    private boolean useDriverController     = false;
-    private boolean useOperatorController   = false;
+    private boolean useDriverController     = true;
+    private boolean useOperatorController   = true;
 
     public final boolean fullRobot;
     private final Pivot pivot;
     private final Drivetrain drivetrain;
     private final Roller roller;
     private final Shifter shifter;
+    private final PneumaticHub pneumaticHub;
+    private final Compressor compressor;
     private final Climb climb;
 
     private final CommandXboxController operatorController;
@@ -57,13 +64,26 @@ public class RobotContainer
         pivot               = (useFullRobot || usePivot)                ? new Pivot()                                                                                                  : null;
         drivetrain          = (useFullRobot || useDrivetrain)           ? new Drivetrain()                                                                                             : null;
         roller              = (useFullRobot || useRoller)               ? new Roller()                                                                                                 : null;
+        pneumaticHub        = (useFullRobot || usePneumaticHub)         ? new PneumaticHub(1)                                                                                          : null;
+        compressor          = (useFullRobot || useCompressor)           ? new Compressor(PneumaticsModuleType.REVPH)                                                                   : null;
         shifter             = (useFullRobot || useShifter)              ? new Shifter()                                                                                                : null;
+
         climb               = (useFullRobot || useClimb)                ? new Climb()                                                                                                  : null;
 
         driverController    = (useFullRobot || useDriverController)     ? new CommandXboxController(Constants.Controllers.DRIVER_CONTROLLER_PORT)                                      : null;
         operatorController  = (useFullRobot || useOperatorController)   ? new CommandXboxController(Constants.Controllers.OPERATOR_CONTROLLER_PORT)                                    : null;
+
+        if(compressor != null && pneumaticHub != null)
+        {
+            configCompressor();
+        }
     }
 
+    public void configCompressor()
+    {
+        pneumaticHub.enableCompressorDigital();
+    }
+    
     public Drivetrain getDrivetrain()
     {
         return drivetrain;
