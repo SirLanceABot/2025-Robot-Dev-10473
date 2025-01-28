@@ -71,20 +71,20 @@ public class RobbieFTest implements Test
      */ 
     public void periodic()
     {
-        // driveTrain.arcadeDriveCommand(() -> joystick.getRawAxis(1), () -> joystick.getRawAxis(0), true).schedule();
+        driveTrain.arcadeDriveCommand(() -> joystick.getRawAxis(1), () -> joystick.getRawAxis(0), true).schedule();
 
         if(joystick.getRawButton(1))
         {
             driveTrain.prepareShiftToLowCommand().schedule();
+            System.out.println("Prepare Shift To Low");
         }
         else if(joystick.getRawButton(2))
         {
             driveTrain.postShiftToLowCommand().schedule();
+            System.out.println("Post Shift To Low");
         }
-        else
-        {
-            driveTrain.stopDriveCommand().schedule();
-        }
+
+        System.out.println(driveTrain.toString());
     }
     
     /**
