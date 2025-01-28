@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Roller;
@@ -37,9 +38,9 @@ public class RobotContainer
     private boolean usePivot                = false;
     private boolean useDrivetrain           = false;
     private boolean useRoller               = false;
-    private boolean useShifter              = false;
-    private boolean usePneumaticHub         = false;
-    private boolean useCompressor           = false;
+    private boolean useShifter              = true;
+    private boolean usePneumaticHub         = true;
+    private boolean useCompressor           = true;
     private boolean useClimb                = false;
 
     private boolean useDriverController     = true;
@@ -82,6 +83,14 @@ public class RobotContainer
     public void configCompressor()
     {
         pneumaticHub.enableCompressorDigital();
+        // compressor.enableDigital();
+        
+        BooleanSupplier pressureSupplier = () -> (DriverStation.getMatchTime() < 30.0 && DriverStation.isTeleopEnabled());
+        Trigger pressureTrigger = new Trigger(pressureSupplier);
+
+        pressureTrigger
+            .onTrue(Commands.runOnce(()-> compressor.disable()))
+            .onFalse(Commands.runOnce(()-> compressor.enableDigital()));
     }
     
     public Drivetrain getDrivetrain()
