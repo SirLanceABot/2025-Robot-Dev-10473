@@ -2,8 +2,10 @@ package frc.robot.commands;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 
 import frc.robot.subsystems.Pivot;
@@ -25,6 +27,8 @@ public final class GeneralCommands
 
     private static Pivot pivot;
     private static Roller roller;
+    private static CommandXboxController driverController;
+    private static CommandXboxController operatorController;
 
     private GeneralCommands()
     {}
@@ -33,6 +37,8 @@ public final class GeneralCommands
     {
         pivot = robotContainer.getPivot();
         roller = robotContainer.getRoller();
+        driverController = robotContainer.getDriverController();
+        operatorController = robotContainer.getOperatorController();
     }
 
     // public static Command intakeCoralFromStationCommand()
@@ -68,10 +74,14 @@ public final class GeneralCommands
                     .withTimeout(2.0)
             )
             .andThen(Commands.waitUntil(roller.isDetectedSupplier()))
-            .andThen(roller.stopCommand())
-            .andThen(pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
-                .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1)
-                .withTimeout(2.0)            
+            .andThen(
+                Commands.parallel(
+                    roller.stopCommand(),
+                    operatorRumble(),
+                    pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
+                        .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1)
+                        .withTimeout(2.0)
+                )
             );
         }
         else
@@ -80,6 +90,12 @@ public final class GeneralCommands
         }
     }
 
+    /**
+     * Command to score a coral
+     * @return Command to score a coral
+     * @author Mason Bellinger
+     * @author Brady Woodard
+     */
     public static Command scoreCoralCommand()
     {
         if(roller != null)
@@ -87,7 +103,12 @@ public final class GeneralCommands
             return
             roller.ejectCoralCommand()
             .andThen(Commands.waitSeconds(2.0))
-            .andThen(roller.stopCommand());
+            .andThen(
+                Commands.parallel(
+                    operatorRumble(),
+                    roller.stopCommand()
+                )
+            );
         }
         else
         {
@@ -95,15 +116,71 @@ public final class GeneralCommands
         }
     }
 
+    /**
+     * Command to score algae into the processor
+     * @return Command to score algae into the processer
+     * @author Mason Bellinger
+     * @author Brady Woodard
+     */
     public static Command scoreAlgaeCommand()
     {
         if(roller != null)
         {
             return
             roller.ejectAlgaeCommand()
-            .andThen()
             .andThen(Commands.waitSeconds(2.0))
-            .andThen(roller.stopCommand());
+            .andThen(
+                Commands.parallel(
+                    operatorRumble(),
+                    roller.stopCommand()
+                )
+            );
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    /**
+     * Command to activate rumble on operator controller
+     * @return Command to activate rumble on operator controller
+     * @author Mason Bellinger
+     * @author Brady Woodard
+     */
+    public static Command operatorRumble()
+    {
+        if(operatorController != null)
+        {
+            return
+            Commands.runEnd(
+                () -> operatorController.getHID().setRumble(RumbleType.kBothRumble, 1), 
+                () -> operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)
+            )
+            .withTimeout(0.2);
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    /**
+     * Command to activate rumble on driver controller
+     * @return Command to activate rumble on driver controller
+     * @author Mason Bellinger
+     * @author Brady Woodard
+     */
+    public static Command driverRumble()
+    {
+        if(driverController != null)
+        {
+            return
+            Commands.runEnd(
+                () -> driverController.getHID().setRumble(RumbleType.kBothRumble, 1), 
+                () -> driverController.getHID().setRumble(RumbleType.kBothRumble, 0)
+            )
+            .withTimeout(0.2);
         }
         else
         {
