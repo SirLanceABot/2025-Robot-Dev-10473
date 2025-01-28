@@ -37,9 +37,9 @@ public class RobotContainer
     private boolean usePivot                = false;
     private boolean useDrivetrain           = false;
     private boolean useRoller               = false;
-    private boolean useShifter              = true;
-    private boolean usePneumaticHub         = true;
-    private boolean useCompressor           = true;
+    private boolean useShifter              = false;
+    private boolean usePneumaticHub         = false;
+    private boolean useCompressor           = false;
     private boolean useClimb                = false;
 
     private boolean useDriverController     = true;
