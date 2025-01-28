@@ -40,14 +40,16 @@ public final class OperatorBindings
         System.out.println("Creating Operator Bindings: " + fullClassName);
 
         controller = robotContainer.getOperatorController();
+        if(controller != null)
+        {
+            configAButton();
+            configBButton();
+            configXButton();
+            configYButton();
 
-        configAButton();
-        configBButton();
-        configXButton();
-        configYButton();
-
-        configRumble(5);
-        configRumble(15);
+            configRumble(5);
+            configRumble(15);
+        }    
     }
 
     private static void configSuppliers()

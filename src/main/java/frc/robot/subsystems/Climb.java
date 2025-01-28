@@ -37,7 +37,7 @@ public class Climb extends SubsystemLance
     private final SparkFlexLance motor = new SparkFlexLance(Constants.Climb.MOTOR_PORT, Constants.Climb.MOTOR_CAN_BUS, "Climb Motor");
 
 
-    private final double FORWARD_SOFT_LIMIT = 1000.0;
+    private final double FORWARD_SOFT_LIMIT = 50.0;
     private final double REVERSE_SOFT_LIMIT = 0.0;
 
     // *** CLASS CONSTRUCTORS ***
@@ -69,8 +69,8 @@ public class Climb extends SubsystemLance
         motor.setupInverted(false);
         motor.setPosition(0.0);
 
-        motor.setupForwardSoftLimit(FORWARD_SOFT_LIMIT, false);
-        motor.setupReverseSoftLimit(REVERSE_SOFT_LIMIT, false);
+        motor.setupForwardSoftLimit(FORWARD_SOFT_LIMIT, true);
+        motor.setupReverseSoftLimit(REVERSE_SOFT_LIMIT, true);
         motor.setupForwardHardLimitSwitch(true, true);
         motor.setupReverseHardLimitSwitch(true, true);
     }
@@ -91,7 +91,7 @@ public class Climb extends SubsystemLance
      */
     private void climbUp(double speed)
     {
-        set(speed);
+        set(Math.abs(speed));
     }
 
     /**
@@ -100,7 +100,7 @@ public class Climb extends SubsystemLance
      */
     private void climbDown(double speed)
     {
-        set(-speed);
+        set(-Math.abs(speed));
     }
 
     /**
@@ -117,8 +117,7 @@ public class Climb extends SubsystemLance
      */
     public Command climbUpCommand()
     {
-        return run(() -> climbUp(0.1) )
-        .withTimeout(5.0)
+        return runOnce(() -> climbUp(0.1) )
         .withName("Climb Up");
     }
 
@@ -128,8 +127,7 @@ public class Climb extends SubsystemLance
      */
     public Command climbDownCommand()
     {
-        return run(() -> climbDown(0.1) )
-        .withTimeout(3.0)
+        return runOnce(() -> climbDown(0.1) )
         .withName("Climb Down");
     }
 

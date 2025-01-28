@@ -44,23 +44,26 @@ public final class DriverBindings
         
         controller = robotContainer.getDriverController();
 
-        // configSuppliers();
-        // configAButton();
-        // configBButton();
-        // configXButton();
-        // configYButton();
-        // configLeftBumper();
-        // configRightBumper();
-        // configBackButton();
-        // configStartButton();
-        // configLeftStick();
-        // configRightStick();
-        // configLeftTrigger();
-        // configRightTrigger();
-        // configDpadUp();
-        // configDpadDown();
-        configRumble(10);
-        configRumble(5);
+        if(controller != null)   
+        {  
+            configSuppliers();
+            configAButton();
+            configBButton();
+            configXButton();
+            configYButton();
+            configLeftBumper();
+            configRightBumper();
+            configBackButton();
+            configStartButton();
+            configLeftStick();
+            configRightStick();
+            configLeftTrigger();
+            configRightTrigger();
+            configDpadUp();
+            configDpadDown();
+            configRumble(10);
+            configRumble(5);
+        }
     }
 
     private static void configSuppliers()
