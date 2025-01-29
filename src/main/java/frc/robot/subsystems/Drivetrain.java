@@ -6,6 +6,7 @@ import java.util.function.DoubleSupplier;
 // import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.motors.TalonFXLance;
 
@@ -36,8 +37,16 @@ public class Drivetrain extends SubsystemLance
 
     private final DifferentialDrive differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
 
-    private final double MAXLOWGEARSPEED = 0.5;
-    private double divisor = 1.0;
+    private final double MAXLOWGEARSPEED = 0.53125;
+
+    private final double FIRSTSTAGEGEARRATIO = 12.0 / 60.0;
+    private final double SECONDSTAGEGEARRATIO = 24.0 / 32.0;
+    private final double HIGHGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (44.0 / 22.0);    // 0.3
+    private final double LOWGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (34.0 / 32.0);     // 0.159375
+
+    // divisor is the number to divide the high gear speed ouputs by to match the max low gear speed
+    // to allow smooth shifting
+    private double divisor = 1.9; // actual value is 1.882352941, rounded to add tolerance
     
 
     // *** INNER ENUMS and INNER CLASSES ***
@@ -139,7 +148,11 @@ public class Drivetrain extends SubsystemLance
         leftLeader.setupCoastMode();
         rightLeader.setupCoastMode();
 
-        divisor = 2.0;  // change this so that it limits the high gear velocity to the max for low gear
+        for(int i = 0; i < 99; i++)
+        {
+            divisor += 0.01;
+            Commands.waitSeconds(.005);
+        }
     }
 
     /*
