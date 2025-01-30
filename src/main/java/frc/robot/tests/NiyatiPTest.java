@@ -30,7 +30,7 @@ public class NiyatiPTest implements Test
     // Put all class and instance variables here.
     // private final RobotContainer robotContainer;
     private final Joystick joystick = new Joystick(0);
-    // private final LEDs leds;
+    private final LEDs leds;
     // private final ExampleSubsystem exampleSubsystem;
 
 
@@ -41,15 +41,15 @@ public class NiyatiPTest implements Test
      * Use this class to test your code using Test mode
      * @param robotContainer The container of all robot components
      */
-    // public NiyatiPTest(RobotContainer robotContainer)
-    // {
-    //     System.out.println("  Constructor Started:  " + fullClassName);
+    public NiyatiPTest(RobotContainer robotContainer)
+    {
+        System.out.println("  Constructor Started:  " + fullClassName);
 
-    //     leds = robotContainer.getLEDs();
-    //     // this.exampleSubsystem = robotContainer.exampleSubsystem;
+        leds = robotContainer.getLEDs();
+        // this.exampleSubsystem = robotContainer.exampleSubsystem;
 
-    //     System.out.println("  Constructor Finished: " + fullClassName);
-    // }
+        System.out.println("  Constructor Finished: " + fullClassName);
+    }
 
 
     // *** CLASS METHODS & INSTANCE METHODS ***
@@ -70,7 +70,24 @@ public class NiyatiPTest implements Test
      * This method runs periodically (every 20ms).
      */
     public void periodic()
-    {}
+    {
+    //     if(joystick.getRawButton(1))
+    //     {
+    //         leds.setColorGradientCommand(LEDs.CustomColor.kRed).schedule();
+    //     }
+    //     else if(joystick.getRawButton(2))
+    //     {
+    //         leds.setColorGradientCommand(LEDs.CustomColor.kRed).schedule();
+    //     }
+    //     else if(joystick.getRawButton(3))
+    //     {
+    //         leds.setColorGradientCommand(LEDs.CustomColor.kRed).schedule();
+    //     }
+    //     else
+    //     {
+    //         leds.stopCommand();
+    //     }
+    }
     
     /**
      * This method runs one time after the periodic() method.

@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Shifter;
@@ -35,16 +36,17 @@ public class RobotContainer
     }
 
     private boolean useFullRobot            = false;
-    private boolean usePivot                = true;
+    private boolean usePivot                = false;
     private boolean useDrivetrain           = false;
     private boolean useRoller               = false;
     private boolean useShifter              = false;
     private boolean usePneumaticHub         = false;
     private boolean useCompressor           = false;
     private boolean useClimb                = false;
+    private boolean useLEDs                 = false;
 
     private boolean useDriverController     = false;
-    private boolean useOperatorController   = true;
+    private boolean useOperatorController   = false;
 
     public final boolean fullRobot;
     private final Pivot pivot;
@@ -54,6 +56,7 @@ public class RobotContainer
     private final PneumaticHub pneumaticHub;
     private final Compressor compressor;
     private final Climb climb;
+    private final LEDs leds;
 
     private final CommandXboxController operatorController;
     private final CommandXboxController driverController;
@@ -68,7 +71,7 @@ public class RobotContainer
         pneumaticHub        = (useFullRobot || usePneumaticHub)         ? new PneumaticHub(1)                                                                                          : null;
         compressor          = (useFullRobot || useCompressor)           ? new Compressor(PneumaticsModuleType.REVPH)                                                                   : null;
         shifter             = (useFullRobot || useShifter)              ? new Shifter()                                                                                                : null;
-
+        leds                = (useFullRobot || useLEDs)                 ? new LEDs()                                                                                                   : null;
         climb               = (useFullRobot || useClimb)                ? new Climb()                                                                                                  : null;
 
         driverController    = (useFullRobot || useDriverController)     ? new CommandXboxController(Constants.Controllers.DRIVER_CONTROLLER_PORT)                                      : null;
@@ -126,6 +129,11 @@ public class RobotContainer
     public Climb getClimb()
     {
         return climb;
+    }
+
+    public LEDs getLEDs()
+    {
+        return leds;
     }
 
     public CommandXboxController getOperatorController()

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.LEDPattern.GradientType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -146,10 +147,10 @@ public class LEDs extends SubsystemLance
         }
     }
 
-    private void setColorGradient(int r, int g, int b)
-    {
-        gradient.applyTo(blankBuffer);
-    }
+    // private void setColorGradient(GradientType.gradient)
+    // {
+    //     gradient.applyTo(blankBuffer);
+    // }
 
     //COMMANDS
 
@@ -173,10 +174,10 @@ public class LEDs extends SubsystemLance
         return run(() -> setColorRainbow(color.r, color.g, color.b)).withName("Set LED Rainbow");
     }
 
-    public Command setColorGradientCommand(CustomColor color)
-    {
-        return run(() -> setColorGradient(color.r, color.g, color.b)).withName("Set LED Gradient");
-    }
+    // public Command setColorGradientCommand(LEDPattern gradient)
+    // {
+    //     return run(() -> gradient.apply(blankBuffer)).withName("Set LED Gradient");
+    // }
 
 
 
