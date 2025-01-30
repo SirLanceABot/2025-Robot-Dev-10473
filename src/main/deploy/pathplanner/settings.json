@@ -12,7 +12,13 @@
     "Right Station Starts",
     "Right Wall Starts"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Left Wall (1st Tests)",
+    "Left Wall Starts",
+    "Middle Starts",
+    "Reef to Right (Tests)",
+    "Reef to Left (Tests)"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,

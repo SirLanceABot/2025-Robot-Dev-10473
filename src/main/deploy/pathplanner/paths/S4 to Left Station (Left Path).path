@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6745598591549284,
-        "y": 3.7840669014084494
+        "x": 2.2698063380281677,
+        "y": 3.769894366197182
       },
       "isLocked": false,
       "linkedName": "S4"
@@ -45,7 +45,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Reef Starts",
+  "folder": "Reef Sarts",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -173.98344983000774

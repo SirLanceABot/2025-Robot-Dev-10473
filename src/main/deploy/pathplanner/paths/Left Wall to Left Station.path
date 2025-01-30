@@ -44,7 +44,7 @@
     "velocity": 0,
     "rotation": 0.0
   },
-  "reversed": true,
+  "reversed": false,
   "folder": "Left Wall Starts",
   "idealStartingState": {
     "velocity": 0,
