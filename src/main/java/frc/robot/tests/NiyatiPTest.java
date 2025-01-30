@@ -2,7 +2,11 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
+import javax.lang.model.util.ElementScanner14;
+
+import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.LEDs;
 
 public class NiyatiPTest implements Test
 {
@@ -24,7 +28,9 @@ public class NiyatiPTest implements Test
 
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
-    private final RobotContainer robotContainer;
+    // private final RobotContainer robotContainer;
+    private final Joystick joystick = new Joystick(0);
+    // private final LEDs leds;
     // private final ExampleSubsystem exampleSubsystem;
 
 
@@ -35,15 +41,15 @@ public class NiyatiPTest implements Test
      * Use this class to test your code using Test mode
      * @param robotContainer The container of all robot components
      */
-    public NiyatiPTest(RobotContainer robotContainer)
-    {
-        System.out.println("  Constructor Started:  " + fullClassName);
+    // public NiyatiPTest(RobotContainer robotContainer)
+    // {
+    //     System.out.println("  Constructor Started:  " + fullClassName);
 
-        this.robotContainer = robotContainer;
-        // this.exampleSubsystem = robotContainer.exampleSubsystem;
+    //     leds = robotContainer.getLEDs();
+    //     // this.exampleSubsystem = robotContainer.exampleSubsystem;
 
-        System.out.println("  Constructor Finished: " + fullClassName);
-    }
+    //     System.out.println("  Constructor Finished: " + fullClassName);
+    // }
 
 
     // *** CLASS METHODS & INSTANCE METHODS ***

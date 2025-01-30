@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.motors.TalonFXLance;
@@ -30,7 +31,7 @@ public class LEDs extends SubsystemLance
 
     // *** INNER ENUMS and INNER CLASSES ***
     // Put all inner enums and inner classes here
-    public enum Color
+    public enum CustomColor
     {
         kRed(255, 0, 0),
         kBlue(0, 102, 204),
@@ -45,7 +46,7 @@ public class LEDs extends SubsystemLance
         int g;
         int b;
 
-        private Color(int r, int g, int b)
+        private CustomColor(int r, int g, int b)
         {
             this.r = r;
             this.g = g;
@@ -62,7 +63,7 @@ public class LEDs extends SubsystemLance
     private final AddressableLEDBuffer blankBuffer;
     private final AddressableLEDBuffer setBuffer;
     private final Timer timer = new Timer();
-
+    private LEDPattern gradient;
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
   
@@ -80,7 +81,7 @@ public class LEDs extends SubsystemLance
         blankBuffer = new AddressableLEDBuffer(5);
         setBuffer = new AddressableLEDBuffer(5);
 
-        //LEDPattern gradient = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kOrange, Color.kPink);
+        gradient = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kOrange, Color.kPink);
 
         configLEDs();
         configBuffers();
@@ -147,7 +148,7 @@ public class LEDs extends SubsystemLance
 
     private void setColorGradient(int r, int g, int b)
     {
-        //gradient.applyTo(setBuffer);
+        gradient.applyTo(blankBuffer);
     }
 
     //COMMANDS
@@ -157,19 +158,24 @@ public class LEDs extends SubsystemLance
         return runOnce(() -> off()).withName("Turn Off");
     }
 
-    public Command setColorSolidCommand(Color color)
+    public Command setColorSolidCommand(CustomColor color)
     {
         return runOnce(() -> setColorSolid(color.r, color.g, color.b)).withName("Set LED Solid");
     }
 
-    public Command setColorBlinkCommand(Color color)
+    public Command setColorBlinkCommand(CustomColor color)
     {
         return run(() -> setColorBlink(color.r, color.g, color.b)).withName("Set LED Blink");
     }
 
-    public Command setColorRainbowCommand(Color color)
+    public Command setColorRainbowCommand(CustomColor color)
     {
         return run(() -> setColorRainbow(color.r, color.g, color.b)).withName("Set LED Rainbow");
+    }
+
+    public Command setColorGradientCommand(CustomColor color)
+    {
+        return run(() -> setColorGradient(color.r, color.g, color.b)).withName("Set LED Gradient");
     }
 
 
