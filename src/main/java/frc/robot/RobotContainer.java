@@ -35,7 +35,7 @@ public class RobotContainer
     }
 
     private boolean useFullRobot            = false;
-    private boolean usePivot                = false;
+    private boolean usePivot                = true;
     private boolean useDrivetrain           = false;
     private boolean useRoller               = false;
     private boolean useShifter              = false;
@@ -43,7 +43,7 @@ public class RobotContainer
     private boolean useCompressor           = false;
     private boolean useClimb                = false;
 
-    private boolean useDriverController     = true;
+    private boolean useDriverController     = false;
     private boolean useOperatorController   = true;
 
     public final boolean fullRobot;

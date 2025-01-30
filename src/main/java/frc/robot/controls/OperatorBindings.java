@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
 import frc.robot.commands.GeneralCommands;
+import frc.robot.subsystems.Roller;
 
 public final class OperatorBindings 
 {
@@ -26,6 +27,7 @@ public final class OperatorBindings
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
     private static CommandXboxController controller;
+    private static Roller roller;
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -40,6 +42,8 @@ public final class OperatorBindings
         System.out.println("Creating Operator Bindings: " + fullClassName);
 
         controller = robotContainer.getOperatorController();
+        roller = robotContainer.getRoller();
+
         if(controller != null)
         {
             configAButton();
@@ -49,6 +53,10 @@ public final class OperatorBindings
 
             configRumble(5);
             configRumble(15);
+            if(roller != null)
+            {
+                configRumble(() -> DriverStation.isTeleopEnabled() && roller.isDetectedSupplier().getAsBoolean());
+            }
         }    
     }
 
@@ -67,7 +75,7 @@ public final class OperatorBindings
     {
         Trigger bButtonTrigger = controller.b();
         bButtonTrigger
-            .onTrue( GeneralCommands.scoreCoralCommand() );
+            .onTrue( GeneralCommands.resetPivotAndRollerCommand() );
     }
 
     private static void configXButton()
@@ -80,6 +88,8 @@ public final class OperatorBindings
     private static void configYButton()
     {
         Trigger yButtonTrigger = controller.y();
+        yButtonTrigger
+            .onTrue( GeneralCommands.scoreCoralCommand() );
     }
 
 
@@ -93,8 +103,21 @@ public final class OperatorBindings
         BooleanSupplier supplier = () -> DriverStation.isTeleopEnabled() && Math.abs(DriverStation.getMatchTime() - time) < 0.5;
         Trigger rumbleTrigger = new Trigger(supplier);
         rumbleTrigger
-            .onTrue(Commands.runOnce(() -> controller.getHID().setRumble(RumbleType.kBothRumble, 1)))
-            .onFalse(Commands.runOnce(() -> controller.getHID().setRumble(RumbleType.kBothRumble, 0)));
+            .onTrue(Commands.runOnce(() -> controller.getHID().setRumble(RumbleType.kBothRumble, 1.0)))
+            .onFalse(Commands.runOnce(() -> controller.getHID().setRumble(RumbleType.kBothRumble, 0.0)));
+    }
+
+    /**
+     * @author Mason B
+     */
+    private static void configRumble(BooleanSupplier supplier)
+    {
+        Trigger rumbleTrigger = new Trigger(supplier);
+        rumbleTrigger.onTrue(
+            Commands.runOnce(() -> controller.getHID().setRumble(RumbleType.kBothRumble, 1.0))
+            .andThen(Commands.waitSeconds(0.5))
+            .andThen(Commands.runOnce(() -> controller.getHID().setRumble(RumbleType.kBothRumble, 0.0)))
+        );
     }
 }
 

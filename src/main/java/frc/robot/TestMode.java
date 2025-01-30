@@ -16,7 +16,7 @@ import frc.robot.tests.Test;
 // Uncomment one of these statements
 
 // import frc.robot.tests.AdityaYTest;
-// import frc.robot.tests.BradyWTest;
+import frc.robot.tests.BradyWTest;
 // import frc.robot.tests.GretaHTest;
 // import frc.robot.tests.JacksonDTest;
 // import frc.robot.tests.MasonBTest;
@@ -54,7 +54,7 @@ public class TestMode
         // Uncomment one of these statements
 
         // myTest = new AdityaYTest(robotContainer);
-        // myTest = new BradyWTest(robotContainer);
+        myTest = new BradyWTest(robotContainer);
         // myTest = new GretaHTest(robotContainer);
         // myTest = new JacksonDTest(robotContainer);
         // myTest = new MasonBTest(robotContainer);

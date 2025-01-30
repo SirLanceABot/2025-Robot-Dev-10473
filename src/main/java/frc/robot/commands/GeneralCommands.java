@@ -41,20 +41,27 @@ public final class GeneralCommands
         operatorController = robotContainer.getOperatorController();
     }
 
-    // public static Command intakeCoralFromStationCommand()
-    // {
-    //     if(pivot != null)
-    //     {
-    //         return
-    //             pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
-    //                 .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1)
-    //                 .withTimeout(2.0);
-    //     }
-    //     else
-    //     {
-    //         return Commands.none();
-    //     }
-    // }
+    public static Command resetPivotAndRollerCommand()
+    {
+        if(pivot != null && roller != null)
+        {
+            return
+                pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
+                    .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1)
+                    .withTimeout(2.0)
+                .andThen(
+                    Commands.parallel(
+                    roller.stopCommand(),
+                    operatorRumble()
+                    )
+                );
+                    
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
 
     /**
      * Command to intake algae from ground
@@ -77,7 +84,7 @@ public final class GeneralCommands
             .andThen(
                 Commands.parallel(
                     roller.stopCommand(),
-                    operatorRumble(),
+                    // operatorRumble(),
                     pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
                         .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1)
                         .withTimeout(2.0)

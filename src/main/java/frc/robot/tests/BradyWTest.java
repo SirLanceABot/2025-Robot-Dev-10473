@@ -30,7 +30,7 @@ public class BradyWTest implements Test
     private final RobotContainer robotContainer;
     private final Roller roller;
     private final Climb climb;
-    private final Joystick joystick = new Joystick(0);
+    private final Joystick joystick = new Joystick(1);
 
     // private final ExampleSubsystem exampleSubsystem;
 
