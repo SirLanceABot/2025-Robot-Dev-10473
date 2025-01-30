@@ -93,6 +93,7 @@ public class RobotContainer
         pneumaticHub.enableCompressorDigital();
         
         // disables at end of match 1 full tank can power 1 solonoid for 90 shifts
+        BooleanSupplier filledOnceSupplier = () -> (DriverStation.isTeleopEnabled()  && DriverStation.getMatchTime() < (135 - 5) && compressor.isEnabled() == false);
         BooleanSupplier pressureSupplier = () -> (DriverStation.getMatchTime() < 30.0 && DriverStation.isTeleopEnabled());
         Trigger pressureTrigger = new Trigger(pressureSupplier);
 
