@@ -38,9 +38,9 @@ public class RobotContainer
     private boolean usePivot                = false;
     private boolean useDrivetrain           = false;
     private boolean useRoller               = false;
-    private boolean useShifter              = true;
-    private boolean usePneumaticHub         = true;
-    private boolean useCompressor           = true;
+    private boolean useShifter              = false;
+    private boolean usePneumaticHub         = false;
+    private boolean useCompressor           = false;
     private boolean useClimb                = false;
 
     private boolean useDriverController     = true;
@@ -80,17 +80,22 @@ public class RobotContainer
         }
     }
 
+    /**
+     * Sets up the compressor and stops it at the end of the match
+     * @author Jackson D
+     * @author Robbie J
+     */
     public void configCompressor()
     {
         pneumaticHub.enableCompressorDigital();
-        // compressor.enableDigital();
         
+        // disables at end of match 1 full tank can power 1 solonoid for 90 shifts
         BooleanSupplier pressureSupplier = () -> (DriverStation.getMatchTime() < 30.0 && DriverStation.isTeleopEnabled());
         Trigger pressureTrigger = new Trigger(pressureSupplier);
 
         pressureTrigger
-            .onTrue(Commands.runOnce(()-> compressor.disable()))
-            .onFalse(Commands.runOnce(()-> compressor.enableDigital()));
+            .onTrue(Commands.runOnce(()-> compressor.disable()));
+            // .whileFalse(Commands.runOnce(()-> compressor.enableDigital()));
     }
     
     public Drivetrain getDrivetrain()
@@ -111,6 +116,11 @@ public class RobotContainer
     public Shifter getShifter()
     {
         return shifter;
+    }
+
+    public Compressor getCompressor()
+    {
+        return compressor;
     }
 
     public Climb getClimb()
