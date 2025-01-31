@@ -5,6 +5,7 @@ import java.lang.invoke.MethodHandles;
 import javax.lang.model.util.ElementScanner14;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.LEDs;
 
@@ -71,22 +72,26 @@ public class NiyatiPTest implements Test
      */
     public void periodic()
     {
-    //     if(joystick.getRawButton(1))
-    //     {
-    //         leds.setColorGradientCommand(LEDs.CustomColor.kRed).schedule();
-    //     }
-    //     else if(joystick.getRawButton(2))
-    //     {
-    //         leds.setColorGradientCommand(LEDs.CustomColor.kRed).schedule();
-    //     }
-    //     else if(joystick.getRawButton(3))
-    //     {
-    //         leds.setColorGradientCommand(LEDs.CustomColor.kRed).schedule();
-    //     }
-    //     else
-    //     {
-    //         leds.stopCommand();
-    //     }
+        if(joystick.getRawButton(1))
+        {
+            leds.setColorGradientCommand(Color.kOrange, Color.kPink).schedule();
+        }
+        // else if(joystick.getRawButton(2))
+        // {
+        //     leds.setColorGradientCommand(LEDs.CustomColor.kRed).schedule();
+        // }
+        // else if(joystick.getRawButton(3))
+        // {
+        //     leds.setColorGradientCommand(LEDs.CustomColor.kRed).schedule();
+        // }
+        // else
+        // if(joystick.getRawButton(1))
+        // {
+        //     leds.setColorSolidCommand(Color.kRoyalBlue).schedule();
+        // }
+        // {
+        //     leds.stopCommand();
+        // }
     }
     
     /**
