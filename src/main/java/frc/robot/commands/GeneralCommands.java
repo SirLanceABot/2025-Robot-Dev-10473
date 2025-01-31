@@ -7,10 +7,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
-
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Pivot.TargetPosition;
 import frc.robot.subsystems.Roller;
+import frc.robot.subsystems.LEDs.CustomColor;
 
 
 public final class GeneralCommands 
@@ -29,6 +30,7 @@ public final class GeneralCommands
     private static Roller roller;
     private static CommandXboxController driverController;
     private static CommandXboxController operatorController;
+    private static LEDs leds;
 
     private GeneralCommands()
     {}
@@ -39,6 +41,7 @@ public final class GeneralCommands
         roller = robotContainer.getRoller();
         driverController = robotContainer.getDriverController();
         operatorController = robotContainer.getOperatorController();
+        leds = robotContainer.getLEDs();
     }
 
     public static Command resetPivotAndRollerCommand()
@@ -71,10 +74,11 @@ public final class GeneralCommands
      */
     public static Command intakeAlgaeCommand()
     {
-        if(pivot != null && roller != null)
+        if(pivot != null && roller != null /*&& leds != null */)
         {
             return
             Commands.parallel(
+                // leds.setColorSolidCommand(CustomColor.kCyan),
                 roller.intakeCommand(),
                 pivot.moveToSetPositionCommand(TargetPosition.kGrabAlgaePosition)
                     .until( () -> Math.abs(TargetPosition.kGrabAlgaePosition.pivot - pivot.getPosition()) < 0.1)
