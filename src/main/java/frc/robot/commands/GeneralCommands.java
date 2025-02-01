@@ -54,11 +54,10 @@ public final class GeneralCommands
                     .withTimeout(2.0)
                 .andThen(
                     Commands.parallel(
-                    roller.stopCommand(),
-                    operatorRumble()
+                        roller.stopCommand(),
+                        operatorRumble()
                     )
-                );
-                    
+                );    
         }
         else
         {
