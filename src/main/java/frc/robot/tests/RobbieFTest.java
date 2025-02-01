@@ -3,6 +3,7 @@ package frc.robot.tests;
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 
@@ -71,20 +72,26 @@ public class RobbieFTest implements Test
      */ 
     public void periodic()
     {
-        driveTrain.arcadeDriveCommand(() -> joystick.getRawAxis(1), () -> joystick.getRawAxis(0), true).schedule();
+        // driveTrain.arcadeDriveCommand(() -> joystick.getRawAxis(1), () -> joystick.getRawAxis(0), true).schedule();
 
         if(joystick.getRawButton(1))
         {
             driveTrain.prepareShiftToLowCommand().schedule();
-            System.out.println("Prepare Shift To Low");
+
+            System.out.println("Prepare Shift Low");
         }
         else if(joystick.getRawButton(2))
         {
             driveTrain.postShiftToLowCommand().schedule();
-            System.out.println("Post Shift To Low");
+
+            System.out.println("Post Shift Low");
+        }
+        else
+        {
+            driveTrain.arcadeDriveCommand(() -> joystick.getRawAxis(1), () -> joystick.getRawAxis(0), true).schedule();
         }
 
-        System.out.println(driveTrain.toString());
+        // System.out.println(driveTrain.toString());
     }
     
     /**

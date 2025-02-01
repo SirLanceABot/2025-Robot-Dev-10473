@@ -11,7 +11,8 @@ import frc.robot.Constants;
 import frc.robot.motors.TalonFXLance;
 
 /**
- * @author Robbie Frank & Aditya Yadav
+ * @author Robbie Frank 
+ * @author Aditya Yadav
  * 
  * creates new drivetrain
  */
@@ -46,7 +47,8 @@ public class Drivetrain extends SubsystemLance
 
     // divisor is the number to divide the high gear speed ouputs by to match the max low gear speed
     // to allow smooth shifting
-    private double divisor = 1.9; // actual value is 1.882352941, rounded to add tolerance
+    private double divisor = 1.0;
+    // actual value of high gear to low gear is 1.882352941, rounded to 1.9 for tolerance
     
 
     // *** INNER ENUMS and INNER CLASSES ***
@@ -113,6 +115,16 @@ public class Drivetrain extends SubsystemLance
         // Use this for data that needs to be logged.
     }
 
+    public double leftLeaderVelocity()
+    {
+        return leftLeader.getVelocity();
+    }
+
+    public double rightLeaderVelocity()
+    {
+        return rightLeader.getVelocity();
+    }
+
     /**
      * @param speed
      * sets drivetrain speed
@@ -148,11 +160,7 @@ public class Drivetrain extends SubsystemLance
         leftLeader.setupCoastMode();
         rightLeader.setupCoastMode();
 
-        for(int i = 0; i < 99; i++)
-        {
-            divisor += 0.01;
-            Commands.waitSeconds(.005);
-        }
+        divisor = 1.9;
     }
 
     /*
@@ -191,6 +199,16 @@ public class Drivetrain extends SubsystemLance
     public void stopDrive()
     {
         differentialDrive.stopMotor();
+    }
+
+    public Command leftLeaderVelocityCommand()
+    {
+        return run( () -> leftLeaderVelocity() ).withName("Get Left Leader Velocity");
+    }
+
+    public Command rightLeaderVelocityCommand()
+    {
+        return run ( () -> rightLeaderVelocity() ).withName("Get Right Leader Velocity");
     }
 
     /**
