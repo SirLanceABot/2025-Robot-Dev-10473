@@ -1,18 +1,18 @@
 package frc.robot.subsystems;
 
 import java.lang.invoke.MethodHandles;
-import java.util.function.DoubleSupplier;
+// import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.math.MathUtil;
+// import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.LEDPattern.GradientType;
+// import edu.wpi.first.wpilibj.Timer;
+// import edu.wpi.first.wpilibj.LEDPattern.GradientType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.motors.TalonFXLance;
+// import frc.robot.Constants;
+// import frc.robot.motors.TalonFXLance;
 
 /**
  * This is an example of what a subsystem should look like.
@@ -81,10 +81,10 @@ public class LEDs extends SubsystemLance
 
         // timer.start();
 
-        m_led = new AddressableLED(5);
-        m_ledBuffer = new AddressableLEDBuffer(5);
+        // m_led = new AddressableLED(5);
+        // m_ledBuffer = new AddressableLEDBuffer(5);
 
-        // ledStrip.setLength(5);
+        m_led.setLength(5);
         // blankBuffer = new AddressableLEDBuffer(5);
         // setBuffer = new AddressableLEDBuffer(5);
 
@@ -97,8 +97,12 @@ public class LEDs extends SubsystemLance
 
     private void configLEDs()
     {
+        LEDPattern red = LEDPattern.solid(Color.kRed);
+        red.applyTo(m_ledBuffer);
         m_led.setData(m_ledBuffer);
         m_led.start();
+        // m_ledBuffer.setRGB(Color.kRed);
+        // getRed(Color.kRed);
     }
 
     // private void configBuffers()
@@ -120,8 +124,8 @@ public class LEDs extends SubsystemLance
     //     color.applyTo(blankBuffer);
     // }
 
-    private void setColorBlink(int r, int g, int b)
-    {
+    // private void setColorBlink(int r, int g, int b)
+    // {
         // for(int i = 0; i < blankBuffer.getLength(); i++)
         // {
         //     setBuffer.setRGB(i, r, g, b);
@@ -135,10 +139,10 @@ public class LEDs extends SubsystemLance
         // {
         //     ledStrip.setData(blankBuffer);
         // }
-    }
+    // }
 
-    private void setColorRainbow(int r, int g, int b)
-    {
+    // private void setColorRainbow(int r, int g, int b)
+    // {
         // for(int i = 0; i < blankBuffer.getLength(); i++)
         // {
         //     setBuffer.setRGB(i, r, g, b);
@@ -147,7 +151,7 @@ public class LEDs extends SubsystemLance
         //     g += 25;
         //     b += 25;
         // }
-    }
+    // }
 
     public void setColorGradient(Color color1, Color color2)
     {
@@ -200,6 +204,7 @@ public class LEDs extends SubsystemLance
     @Override
     public void periodic()
     {
+        m_led.setData(m_ledBuffer);
         // This method will be called once per scheduler run
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.

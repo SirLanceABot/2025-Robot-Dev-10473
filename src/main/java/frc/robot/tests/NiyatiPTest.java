@@ -74,6 +74,7 @@ public class NiyatiPTest implements Test
     {
         if(joystick.getRawButton(1))
         {
+            System.out.println("Hi");
             leds.setColorGradientCommand(Color.kOrange, Color.kPink).schedule();
         }
         // else if(joystick.getRawButton(2))
