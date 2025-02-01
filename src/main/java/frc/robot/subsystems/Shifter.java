@@ -58,13 +58,18 @@ public class Shifter extends SubsystemLance
 
     // *** CLASS METHODS & INSTANCE METHODS ***
     // Put all class methods and instance methods here
-
+    /**
+     * Creates a method to shift to high gear.
+     */
     public void shiftHigh()
     {
         solenoid.set(Value.kForward);
         isHighGear = true;
     }
 
+    /**
+     * Creates a method to go to low gear.
+     */
     public void shiftLow()
     {
         solenoid.set(Value.kReverse);
@@ -76,6 +81,9 @@ public class Shifter extends SubsystemLance
         return isHighGear;
     }
 
+    /**
+     * Creates a method to Toggle between low and high gear on the same button.
+     */
     public void shiftToggle()
     {
         if(isHighGear())
@@ -88,21 +96,33 @@ public class Shifter extends SubsystemLance
         }
     }
 
+    /**
+     * Creates a command to run ShiftHigh method once
+     */
     public Command shiftHighCommand()
     {
         return runOnce(() -> shiftHigh()).withName("Shift High");
     }
 
+    /**
+     * Creates a command to run ShiftLow method once
+     */
     public Command shiftLowCommand()
     {
         return runOnce(() -> shiftLow()).withName("Shift Low");
     }
 
+    /**
+     * Creates a command to run ShiftToggle method once
+     */
     public Command shiftToggleCommand()
     {
         return runOnce(() -> shiftToggle()).withName("Shift toggle");
     }
 
+    /**
+     * Creates a Boolean supplier that returns isHighGear
+     */
     public BooleanSupplier isHighGearSupplier()
     {
         return () -> isHighGear();
