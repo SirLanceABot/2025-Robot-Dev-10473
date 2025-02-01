@@ -9,19 +9,19 @@
       "prevControl": null,
       "nextControl": {
         "x": 6.176,
-        "y": 0.6029999999999998
+        "y": 0.6029999999999999
       },
       "isLocked": false,
       "linkedName": "Right Wall"
     },
     {
       "anchor": {
-        "x": 3.45,
-        "y": 2.95
+        "x": 3.55950704225352,
+        "y": 3.018749999999999
       },
       "prevControl": {
-        "x": 2.95,
-        "y": 2.083974596215562
+        "x": 3.05950704225352,
+        "y": 2.1527245962155606
       },
       "nextControl": null,
       "isLocked": false,

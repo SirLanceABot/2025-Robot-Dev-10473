@@ -3,51 +3,58 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.826128472222222,
-        "y": 3.997048611111111
+        "x": 1.745,
+        "y": 7.262
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.06012323943662,
-        "y": 4.067517605633801
+        "x": 1.9116538336108895,
+        "y": 6.481997289307688
       },
       "isLocked": false,
-      "linkedName": "S1"
+      "linkedName": "Left Station"
     },
     {
       "anchor": {
-        "x": 4.367341549295774,
-        "y": 2.055017605633801
+        "x": 2.795169712793734,
+        "y": 3.3605744125326362
       },
       "prevControl": {
-        "x": 5.029820058351058,
-        "y": 2.395457950564989
+        "x": 2.549059988491291,
+        "y": 4.372358834664899
       },
       "nextControl": {
-        "x": 3.346919014084506,
-        "y": 1.5306338028169
+        "x": 3.0467322127937337,
+        "y": 2.326373023643747
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.716,
-        "y": 0.759
+        "x": 5.047623239436619,
+        "y": 2.735299295774647
       },
       "prevControl": {
-        "x": 2.4965669014084497,
-        "y": 1.785739436619718
+        "x": 5.606656191881255,
+        "y": 2.0085671652058283
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Station"
+      "linkedName": "S2 Right"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -61,7 +68,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Reef Sarts",
+  "folder": "Left Station Starts",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

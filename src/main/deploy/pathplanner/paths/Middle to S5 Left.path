@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.176,
-        "y": 0.603
+        "x": 7.283,
+        "y": 4.026
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.176,
-        "y": 0.6030000000000001
+        "x": 6.053873239436619,
+        "y": 4.08169014084507
       },
       "isLocked": false,
-      "linkedName": "Right Wall"
+      "linkedName": "Middle"
     },
     {
       "anchor": {
-        "x": 1.716,
-        "y": 0.759
+        "x": 5.359419014084507,
+        "y": 5.3713908450704215
       },
       "prevControl": {
-        "x": 2.5693921232876704,
-        "y": 2.469841609589041
+        "x": 5.8902460387323945,
+        "y": 4.85314502640845
+      },
+      "nextControl": {
+        "x": 4.828591989436619,
+        "y": 5.889636663732393
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.112235915492957,
+        "y": 5.3713908450704215
+      },
+      "prevControl": {
+        "x": 3.460302584025108,
+        "y": 6.434333002702108
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Station"
+      "linkedName": "S5 Left"
     }
   ],
   "rotationTargets": [],
@@ -45,7 +61,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Right Wall Starts",
+  "folder": "Middle Starts",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

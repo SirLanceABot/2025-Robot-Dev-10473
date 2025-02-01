@@ -8,24 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.1860154657196,
-        "y": 3.927102577371752
+        "x": 6.479049295774647,
+        "y": 4.053345070422535
       },
       "isLocked": false,
       "linkedName": "Middle"
     },
     {
       "anchor": {
-        "x": 5.889,
-        "y": 3.898
+        "x": 5.842362924281985,
+        "y": 2.8794386422976492
       },
       "prevControl": {
-        "x": 6.7027239737319135,
-        "y": 3.9752216067045545
+        "x": 6.4517819383664925,
+        "y": 3.2195794873680716
+      },
+      "nextControl": {
+        "x": 4.757710391731357,
+        "y": 2.2740511822693934
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.55950704225352,
+        "y": 3.018749999999999
+      },
+      "prevControl": {
+        "x": 3.0209532829475,
+        "y": 2.2534312839417185
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "S1 Left"
+      "linkedName": "S3 Left"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +58,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -29.999999999999996
   },
   "reversed": false,
   "folder": "Middle Starts",

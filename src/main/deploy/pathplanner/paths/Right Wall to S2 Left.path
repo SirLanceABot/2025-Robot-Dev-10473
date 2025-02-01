@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 5.128371710526316,
-        "y": 2.738
+        "x": 5.047623239436619,
+        "y": 2.735299295774647
       },
       "prevControl": {
-        "x": 5.450899565763853,
-        "y": 2.1793653678723643
+        "x": 5.370151094674156,
+        "y": 2.1766646636470113
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "S2 Left"
+      "linkedName": "S2 Right"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 29.999999999999996
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Right Wall Starts",

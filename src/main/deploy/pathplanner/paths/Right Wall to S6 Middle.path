@@ -8,24 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.176,
-        "y": 0.6030000000000001
+        "x": 5.572007067605939,
+        "y": 0.5243832855575195
       },
       "isLocked": false,
       "linkedName": "Right Wall"
     },
     {
       "anchor": {
-        "x": 1.716,
-        "y": 0.759
+        "x": 5.95691906005222,
+        "y": 3.8875326370757177
       },
       "prevControl": {
-        "x": 2.5693921232876704,
-        "y": 2.469841609589041
+        "x": 5.984250879105199,
+        "y": 2.7532621463771116
+      },
+      "nextControl": {
+        "x": 5.928573989629684,
+        "y": 5.063853059610931
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.178,
+        "y": 5.125
+      },
+      "prevControl": {
+        "x": 6.061178194402231,
+        "y": 6.4126303685576564
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Station"
+      "linkedName": "S6 Middle"
     }
   ],
   "rotationTargets": [],

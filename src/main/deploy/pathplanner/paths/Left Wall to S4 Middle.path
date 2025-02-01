@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.745,
-        "y": 7.262
+        "x": 7.126,
+        "y": 7.428
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.235452127659575,
-        "y": 7.227134308510637
+        "x": 5.926320422535212,
+        "y": 7.483098591549296
       },
       "isLocked": false,
-      "linkedName": "Left Station"
+      "linkedName": "Left Wall"
     },
     {
       "anchor": {
-        "x": 3.135,
-        "y": 3.95
+        "x": 3.8713028169014074,
+        "y": 5.952464788732394
       },
       "prevControl": {
-        "x": 1.7443715277777763,
-        "y": 3.787413194444444
+        "x": 5.0181338028169,
+        "y": 7.13794014084507
+      },
+      "nextControl": {
+        "x": 3.176007639577333,
+        "y": 5.233740490833767
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.14850352112676,
+        "y": 4.024999999999999
+      },
+      "prevControl": {
+        "x": 2.4398767605633793,
+        "y": 3.968309859154929
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "S4"
+      "linkedName": "S4 Middle"
     }
   ],
   "rotationTargets": [],
@@ -42,10 +58,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -173.98344983000774
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Left Station Starts",
+  "folder": "Left Wall Starts",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
