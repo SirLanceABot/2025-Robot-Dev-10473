@@ -38,6 +38,11 @@ public final class DriverBindings
     private DriverBindings()
     {}
 
+    /**
+     * Creates button bindings for the driver
+     * @param robotContainer
+     * @author Jackson D.
+     */
     public static void createBindings(RobotContainer robotContainer)
     {
         System.out.println("Creating Driver Bindings:" + fullClassName);
@@ -46,94 +51,96 @@ public final class DriverBindings
 
         if(controller != null)   
         {  
-            configSuppliers();
-            configAButton();
-            configBButton();
-            configXButton();
-            configYButton();
-            configLeftBumper();
-            configRightBumper();
-            configBackButton();
-            configStartButton();
-            configLeftStick();
-            configRightStick();
-            configLeftTrigger();
-            configRightTrigger();
-            configDpadUp();
-            configDpadDown();
+            // configSuppliers();
+            // configAButton();
+            // configBButton();
+            // configXButton();
+            // configYButton();
+            // configLeftBumper();
+            // configRightBumper();
+            // configBackButton();
+            // configStartButton();
+            // configLeftStick();
+            // configRightStick();
+            // configLeftTrigger();
+            // configRightTrigger();
+            // configDpadUp();
+            // configDpadDown();
             configRumble(10);
             configRumble(5);
         }
     }
 
-    private static void configSuppliers()
-    {}
+    // private static void configSuppliers()
+    // {}
 
-    private static void configAButton()
-    {
-        Trigger aButtonTrigger = controller.a();
-    }
+    // private static void configAButton()
+    // {
+    //     Trigger aButtonTrigger = controller.a();
+    // }
 
-    private static void configBButton()
-    {
-        Trigger bButtonTrigger = controller.b();
-    }
+    // private static void configBButton()
+    // {
+    //     Trigger bButtonTrigger = controller.b();
+    // }
 
-    private static void configXButton()
-    {
-        Trigger xButtonTrigger = controller.x();
-    }
+    // private static void configXButton()
+    // {
+    //     Trigger xButtonTrigger = controller.x();
+    // }
 
-    private static void configYButton()
-    {
-        Trigger yButtonTrigger = controller.y();
-    }
+    // private static void configYButton()
+    // {
+    //     Trigger yButtonTrigger = controller.y();
+    // }
 
-    private static void configLeftBumper()
-    {
-        Trigger leftBumperTrigger = controller.leftBumper();
-    }
+    // private static void configLeftBumper()
+    // {
+    //     Trigger leftBumperTrigger = controller.leftBumper();
+    // }
 
-    private static void configRightBumper()
-    {
-        Trigger rightBumperTrigger = controller.rightBumper();
-    }
+    // private static void configRightBumper()
+    // {
+    //     Trigger rightBumperTrigger = controller.rightBumper();
+    // }
 
-    private static void configBackButton()
-    {
-        Trigger backButtonTrigger = controller.back();
-    }
+    // private static void configBackButton()
+    // {
+    //     Trigger backButtonTrigger = controller.back();
+    // }
 
-    private static void configStartButton()
-    {
-        Trigger startButtonTrigger = controller.start();
-    }
+    // private static void configStartButton()
+    // {
+    //     Trigger startButtonTrigger = controller.start();
+    // }
 
-    private static void configLeftStick()
-    {
-        Trigger leftStickTrigger = controller.leftStick();
-    }
+    // private static void configLeftStick()
+    // {
+    //     Trigger leftStickTrigger = controller.leftStick();
+    // }
 
-    private static void configRightStick()
-    {
-        Trigger rightStickTrigger = controller.rightStick();
-    }
+    // private static void configRightStick()
+    // {
+    //     Trigger rightStickTrigger = controller.rightStick();
+    // }
 
-    private static void configLeftTrigger()
-    {}
+    // private static void configLeftTrigger()
+    // {}
 
-    private static void configRightTrigger()
-    {}
+    // private static void configRightTrigger()
+    // {}
 
-    private static void configDpadUp()
-    {}
+    // private static void configDpadUp()
+    // {}
 
-    private static void configDpadDown()
-    {}
+    // private static void configDpadDown()
+    // {}
 
     /**
-     *@author Jackson D
-     *@author Robbie J
+     * Configures rumble to happen at a certain match time on the driver controller
+     * @param time The time in the match that the controller rumbles
+     * @author Jackson D
+     * @author Robbie J
     */ 
     private static void configRumble(int time)
     {

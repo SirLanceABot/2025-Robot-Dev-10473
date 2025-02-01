@@ -17,7 +17,8 @@ public final class Constants
 
     public static final double MAX_BATTERY_VOLTAGE          = 12.0;
     public static final double END_OF_MATCH_BATTERY_VOLTAGE = 11.5; // This is the estimated voltage at the end of each match, used in subsystems with setVoltage()
-    
+    public static final int MATCH_LENGTH                    = 135;
+
     // *** STATIC INITIALIZATION BLOCK ***
     // This block of code is run first when the class is loaded
     static

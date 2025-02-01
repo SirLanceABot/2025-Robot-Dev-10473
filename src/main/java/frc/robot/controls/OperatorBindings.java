@@ -33,9 +33,19 @@ public final class OperatorBindings
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
 
+    /**
+     * Button bindings for the operator
+     * @author Robbie J.
+     */
 
     private OperatorBindings()
     {}
+
+    /**
+     * Creates button bindings for the operator
+     * @param robotContainer
+     * @author Robbie J.
+     */
 
     public static void createBindings(RobotContainer robotContainer)
     {
@@ -95,8 +105,10 @@ public final class OperatorBindings
 
     
     /**
-     *@author Jackson D
-     *@author Robbie J
+     * Configures rumble to happen at a certain match time on the driver controller
+     * @param time The time in the match that the controller rumbles
+     * @author Jackson D
+     * @author Robbie J
     */ 
     private static void configRumble(int time)
     {
@@ -108,6 +120,7 @@ public final class OperatorBindings
     }
 
     /**
+     * Configures rumble to happen for 0.5 seconds
      * @author Mason B
      */
     private static void configRumble(BooleanSupplier supplier)

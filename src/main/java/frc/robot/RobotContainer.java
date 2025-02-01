@@ -84,22 +84,25 @@ public class RobotContainer
     }
 
     /**
-     * Sets up the compressor and stops it at the end of the match
+     * Sets up the compressor and sets it to stop once the tank has filled once
      * @author Jackson D
      * @author Robbie J
      */
     public void configCompressor()
     {
         pneumaticHub.enableCompressorDigital();
+        // One full tank can power one solenoid for 90 shifts
         
-        // disables at end of match 1 full tank can power 1 solonoid for 90 shifts
-        BooleanSupplier filledOnceSupplier = () -> (DriverStation.isTeleopEnabled()  && DriverStation.getMatchTime() < (135 - 5) && compressor.isEnabled() == false);
-        BooleanSupplier pressureSupplier = () -> (DriverStation.getMatchTime() < 30.0 && DriverStation.isTeleopEnabled());
-        Trigger pressureTrigger = new Trigger(pressureSupplier);
+        // Disables compressor once the tank has filled once
+        BooleanSupplier filledOnceSupplier = () -> (DriverStation.isTeleopEnabled()  && DriverStation.getMatchTime() < (Constants.MATCH_LENGTH - 5) && compressor.isEnabled() == false);
+        
+        // Disables compressor for the last 30 seconds of the match
+        // BooleanSupplier pressureSupplier = () -> (DriverStation.getMatchTime() < 30.0 && DriverStation.isTeleopEnabled());
 
-        pressureTrigger
+        Trigger disableTrigger = new Trigger(filledOnceSupplier);
+
+        disableTrigger
             .onTrue(Commands.runOnce(()-> compressor.disable()));
-            // .whileFalse(Commands.runOnce(()-> compressor.enableDigital()));
     }
     
     public Drivetrain getDrivetrain()
