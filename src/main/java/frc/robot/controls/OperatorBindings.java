@@ -65,7 +65,7 @@ public final class OperatorBindings
             configRumble(15);
             if(roller != null)
             {
-                configRumble(() -> DriverStation.isTeleopEnabled() && roller.isDetectedSupplier().getAsBoolean());
+                // configRumble(() -> DriverStation.isTeleopEnabled() && roller.isDetectedSupplier().getAsBoolean());
             }
         }    
     }
@@ -123,14 +123,14 @@ public final class OperatorBindings
      * Configures rumble to happen for 0.5 seconds
      * @author Mason B
      */
-    private static void configRumble(BooleanSupplier supplier)
-    {
-        Trigger rumbleTrigger = new Trigger(supplier);
-        rumbleTrigger.onTrue(
-            Commands.runOnce(() -> controller.getHID().setRumble(RumbleType.kBothRumble, 1.0))
-            .andThen(Commands.waitSeconds(0.5))
-            .andThen(Commands.runOnce(() -> controller.getHID().setRumble(RumbleType.kBothRumble, 0.0)))
-        );
-    }
+    // private static void configRumble(BooleanSupplier supplier)
+    // {
+    //     Trigger rumbleTrigger = new Trigger(supplier);
+    //     rumbleTrigger.onTrue(
+    //         Commands.runOnce(() -> controller.getHID().setRumble(RumbleType.kBothRumble, 1.0))
+    //         .andThen(Commands.waitSeconds(0.5))
+    //         .andThen(Commands.runOnce(() -> controller.getHID().setRumble(RumbleType.kBothRumble, 0.0)))
+    //     );
+    // }
 }
 

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.InternalButton;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pivot;
@@ -31,6 +32,7 @@ public final class GeneralCommands
     private static CommandXboxController driverController;
     private static CommandXboxController operatorController;
     private static LEDs leds;
+    private static final InternalButton intakeAlgaeTriggersRumble = new InternalButton();
 
     private GeneralCommands()
     {}
@@ -42,6 +44,7 @@ public final class GeneralCommands
         driverController = robotContainer.getDriverController();
         operatorController = robotContainer.getOperatorController();
         leds = robotContainer.getLEDs();
+        intakeAlgaeTriggersRumble.onTrue(operatorRumble());
     }
 
     public static Command resetPivotAndRollerCommand()
@@ -88,11 +91,13 @@ public final class GeneralCommands
                 Commands.parallel(
                     roller.stopCommand(),
                     // operatorRumble(),
+                    Commands.runOnce( () -> intakeAlgaeTriggersRumble.setPressed(true) ),
                     pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
                         .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1)
                         .withTimeout(2.0)
                 )
-            );
+            )
+            .andThen( () -> intakeAlgaeTriggersRumble.setPressed(false) );
         }
         else
         {
