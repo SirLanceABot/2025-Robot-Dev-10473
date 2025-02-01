@@ -3,6 +3,10 @@ package frc.robot.subsystems;
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 // import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -53,6 +57,15 @@ public class Drivetrain extends SubsystemLance
 
     // *** INNER ENUMS and INNER CLASSES ***
     // Put all inner enums and inner classes here
+    // private final DifferentialDrivePoseEstimator postEstimator = 
+    //     new DifferentialDrivePoseEstimator(
+    //         kinematics,
+    //         gryo.getRotation2d(),
+    //         leftEncoder.getDistance(),
+    //         rightEncoder.getDistance(),
+    //         new Pose2d(),
+    //         VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+    //         VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -115,15 +128,15 @@ public class Drivetrain extends SubsystemLance
         // Use this for data that needs to be logged.
     }
 
-    public double leftLeaderVelocity()
-    {
-        return leftLeader.getVelocity();
-    }
+    // public double leftLeaderVelocity()
+    // {
+    //     return leftLeader.getVelocity();
+    // }
 
-    public double rightLeaderVelocity()
-    {
-        return rightLeader.getVelocity();
-    }
+    // public double rightLeaderVelocity()
+    // {
+    //     return rightLeader.getVelocity();
+    // }
 
     /**
      * @param speed
@@ -201,15 +214,15 @@ public class Drivetrain extends SubsystemLance
         differentialDrive.stopMotor();
     }
 
-    public Command leftLeaderVelocityCommand()
-    {
-        return run( () -> leftLeaderVelocity() ).withName("Get Left Leader Velocity");
-    }
+    // public Command leftLeaderVelocityCommand()
+    // {
+    //     return run( () -> leftLeaderVelocity() ).withName("Get Left Leader Velocity");
+    // }
 
-    public Command rightLeaderVelocityCommand()
-    {
-        return run ( () -> rightLeaderVelocity() ).withName("Get Right Leader Velocity");
-    }
+    // public Command rightLeaderVelocityCommand()
+    // {
+    //     return run ( () -> rightLeaderVelocity() ).withName("Get Right Leader Velocity");
+    // }
 
     /**
      * @param speed
