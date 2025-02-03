@@ -298,7 +298,7 @@ public class Drivetrain extends SubsystemLance
     /*
      * runs the prepareShiftToHigh() method
      */
-    public Command prepareShiftToHighCommmand()
+    public Command prepareShiftToHighCommand()
     {
         return run( () -> prepareShiftToHigh()).withName("Prepare Shift to High");
     }

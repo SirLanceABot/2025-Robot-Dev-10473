@@ -86,6 +86,18 @@ public class RobbieFTest implements Test
 
             System.out.println("Post Shift Low");
         }
+        else if(joystick.getRawButton(3))
+        {
+            driveTrain.prepareShiftToHighCommand().schedule();
+
+            System.out.println("Prepare Shift High");
+        }
+        else if(joystick.getRawButton(4))
+        {
+            driveTrain.postShiftToHighCommand().schedule();
+
+            System.out.println("Post Shift High");
+        }
         else
         {
             driveTrain.arcadeDriveCommand(() -> joystick.getRawAxis(1), () -> joystick.getRawAxis(0), true).schedule();
