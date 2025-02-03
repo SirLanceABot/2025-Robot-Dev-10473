@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.745,
+        "y": 7.262
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.9331915505835245,
+        "y": 6.678076168104076
+      },
+      "isLocked": false,
+      "linkedName": "Left Station"
+    },
+    {
+      "anchor": {
+        "x": 4.849207746478872,
+        "y": 5.343045774647887
+      },
+      "prevControl": {
+        "x": 5.350522174100417,
+        "y": 6.208310962124237
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "S6 Left"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 152.5011963340437
+  },
+  "reversed": false,
+  "folder": "Left Station Starts",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
