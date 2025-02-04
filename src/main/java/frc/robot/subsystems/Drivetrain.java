@@ -3,11 +3,19 @@ package frc.robot.subsystems;
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.util.Units;
-// import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Encoder;
+
+import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -35,14 +43,14 @@ public class Drivetrain extends SubsystemLance
 
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final TalonFXLance leftLeader = new TalonFXLance(Constants.Drivetrain.LEFT_LEADER_PORT, Constants.Drivetrain.LEFT_LEADER_CAN_BUS, "Left Leader");
-    private final TalonFXLance leftFollower = new TalonFXLance(Constants.Drivetrain.LEFT_FOLLOWER_PORT, Constants.Drivetrain.LEFT_FOLLOWER_CAN_BUS, "Left Follower");
-    private final TalonFXLance rightLeader = new TalonFXLance(Constants.Drivetrain.RIGHT_LEADER_PORT, Constants.Drivetrain.RIGHT_LEADER_CAN_BUS, "Right Leader");
-    private final TalonFXLance rightFollower = new TalonFXLance(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, Constants.Drivetrain.RIGHT_FOLLOWER_CAN_BUS, "Right Follower");
-
-    private final DifferentialDrive differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
+    
 
     private final double MAXLOWGEARSPEED = 0.53125;
+
+    private static final double TRACKWIDTH = 4237.0;
+    private static final double WHEELRADIUS = 4237.0;
+    private static final int ENCODERERESOLUTION = 4237;
+
 
     private final double FIRSTSTAGEGEARRATIO = 12.0 / 60.0;
     private final double SECONDSTAGEGEARRATIO = 24.0 / 32.0;
@@ -52,20 +60,34 @@ public class Drivetrain extends SubsystemLance
     // divisor is the number to divide the high gear speed ouputs by to match the max low gear speed
     // to allow smooth shifting
     private double divisor = 1.0;
-    // actual value of high gear to low gear is 1.882352941, rounded to 1.9 for tolerance
-    
+
+    private final Encoder leftEncoder = new Encoder(0, 1);
+    private final Encoder rightEncoder = new Encoder(2, 3);
+
+    private final AnalogGyro gyro = new AnalogGyro(0);
+
+    private final PIDController leftPIDController = new PIDController(1, 0, 0);
+    private final PIDController rightPIDController = new PIDController(1, 0, 0);
+
+    // private final DifferentialDriveKinematics kimenatics =
+    //     new DifferentialDriveKinematics(TRACKWIDTH);
+
+    private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(
+        gyro.getRotation2d(),
+        leftEncoder.getDistance(), rightEncoder.getDistance(),
+        new Pose2d(4237.0, 4237.0, new Rotation2d() ) );
+
+    private final SimpleMotorFeedforward feedFoward = new SimpleMotorFeedforward(1, 3);
+
+    private final TalonFXLance leftLeader = new TalonFXLance(Constants.Drivetrain.LEFT_LEADER_PORT, Constants.Drivetrain.LEFT_LEADER_CAN_BUS, "Left Leader");
+    private final TalonFXLance leftFollower = new TalonFXLance(Constants.Drivetrain.LEFT_FOLLOWER_PORT, Constants.Drivetrain.LEFT_FOLLOWER_CAN_BUS, "Left Follower");
+    private final TalonFXLance rightLeader = new TalonFXLance(Constants.Drivetrain.RIGHT_LEADER_PORT, Constants.Drivetrain.RIGHT_LEADER_CAN_BUS, "Right Leader");
+    private final TalonFXLance rightFollower = new TalonFXLance(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, Constants.Drivetrain.RIGHT_FOLLOWER_CAN_BUS, "Right Follower");
+
+    private final DifferentialDrive differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
 
     // *** INNER ENUMS and INNER CLASSES ***
     // Put all inner enums and inner classes here
-    // private final DifferentialDrivePoseEstimator postEstimator = 
-    //     new DifferentialDrivePoseEstimator(
-    //         kinematics,
-    //         gryo.getRotation2d(),
-    //         leftEncoder.getDistance(),
-    //         rightEncoder.getDistance(),
-    //         new Pose2d(),
-    //         VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-    //         VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -77,6 +99,15 @@ public class Drivetrain extends SubsystemLance
     {
         super("Example Subsystem");
         System.out.println("  Constructor Started:  " + fullClassName);
+
+        gyro.reset();
+
+        leftEncoder.reset();
+        rightEncoder.reset();
+
+        // is this in the right spot?
+        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+            leftLeader.getVelocity(), rightLeader.getVelocity(), Math.PI / 2.0, gyro.getRotation2d() );
 
         configMotors();
 
@@ -107,15 +138,6 @@ public class Drivetrain extends SubsystemLance
         rightFollower.setupInverted(false);
     }
 
-    
-
-
-    // Use a method reference instead of this method
-    // public Command stopCommand()
-    // {
-    //     return run( () -> stop() );
-    // }
-
 
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here
@@ -123,20 +145,10 @@ public class Drivetrain extends SubsystemLance
     @Override
     public void periodic()
     {
-        // This method will be called once per scheduler run
-        // Use this for sensors that need to be read periodically.
-        // Use this for data that needs to be logged.
+        var gryoAngle = gyro.getRotation2d();
+
+        // pose = odometry.update(gryoAngle, leftEncoder.getDistance(), rightEncoder.getDistance());
     }
-
-    // public double leftLeaderVelocity()
-    // {
-    //     return leftLeader.getVelocity();
-    // }
-
-    // public double rightLeaderVelocity()
-    // {
-    //     return rightLeader.getVelocity();
-    // }
 
     /**
      * @param speed
@@ -173,7 +185,8 @@ public class Drivetrain extends SubsystemLance
         leftLeader.setupCoastMode();
         rightLeader.setupCoastMode();
 
-        divisor = 1.9;
+        divisor = 1.9;  // actual value of high gear to low gear is 1.882352941, rounded to 1.9 for tolerance
+    
     }
 
     /*
@@ -344,6 +357,7 @@ public class Drivetrain extends SubsystemLance
             .andThen(stopDriveCommand())
             .withName("Autonomous Turn And Drive Command");
     }
+
 
     @Override
     public String toString()
