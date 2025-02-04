@@ -74,9 +74,25 @@ public class NiyatiPTest implements Test
     {
         if(joystick.getRawButton(1))
         {
-            System.out.println("Hi");
-            leds.setColorGradientCommand(Color.kOrange, Color.kPink).schedule();
+            leds.setColorGradientCommand(Color.kFuchsia, Color.kGold, Color.kSeaGreen, Color.kRoyalBlue, Color.kRosyBrown).schedule();
         }
+        else if(joystick.getRawButton(2))
+        {
+            leds.offCommand().schedule();
+        }
+        else if(joystick.getRawButton(3))
+        {
+            leds.setColorRainbowCommand().schedule();
+        }
+        else if(joystick.getRawButton(4))
+        {
+            leds.setColorSolidCommand(Color.kMediumOrchid).schedule();
+        }
+
+        // else if(joystick.getRawButton(5))
+        // {
+        //     leds.setColorCoolPatternCommand().schedule();
+        // }
         // else if(joystick.getRawButton(2))
         // {
         //     leds.setColorGradientCommand(LEDs.CustomColor.kRed).schedule();

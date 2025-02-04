@@ -3,10 +3,12 @@ package frc.robot.subsystems;
 import java.lang.invoke.MethodHandles;
 // import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.units.measure.Distance;
 // import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.units.Units;
 // import edu.wpi.first.wpilibj.Timer;
 // import edu.wpi.first.wpilibj.LEDPattern.GradientType;
 import edu.wpi.first.wpilibj.util.Color;
@@ -65,9 +67,16 @@ public class LEDs extends SubsystemLance
     // private final AddressableLEDBuffer setBuffer;
     // private final Timer timer = new Timer();
     public LEDPattern gradient;
-    private AddressableLED m_led = new AddressableLED(5);
-    private AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(5);
+    private AddressableLED led = new AddressableLED(1);
+    private AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(200);
 
+    private LEDPattern off = LEDPattern.solid(Color.kBlack);
+    private final LEDPattern rainbow = LEDPattern.rainbow(255, 255);
+    private LEDPattern solid;
+    // LEDPattern coolPattern = LEDPattern.progressMaskLayer(() -> 4/5);
+    // private final LEDPattern scrollingRainbow = rainbow.scrollAtAboutSpeed(MetersPerSecond.of(1), kLedSpacing);
+
+    // private static final Distance kLedSpacing = Meters.of(1/120.0);
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
   
@@ -84,11 +93,11 @@ public class LEDs extends SubsystemLance
         // m_led = new AddressableLED(5);
         // m_ledBuffer = new AddressableLEDBuffer(5);
 
-        m_led.setLength(5);
+        led.setLength(200);
         // blankBuffer = new AddressableLEDBuffer(5);
         // setBuffer = new AddressableLEDBuffer(5);
 
-        gradient = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kOrange, Color.kPink);
+        // gradient = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kOrange, Color.kPink);
         
         configLEDs();
         // configBuffers();
@@ -97,10 +106,7 @@ public class LEDs extends SubsystemLance
 
     private void configLEDs()
     {
-        LEDPattern red = LEDPattern.solid(Color.kRed);
-        red.applyTo(m_ledBuffer);
-        m_led.setData(m_ledBuffer);
-        m_led.start();
+        led.start();
         // m_ledBuffer.setRGB(Color.kRed);
         // getRed(Color.kRed);
     }
@@ -113,15 +119,22 @@ public class LEDs extends SubsystemLance
     //     }
     // }
 
-    // private void off()
-    // {
-        
-    // }
+    private void off()
+    {
+        off.applyTo(ledBuffer);
+        led.setData(ledBuffer);
+    }
 
-    // private void setColorSolid(Color color)
+    private void setColorSolid(Color color)
+    {
+        solid = LEDPattern.solid(color);
+        solid.applyTo(ledBuffer);
+    }
+
+    // private void setCoolPattern()
     // {
-    //     LedPattern red = LEDPattern.solid(Color.kRed);
-    //     color.applyTo(blankBuffer);
+    //     coolPattern.applyTo(ledBuffer);
+    //     led.setData(ledBuffer);
     // }
 
     // private void setColorBlink(int r, int g, int b)
@@ -141,50 +154,53 @@ public class LEDs extends SubsystemLance
         // }
     // }
 
-    // private void setColorRainbow(int r, int g, int b)
-    // {
-        // for(int i = 0; i < blankBuffer.getLength(); i++)
-        // {
-        //     setBuffer.setRGB(i, r, g, b);
-
-        //     r += 25;
-        //     g += 25;
-        //     b += 25;
-        // }
-    // }
-
-    public void setColorGradient(Color color1, Color color2)
+    private void setColorRainbow()
     {
-        gradient = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, color1, color2);
-        gradient.applyTo(m_ledBuffer);
+        rainbow.applyTo(ledBuffer);
+    }
+
+    public void setColorGradient(Color color1, Color color2, Color color3, Color color4, Color color5)
+    {
+        gradient = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, color1, color2, color3, color4, color5);
+        gradient.applyTo(ledBuffer);
     }
 
     //COMMANDS
+
+    public Command offCommand()
+    {
+        return run(() -> off()).withName("Turn Off");
+    }
 
     // public Command stopCommand()
     // {
     //     return runOnce(() -> off()).withName("Turn Off");
     // }
 
-    // public Command setColorSolidCommand(Color color)
-    // {
-    //     return runOnce(() -> setColorSolid(color)).withName("Set LED Solid");
-    // }
+    public Command setColorSolidCommand(Color color)
+    {
+        return runOnce(() -> setColorSolid(color)).withName("Set LED Solid");
+    }
 
     // public Command setColorBlinkCommand(CustomColor color)
     // {
     //     return run(() -> setColorBlink(color.r, color.g, color.b)).withName("Set LED Blink");
     // }
 
-    // public Command setColorRainbowCommand(CustomColor color)
-    // {
-    //     return run(() -> setColorRainbow(color.r, color.g, color.b)).withName("Set LED Rainbow");
-    // }
-
-    public Command setColorGradientCommand(Color color1, Color color2)
+    public Command setColorRainbowCommand()
     {
-        return run(() -> setColorGradient(color1, color2)).withName("Set LED Gradient");
+        return run(() -> setColorRainbow()).withName("Set LED Rainbow");
     }
+
+    public Command setColorGradientCommand(Color color1, Color color2, Color color3, Color color4, Color color5)
+    {
+        return run(() -> setColorGradient(color1, color2, color3, color4, color5)).withName("Set LED Gradient");
+    }
+
+    // public Command setColorCoolPatternCommand()
+    // {
+    //     return run(() -> setColorCoolPatternCommand().withName("Set LED Cool Pattern"));
+    // }
 
 
 
@@ -204,7 +220,7 @@ public class LEDs extends SubsystemLance
     @Override
     public void periodic()
     {
-        m_led.setData(m_ledBuffer);
+        led.setData(ledBuffer);
         // This method will be called once per scheduler run
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
