@@ -7,9 +7,6 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-/**
- * Use this class as a template to create other sensors.
- */
 public class Proximity extends SensorLance
 {
     // This string gets the full name of the class, including the package name
