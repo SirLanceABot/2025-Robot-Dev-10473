@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 6.059269969129849,
-        "y": 1.7580307616245392
+        "y": 1.7580307616245394
       },
       "isLocked": false,
       "linkedName": "S2 Left"
@@ -37,7 +37,7 @@
       },
       "prevControl": {
         "x": 2.5816021126760553,
-        "y": 1.7999119718309855
+        "y": 1.7999119718309853
       },
       "nextControl": null,
       "isLocked": false,

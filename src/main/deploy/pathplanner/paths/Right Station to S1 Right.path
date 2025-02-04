@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.745,
-        "y": 7.262
+        "x": 1.716,
+        "y": 0.759
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.745,
-        "y": 7.262
+        "x": 3.2133696631724415,
+        "y": 1.4204812137807195
       },
       "isLocked": false,
-      "linkedName": "Left Station"
+      "linkedName": "Right Station"
     },
     {
       "anchor": {
-        "x": 2.430034722222221,
-        "y": 4.262586805555555
+        "x": 5.546614583333333,
+        "y": 2.4597222222222217
       },
       "prevControl": {
-        "x": 2.2223409867732045,
-        "y": 5.7757840209698195
+        "x": 4.634834130654752,
+        "y": 2.139217578250357
       },
       "nextControl": {
-        "x": 2.6256944444444437,
-        "y": 2.837065972222222
+        "x": 7.852604166666667,
+        "y": 3.2703124999999993
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.8146126760563375,
-        "y": 2.820334507042253
+        "x": 5.816427546628407,
+        "y": 3.7480272596843616
       },
       "prevControl": {
-        "x": 3.236265409885169,
-        "y": 1.8186076576152286
+        "x": 6.066427546628407,
+        "y": 3.7480272596843616
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "S3 Middle "
+      "linkedName": "S1 Right"
     }
   ],
   "rotationTargets": [],
@@ -61,7 +61,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Left Station Starts",
+  "folder": "Right Station Starts",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
