@@ -43,9 +43,6 @@ public class Drivetrain extends SubsystemLance
 
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    
-
-    private final double MAXLOWGEARSPEED = 0.53125;
 
     private static final double TRACKWIDTH = 4237.0;
     private static final double WHEELRADIUS = 4237.0;
@@ -56,6 +53,8 @@ public class Drivetrain extends SubsystemLance
     private final double SECONDSTAGEGEARRATIO = 24.0 / 32.0;
     private final double HIGHGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (44.0 / 22.0);    // 0.3
     private final double LOWGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (34.0 / 32.0);     // 0.159375
+    
+    private final double MAXLOWGEARSPEED = 0.53125;
 
     // divisor is the number to divide the high gear speed ouputs by to match the max low gear speed
     // to allow smooth shifting

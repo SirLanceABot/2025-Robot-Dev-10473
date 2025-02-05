@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.GeneralCommands;
 import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
+import frc.robot.subsystems.Pneumatics;
 
 public class Robot extends TimedRobot 
 {
@@ -93,10 +94,10 @@ public class Robot extends TimedRobot
         /**
          * Enables compressor on autonomous init
          */
-        Compressor compressor = robotContainer.getCompressor();;        
-        if (compressor != null)
+        Pneumatics pneumatics = robotContainer.getPneumatics();        
+        if (pneumatics != null)
         {
-            compressor.enableDigital();
+            pneumatics.enableCompressor();
         }
     }
 

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Shifter;
 import frc.robot.commands.GeneralCommands;
@@ -96,9 +97,9 @@ public class RobotContainer
         return shifter;
     }
 
-    public Compressor getCompressor()
+    public Pneumatics getPneumatics()
     {
-        return compressor;
+        return pneumatics;
     }
 
     public Climb getClimb()
