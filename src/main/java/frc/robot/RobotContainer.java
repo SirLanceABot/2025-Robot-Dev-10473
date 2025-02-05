@@ -40,8 +40,7 @@ public class RobotContainer
     private boolean useDrivetrain           = false;
     private boolean useRoller               = false;
     private boolean useShifter              = false;
-    private boolean usePneumaticHub         = false;
-    private boolean useCompressor           = false;
+    private boolean usePneumatics           = false;
     private boolean useClimb                = false;
     private boolean useLEDs                 = false;
 
@@ -53,8 +52,7 @@ public class RobotContainer
     private final Drivetrain drivetrain;
     private final Roller roller;
     private final Shifter shifter;
-    private final PneumaticHub pneumaticHub;
-    private final Compressor compressor;
+    private final Pneumatics pneumatics;
     private final Climb climb;
     private final LEDs leds;
 
@@ -68,41 +66,14 @@ public class RobotContainer
         pivot               = (useFullRobot || usePivot)                ? new Pivot()                                                                                                  : null;
         drivetrain          = (useFullRobot || useDrivetrain)           ? new Drivetrain()                                                                                             : null;
         roller              = (useFullRobot || useRoller)               ? new Roller()                                                                                                 : null;
-        pneumaticHub        = (useFullRobot || usePneumaticHub)         ? new PneumaticHub(1)                                                                                          : null;
-        compressor          = (useFullRobot || useCompressor)           ? new Compressor(PneumaticsModuleType.REVPH)                                                                   : null;
         shifter             = (useFullRobot || useShifter)              ? new Shifter()                                                                                                : null;
         leds                = (useFullRobot || useLEDs)                 ? new LEDs()                                                                                                   : null;
         climb               = (useFullRobot || useClimb)                ? new Climb()                                                                                                  : null;
+        pneumatics          = (useFullRobot || usePneumatics)           ? new Pneumatics()                                                                                             : null;
 
         driverController    = (useFullRobot || useDriverController)     ? new CommandXboxController(Constants.Controllers.DRIVER_CONTROLLER_PORT)                                      : null;
         operatorController  = (useFullRobot || useOperatorController)   ? new CommandXboxController(Constants.Controllers.OPERATOR_CONTROLLER_PORT)                                    : null;
 
-        if(compressor != null && pneumaticHub != null)
-        {
-            configCompressor();
-        }
-    }
-
-    /**
-     * Sets up the compressor and sets it to stop once the tank has filled once
-     * @author Jackson D
-     * @author Robbie J
-     */
-    public void configCompressor()
-    {
-        pneumaticHub.enableCompressorDigital();
-        // One full tank can power one solenoid for 90 shifts
-        
-        // Disables compressor once the tank has filled once
-        BooleanSupplier filledOnceSupplier = () -> (DriverStation.isTeleopEnabled()  && DriverStation.getMatchTime() < (Constants.MATCH_LENGTH - 5) && compressor.isEnabled() == false);
-        
-        // Disables compressor for the last 30 seconds of the match
-        // BooleanSupplier pressureSupplier = () -> (DriverStation.getMatchTime() < 30.0 && DriverStation.isTeleopEnabled());
-
-        Trigger disableTrigger = new Trigger(filledOnceSupplier);
-
-        disableTrigger
-            .onTrue(Commands.runOnce(()-> compressor.disable()));
     }
     
     public Drivetrain getDrivetrain()

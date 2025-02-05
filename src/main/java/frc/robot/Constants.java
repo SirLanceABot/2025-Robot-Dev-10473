@@ -39,6 +39,11 @@ public final class Constants
         public static final int REVERSE_CHANNEL_PORT                    = 1;        
     }
 
+    public static class PneumaticHub
+    {
+        public static final int Pneumatic_HUB_PORT                      = 1;        
+    }
+
     public static class Drivetrain
     {
         public static final int LEFT_LEADER_PORT                        = 0;
