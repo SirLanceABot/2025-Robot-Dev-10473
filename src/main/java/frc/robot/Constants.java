@@ -39,9 +39,13 @@ public final class Constants
         public static final int REVERSE_CHANNEL_PORT                    = 1;        
     }
 
-    public static class PneumaticHub
+    public static class Pneumatics
     {
-        public static final int Pneumatic_HUB_PORT                      = 1;        
+        public static final int Pneumatic_HUB_PORT                      = 1;
+        
+        public static final double MAX_PRESSURE                         = 120;
+        public static final double MIN_PRESSURE                         = 90;
+
     }
 
     public static class Drivetrain

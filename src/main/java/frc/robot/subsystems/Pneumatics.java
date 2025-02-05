@@ -3,6 +3,9 @@ package frc.robot.subsystems;
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+
+import com.revrobotics.AnalogInput;
+
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Compressor;
@@ -39,7 +42,8 @@ public class Pneumatics extends SubsystemLance
     // Put all class variables and instance variables here
 
     private final Compressor compressor=  new Compressor(PneumaticsModuleType.REVPH);
-    private final PneumaticHub pneumaticHub = new PneumaticHub(Constants.PneumaticHub.Pneumatic_HUB_PORT);
+    private final PneumaticHub pneumaticHub = new PneumaticHub(Constants.Pneumatics.Pneumatic_HUB_PORT);
+
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -68,7 +72,7 @@ public class Pneumatics extends SubsystemLance
      */
     private void configCompressor()
     {
-        pneumaticHub.enableCompressorDigital();
+        pneumaticHub.enableCompressorAnalog(Constants.Pneumatics.MIN_PRESSURE, Constants.Pneumatics.MAX_PRESSURE);
         // One full tank can power one solenoid for 90 shifts
         
         // Disables compressor once the tank has filled once
@@ -92,7 +96,7 @@ public class Pneumatics extends SubsystemLance
 
     public void enableCompressor()
     {
-        compressor.enableDigital();
+        compressor.enableAnalog(Constants.Pneumatics.MIN_PRESSURE, Constants.Pneumatics.MAX_PRESSURE);
     }
 
     public void disableCompressor()
