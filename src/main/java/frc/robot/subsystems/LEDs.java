@@ -201,7 +201,7 @@ public class LEDs extends SubsystemLance
 
     public Command offCommand()
     {
-        return run(() -> off()).withName("Turn Off");
+        return runOnce(() -> off()).withName("Turn Off");
     }
 
     // public Command stopCommand()
@@ -221,12 +221,12 @@ public class LEDs extends SubsystemLance
 
     public Command setColorRainbowCommand()
     {
-        return run(() -> setColorRainbow()).withName("Set LED Rainbow");
+        return runOnce(() -> setColorRainbow()).withName("Set LED Rainbow");
     }
 
     public Command setColorGradientCommand(Color color1, Color color2, Color color3, Color color4, Color color5)
     {
-        return run(() -> setColorGradient(color1, color2, color3, color4, color5)).withName("Set LED Gradient");
+        return runOnce(() -> setColorGradient(color1, color2, color3, color4, color5)).withName("Set LED Gradient");
     }
 
     public Command setColorBlinkCommand(Color color1, Color color2, Color color3, Color color4, Color color5, Color color6, Color color7, Color color8, Color color9, Color color10)
