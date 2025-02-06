@@ -81,7 +81,7 @@ public class RobotContainer
         leds                = (useFullRobot || useLEDs)                 ? new LEDs()                                                                                                   : null;
         climb               = (useFullRobot || useClimb)                ? new Climb()                                                                                                  : null;
         pneumatics          = (useFullRobot || usePneumatics)           ? new Pneumatics()                                                                                             : null;
-        camera              = (useFullRobot || useCamera)               ? new Camera()                                                                                                 : null;
+        camera              = (useFullRobot || useCamera)               ? new Camera(Constants.Camera.CAMERA)                                                                          : null;
         poseEstimator       = (useFullRobot || usePoseEstimator)        ? new PoseEstimatorLance(gyro, drivetrain, camera)                                                             : null;
 
         driverController    = (useFullRobot || useDriverController)     ? new CommandXboxController(Constants.Controllers.DRIVER_CONTROLLER_PORT)                                      : null;
