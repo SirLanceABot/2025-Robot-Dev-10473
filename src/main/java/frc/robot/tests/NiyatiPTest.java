@@ -88,6 +88,10 @@ public class NiyatiPTest implements Test
         {
             leds.setColorSolidCommand(Color.kMediumOrchid).schedule();
         }
+        else if(joystick.getRawButton(5))
+        {
+            leds.setColorBlinkCommand(Color.kDarkTurquoise, Color.kBlueViolet, Color.kRed, Color.kBlanchedAlmond, Color.kFuchsia).schedule();
+        }
 
         // else if(joystick.getRawButton(5))
         // {

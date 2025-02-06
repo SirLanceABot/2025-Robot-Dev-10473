@@ -3,12 +3,13 @@ package frc.robot.subsystems;
 import java.lang.invoke.MethodHandles;
 // import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.units.measure.Distance;
+// import edu.wpi.first.units.measure.Distance;
 // import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.units.Units;
+// import edu.wpi.first.units.TimeUnit;
 // import edu.wpi.first.wpilibj.Timer;
 // import edu.wpi.first.wpilibj.LEDPattern.GradientType;
 import edu.wpi.first.wpilibj.util.Color;
@@ -68,11 +69,20 @@ public class LEDs extends SubsystemLance
     // private final Timer timer = new Timer();
     public LEDPattern gradient;
     private AddressableLED led = new AddressableLED(1);
-    private AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(200);
+    private AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(49);
 
     private LEDPattern off = LEDPattern.solid(Color.kBlack);
     private final LEDPattern rainbow = LEDPattern.rainbow(255, 255);
     private LEDPattern solid;
+
+    // Scroll Pattern
+    // Distance ledSpacing = Meters.of(1 / 120.0);
+    
+    private LEDPattern base;
+    private LEDPattern blinkPattern;
+    // LEDPattern pattern = base.scrollAtRelativeSpeed(Percent.per(Second).of(25));
+    // LEDPattern absolute = base.scrollAtAbsoluteSpeed(Centimeters.per(Second).of(12.5), ledSPacing);
+
     // LEDPattern coolPattern = LEDPattern.progressMaskLayer(() -> 4/5);
     // private final LEDPattern scrollingRainbow = rainbow.scrollAtAboutSpeed(MetersPerSecond.of(1), kLedSpacing);
 
@@ -165,6 +175,15 @@ public class LEDs extends SubsystemLance
         gradient.applyTo(ledBuffer);
     }
 
+    public void setColorBlink(Color color1, Color color2, Color color3, Color color4, Color color5)
+    {
+        base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, color1, color2, color3, color4, color5);
+        blinkPattern = base.breathe(Units.Seconds.of(2));
+        blinkPattern.applyTo(ledBuffer);
+    }
+
+    // public void setColorMix
+
     //COMMANDS
 
     public Command offCommand()
@@ -197,10 +216,10 @@ public class LEDs extends SubsystemLance
         return run(() -> setColorGradient(color1, color2, color3, color4, color5)).withName("Set LED Gradient");
     }
 
-    // public Command setColorCoolPatternCommand()
-    // {
-    //     return run(() -> setColorCoolPatternCommand().withName("Set LED Cool Pattern"));
-    // }
+    public Command setColorBlinkCommand(Color color1, Color color2, Color color3, Color color4, Color color5)
+    {
+        return run(() -> setColorBlink(color1, color2, color3, color4, color5)).withName("Set LED Blink");
+    }
 
 
 
