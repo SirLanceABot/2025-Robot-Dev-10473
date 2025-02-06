@@ -8,10 +8,16 @@ import java.lang.invoke.MethodHandles;
 import java.util.Queue;
 import java.util.function.BooleanSupplier;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -69,6 +75,8 @@ public class RobotContainer
     private final CommandXboxController operatorController;
     private final CommandXboxController driverController;
 
+    private final SendableChooser<Command> autoChooser;
+
 
     RobotContainer() 
     {
@@ -87,6 +95,17 @@ public class RobotContainer
         driverController    = (useFullRobot || useDriverController)     ? new CommandXboxController(Constants.Controllers.DRIVER_CONTROLLER_PORT)                                      : null;
         operatorController  = (useFullRobot || useOperatorController)   ? new CommandXboxController(Constants.Controllers.OPERATOR_CONTROLLER_PORT)                                    : null;
 
+        // registerNamedCommands();
+
+        if(drivetrain != null)
+        {
+            autoChooser = AutoBuilder.buildAutoChooser();
+            SmartDashboard.putData("Auto Chooser", autoChooser);
+        }
+        else
+        {
+            autoChooser = null;
+        }
     }
     
     public Drivetrain getDrivetrain()
@@ -158,9 +177,15 @@ public class RobotContainer
         };
     }
 
+    // public void registerNamedCommands()
+    // {
+    //     NamedCommands.registerCommand("Intake Algae", GeneralCommands.intakeAlgaeCommand());
+    //     NamedCommands.registerCommand("Score Algae", GeneralCommands.scoreAlgaeCommand());
+    //     NamedCommands.registerCommand("Score Coral", GeneralCommands.scoreAlgaeCommand());
+    // }
+
     public Command getAutonomousCommand() 
     {
-        // return Commands.print("No autonomous command configured");
-        return GeneralCommands.intakeAlgaeCommand();
+        return autoChooser.getSelected();
     }
 }
