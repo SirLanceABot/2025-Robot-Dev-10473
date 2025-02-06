@@ -105,6 +105,16 @@ public class Pneumatics extends SubsystemLance
         compressor.disable();
     }
 
+    public double getPressure()
+    {
+        return pneumaticHub.getPressure(0);
+    }
+
+    public DoubleSupplier getPressureSupplier()
+    {
+        return () -> getPressure();
+    }
+
     // Use a method reference instead of this method
     // public Command stopCommand()
     // {
