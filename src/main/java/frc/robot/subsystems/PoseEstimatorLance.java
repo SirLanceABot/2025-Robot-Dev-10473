@@ -13,6 +13,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.motors.TalonFXLance;
 import frc.robot.sensors.Camera;
 import frc.robot.sensors.GyroLance;
@@ -104,25 +105,25 @@ public class PoseEstimatorLance extends SubsystemLance
         );
     }
 
-    // private void periodicCameraUpdate()
-    // {
-    //     if(camera != null)
-    //     {
-    //         if(camera.isTargetFound() && camera.getAverageDistanceFromTarget() < MAX_TARGET_DISTANCE)
-    //         {
-    //             LimelightHelpers.PoseEstimate limelightMeasurement =
-    //             LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-    //             if(limelightMeasurement.tagCount >= 2 )     // only trusting if multiple tags are seen
-    //             {
-    //                 poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999999));
-    //                 poseEstimator.addVisionMeasurement(
-    //                     limelightMeasurement.pose,
-    //                     limelightMeasurement.timestampSeconds
-    //                 );
-    //             }
-    //         }
-    //     }
-    // }
+    private void periodicCameraUpdate()
+    {
+        if(camera != null)
+        {
+            if(camera.isTargetFound() && camera.getAverageDistanceFromTarget() < MAX_TARGET_DISTANCE)
+            {
+                LimelightHelpers.PoseEstimate limelightMeasurement =
+                LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+                if(limelightMeasurement.tagCount >= 2 )     // only trusting if multiple tags are seen
+                {
+                    poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999999));
+                    poseEstimator.addVisionMeasurement(
+                        limelightMeasurement.pose,
+                        limelightMeasurement.timestampSeconds
+                    );
+                }
+            }
+        }
+    }
 
 
     // *** OVERRIDEN METHODS ***
@@ -134,6 +135,12 @@ public class PoseEstimatorLance extends SubsystemLance
         // This method will be called once per scheduler run
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
+
+        poseEstimator.update(
+            gyro.getRotation2d(),
+            drivetrain.getLeftLeaderDistance(),
+            drivetrain.getRightLeaderDistance()
+        );
     }
 
     @Override

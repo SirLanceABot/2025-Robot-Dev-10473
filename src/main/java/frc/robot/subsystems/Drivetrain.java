@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Optional;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -122,13 +124,7 @@ public class Drivetrain extends SubsystemLance
                 (speeds, feedforwards) -> driveRobotRelative(speeds),
                 new PPLTVController(0.02),
                 config,
-                () -> {
-                    var alliance = DriverStation.getAlliance();
-                    if(alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
-                },
+                shouldFlipPath(),
                 this
             );
         } 
@@ -219,6 +215,20 @@ public class Drivetrain extends SubsystemLance
 
     {
         return rightLeader.getPosition();
+    }
+
+    public BooleanSupplier shouldFlipPath()
+    {
+        return 
+        () -> 
+        {
+            Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+            if(alliance.isPresent()) 
+            {
+                return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+        };
     }
 
     /**
