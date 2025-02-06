@@ -92,6 +92,10 @@ public class Camera extends SensorLance
         System.out.println("  Constructor Started:  " + fullClassName + " >> " + cameraName);
     }
 
+    /**
+     * 
+     * @return coordinates of the robot on the field
+     */
     public LimelightHelpers.PoseEstimate getPoseEstimate()
     {
         return LimelightHelpers.getBotPoseEstimate_wpiBlue(cameraName);
