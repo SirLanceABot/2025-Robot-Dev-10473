@@ -4,10 +4,9 @@ import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import com.revrobotics.AnalogInput;
-
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.math.MathUtil;
@@ -43,6 +42,7 @@ public class Pneumatics extends SubsystemLance
 
     private final Compressor compressor=  new Compressor(PneumaticsModuleType.REVPH);
     private final PneumaticHub pneumaticHub = new PneumaticHub(Constants.Pneumatics.Pneumatic_HUB_PORT);
+    private final AnalogInput analogPressure = new AnalogInput(0);
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -68,34 +68,35 @@ public class Pneumatics extends SubsystemLance
   /**
      * Sets up the compressor and sets it to stop once the tank has filled once
      * @author Jackson D
-     * @author Robbie J
+     * @author Robbie J 
      */
     private void configCompressor()
     {
+        // pneumaticHub.enableCompressorDigital();
         pneumaticHub.enableCompressorAnalog(Constants.Pneumatics.MIN_PRESSURE, Constants.Pneumatics.MAX_PRESSURE);
         // One full tank can power one solenoid for 90 shifts
         
         // Disables compressor once the tank has filled once
-        BooleanSupplier filledOnceSupplier = () -> (DriverStation.isTeleopEnabled()  && DriverStation.getMatchTime() < (Constants.MATCH_LENGTH - 5) && compressor.isEnabled() == false);
+        // BooleanSupplier filledOnceSupplier = () -> (DriverStation.isTeleopEnabled()  && DriverStation.getMatchTime() < (Constants.MATCH_LENGTH - 5) && compressor.isEnabled() == false);
         
         // Disables compressor for the last 30 seconds of the match
-        // BooleanSupplier pressureSupplier = () -> (DriverStation.getMatchTime() < 30.0 && DriverStation.isTeleopEnabled());
+        BooleanSupplier pressureSupplier = () -> (DriverStation.getMatchTime() < 30.0 && DriverStation.isTeleopEnabled() && pneumaticHub.getPressure(0) > 100);
 
-        Trigger disableTrigger = new Trigger(filledOnceSupplier);
+        Trigger disableTrigger = new Trigger(pressureSupplier);
 
         disableTrigger
             .onTrue(Commands.runOnce(()-> compressor.disable()));
     }
 
-    // Better name?
     public void configAnalogSwitch()
     {
-
+        
     }
 
 
     public void enableCompressor()
     {
+        // compressor.enableDigital();
         compressor.enableAnalog(Constants.Pneumatics.MIN_PRESSURE, Constants.Pneumatics.MAX_PRESSURE);
     }
 
