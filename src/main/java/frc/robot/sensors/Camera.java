@@ -92,6 +92,11 @@ public class Camera extends SensorLance
         System.out.println("  Constructor Started:  " + fullClassName + " >> " + cameraName);
     }
 
+    public LimelightHelpers.PoseEstimate getPoseEstimate()
+    {
+        return LimelightHelpers.getBotPoseEstimate_wpiBlue(cameraName);
+    }
+
     /**
      * 
      * @return size of target as percentage of total FOV it takes up
