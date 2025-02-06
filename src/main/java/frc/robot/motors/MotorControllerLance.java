@@ -110,4 +110,10 @@ public abstract class MotorControllerLance extends MotorSafety implements MotorC
     public abstract double getPosition();
     public abstract double getVelocity();
     public abstract double getMotorVoltage();
+
+    @Override
+    public void setInverted(boolean isInverted)
+    {
+        setupInverted(isInverted);
+    }
 }

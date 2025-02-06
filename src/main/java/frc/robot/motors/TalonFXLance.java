@@ -664,14 +664,14 @@ public class TalonFXLance extends MotorControllerLance
         return motor.get();
     }
 
-    /**
-     * @deprecated Use <b>setupInverted()</b> instead
-     */
-    @Override
-    public void setInverted(boolean isInverted)
-    {
-        setupInverted(isInverted);
-    }
+    // /**
+    //  * @deprecated Use <b>setupInverted()</b> instead
+    //  */
+    // @Override
+    // public void setInverted(boolean isInverted)
+    // {
+    //     setupInverted(isInverted);
+    // }
 
     @Override
     public boolean getInverted()
