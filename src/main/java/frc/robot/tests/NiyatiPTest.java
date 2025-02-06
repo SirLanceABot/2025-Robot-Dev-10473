@@ -90,8 +90,12 @@ public class NiyatiPTest implements Test
         }
         else if(joystick.getRawButton(5))
         {
-            leds.setColorBlinkCommand(Color.kDarkTurquoise, Color.kBlueViolet, Color.kRed, Color.kBlanchedAlmond, Color.kFuchsia).schedule();
+            leds.setColorBlinkCommand(Color.kRed, Color.kOrangeRed, Color.kOrange, Color.kYellow, Color.kYellowGreen, Color.kLimeGreen, Color.kBurlywood, Color.kBlue, Color.kBlueViolet, Color.kFuchsia).schedule();
         }
+        // else if(joystick.getRawButton(6))
+        // {
+        //     leds.setColorMovingMaskCommand(Color.kBlueViolet, Color.kGreen, Color.kBeige).schedule();
+        // }
 
         // else if(joystick.getRawButton(5))
         // {

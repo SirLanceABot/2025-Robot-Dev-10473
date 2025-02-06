@@ -1,7 +1,11 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Percent;
+import static edu.wpi.first.units.Units.Second;
+
 import java.lang.invoke.MethodHandles;
 // import java.util.function.DoubleSupplier;
+import java.util.Map;
 
 // import edu.wpi.first.units.measure.Distance;
 // import edu.wpi.first.math.MathUtil;
@@ -80,6 +84,10 @@ public class LEDs extends SubsystemLance
     
     private LEDPattern base;
     private LEDPattern blinkPattern;
+
+    // public Map<Double, Color> maskSteps = Map.of(0, Color.kWhite, 0.5, Color.kBlack);
+    // private LEDPattern mask = LEDPattern.steps(Map.of(0, Color.kWhite, 0.5, Color.kBlack)).scrollAtRelativeSpeed(Percent.per(Second).of(0.25));
+    // private LEDPattern movingMask = base.mask(mask);
     // LEDPattern pattern = base.scrollAtRelativeSpeed(Percent.per(Second).of(25));
     // LEDPattern absolute = base.scrollAtAbsoluteSpeed(Centimeters.per(Second).of(12.5), ledSPacing);
 
@@ -175,14 +183,19 @@ public class LEDs extends SubsystemLance
         gradient.applyTo(ledBuffer);
     }
 
-    public void setColorBlink(Color color1, Color color2, Color color3, Color color4, Color color5)
+    public void setColorBlink(Color color1, Color color2, Color color3, Color color4, Color color5, Color color6, Color color7, Color color8, Color color9, Color color10)
     {
-        base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, color1, color2, color3, color4, color5);
+        base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, color1, color2, color3, color4, color5, color6, color7, color8, color9, color10);
         blinkPattern = base.breathe(Units.Seconds.of(2));
         blinkPattern.applyTo(ledBuffer);
     }
 
-    // public void setColorMix
+    // public void setColorMovingMask(Color color1, Color color2, Color color3)
+    // {
+    //     mask = LEDPattern.steps(Map.of(0, Color.kWhite, 0.5, Color.kBlack)).scrollAtRelativeSpeed(Percent.per(Second).of(0.25));
+    //     base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, color1, color2);
+    //     movingMask.applyTo(ledBuffer);   
+    // }
 
     //COMMANDS
 
@@ -216,12 +229,15 @@ public class LEDs extends SubsystemLance
         return run(() -> setColorGradient(color1, color2, color3, color4, color5)).withName("Set LED Gradient");
     }
 
-    public Command setColorBlinkCommand(Color color1, Color color2, Color color3, Color color4, Color color5)
+    public Command setColorBlinkCommand(Color color1, Color color2, Color color3, Color color4, Color color5, Color color6, Color color7, Color color8, Color color9, Color color10)
     {
-        return run(() -> setColorBlink(color1, color2, color3, color4, color5)).withName("Set LED Blink");
+        return run(() -> setColorBlink(color1, color2, color3, color4, color5, color6, color7, color8, color9, color10)).withName("Set LED Blink");
     }
 
-
+    // public Command setColorMovingMaskCommand(Color color1, Color color2, Color color3)
+    // {
+    //     return run(() -> setColorMovingMask(color1, color2, color3)).withName("Set LED Moving Mask");
+    // }
 
     // *** CLASS METHODS & INSTANCE METHODS ***
     // Put all class methods and instance methods here
