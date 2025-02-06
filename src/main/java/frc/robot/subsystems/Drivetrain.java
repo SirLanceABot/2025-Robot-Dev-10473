@@ -55,8 +55,9 @@ public class Drivetrain extends SubsystemLance
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
 
+
     private static final double WHEELRADIUS = 4237.0;
-    private static final double TRACKWIDTH = 4237.0;
+    private static final double TRACKWIDTH = 18.8495559215;  // inches // radius = 3.0 in
     private static final int ENCODERERESOLUTION = 4237;
 
     private final double FIRSTSTAGEGEARRATIO = 12.0 / 60.0;
