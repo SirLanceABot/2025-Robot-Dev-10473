@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.125,
-        "y": 3.95
+        "x": 5.489249999999999,
+        "y": 4.99025
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.099735915492957,
-        "y": 4.110035211267604
+        "x": 7.380750000000001,
+        "y": 7.135249999999998
       },
       "isLocked": false,
-      "linkedName": "S4"
+      "linkedName": "S6 Right"
     },
     {
       "anchor": {
-        "x": 1.716,
-        "y": 0.759
+        "x": 1.745,
+        "y": 7.262
       },
       "prevControl": {
-        "x": 2.2981514084507033,
-        "y": 1.7857394366197181
+        "x": 2.9730181696889164,
+        "y": 8.14529836403895
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Station"
+      "linkedName": "Left Station"
     }
   ],
   "rotationTargets": [],
@@ -45,10 +45,10 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Reef Starts",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -173.98344983000774
+    "rotation": 150.46121774044192
   },
   "useDefaultConstraints": true
 }

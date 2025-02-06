@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7029049295774634,
+        "x": 1.7029049295774636,
         "y": 3.9257922535211254
       },
       "isLocked": false,
@@ -37,7 +37,7 @@
       },
       "prevControl": {
         "x": 2.383186619718308,
-        "y": 1.870774647887324
+        "y": 1.8707746478873237
       },
       "nextControl": null,
       "isLocked": false,
@@ -61,7 +61,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Reef Sarts",
+  "folder": "Reef Starts",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -173.98344983000774
