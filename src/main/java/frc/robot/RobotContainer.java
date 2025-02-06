@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Queue;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.Compressor;
@@ -19,9 +20,12 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.PoseEstimatorLance;
 import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Shifter;
 import frc.robot.commands.GeneralCommands;
+import frc.robot.sensors.Camera;
+import frc.robot.sensors.GyroLance;
 import frc.robot.subsystems.Climb;
 
 public class RobotContainer 
@@ -44,6 +48,8 @@ public class RobotContainer
     private boolean usePneumatics           = false;
     private boolean useClimb                = false;
     private boolean useLEDs                 = false;
+    private boolean usePoseEstimator        = false;
+    private boolean useCamera               = false;
 
     private boolean useDriverController     = false;
     private boolean useOperatorController   = false;
@@ -56,6 +62,9 @@ public class RobotContainer
     private final Pneumatics pneumatics;
     private final Climb climb;
     private final LEDs leds;
+    private final GyroLance gyro;
+    private final PoseEstimatorLance poseEstimator;
+    private final Camera camera;
 
     private final CommandXboxController operatorController;
     private final CommandXboxController driverController;
@@ -65,12 +74,15 @@ public class RobotContainer
     {
         fullRobot           = (useFullRobot);
         pivot               = (useFullRobot || usePivot)                ? new Pivot()                                                                                                  : null;
-        drivetrain          = (useFullRobot || useDrivetrain)           ? new Drivetrain()                                                                                             : null;
+        gyro                = (useFullRobot || useDrivetrain)           ? new GyroLance()                                                                                              : null;
+        drivetrain          = (useFullRobot || useDrivetrain)           ? new Drivetrain(gyro)                                                                                         : null;
         roller              = (useFullRobot || useRoller)               ? new Roller()                                                                                                 : null;
         shifter             = (useFullRobot || useShifter)              ? new Shifter()                                                                                                : null;
         leds                = (useFullRobot || useLEDs)                 ? new LEDs()                                                                                                   : null;
         climb               = (useFullRobot || useClimb)                ? new Climb()                                                                                                  : null;
         pneumatics          = (useFullRobot || usePneumatics)           ? new Pneumatics()                                                                                             : null;
+        camera              = (useFullRobot || useCamera)               ? new Camera()                                                                                                 : null;
+        poseEstimator       = (useFullRobot || usePoseEstimator)        ? new PoseEstimatorLance(gyro, drivetrain, camera)                                                             : null;
 
         driverController    = (useFullRobot || useDriverController)     ? new CommandXboxController(Constants.Controllers.DRIVER_CONTROLLER_PORT)                                      : null;
         operatorController  = (useFullRobot || useOperatorController)   ? new CommandXboxController(Constants.Controllers.OPERATOR_CONTROLLER_PORT)                                    : null;
@@ -110,6 +122,16 @@ public class RobotContainer
     public LEDs getLEDs()
     {
         return leds;
+    }
+
+    public Camera getCamera()
+    {
+        return camera;
+    }
+
+    public PoseEstimatorLance getPoseEstimator()
+    {
+        return poseEstimator;
     }
 
     public CommandXboxController getOperatorController()

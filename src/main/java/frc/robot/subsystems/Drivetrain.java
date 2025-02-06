@@ -3,6 +3,12 @@ package frc.robot.subsystems;
 import java.lang.invoke.MethodHandles;
 import java.util.function.DoubleSupplier;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.controllers.PPLTVController;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
@@ -11,22 +17,25 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Encoder;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.motors.TalonFXLance;
+import frc.robot.sensors.GyroLance;
 
 /**
  * @author Robbie Frank 
  * @author Aditya Yadav
  * 
- * creates new drivetrain
+ * makes robot drive
  */
 
 public class Drivetrain extends SubsystemLance
@@ -44,10 +53,9 @@ public class Drivetrain extends SubsystemLance
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
 
-    private static final double TRACKWIDTH = 4237.0;
     private static final double WHEELRADIUS = 4237.0;
+    private static final double TRACKWIDTH = 4237.0;
     private static final int ENCODERERESOLUTION = 4237;
-
 
     private final double FIRSTSTAGEGEARRATIO = 12.0 / 60.0;
     private final double SECONDSTAGEGEARRATIO = 24.0 / 32.0;
@@ -60,23 +68,7 @@ public class Drivetrain extends SubsystemLance
     // to allow smooth shifting
     private double divisor = 1.0;
 
-    private final Encoder leftEncoder = new Encoder(0, 1);
-    private final Encoder rightEncoder = new Encoder(2, 3);
-
-    private final AnalogGyro gyro = new AnalogGyro(0);
-
-    private final PIDController leftPIDController = new PIDController(1, 0, 0);
-    private final PIDController rightPIDController = new PIDController(1, 0, 0);
-
-    // private final DifferentialDriveKinematics kimenatics =
-    //     new DifferentialDriveKinematics(TRACKWIDTH);
-
-    private final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(
-        gyro.getRotation2d(),
-        leftEncoder.getDistance(), rightEncoder.getDistance(),
-        new Pose2d(4237.0, 4237.0, new Rotation2d() ) );
-
-    private final SimpleMotorFeedforward feedFoward = new SimpleMotorFeedforward(1, 3);
+    private final GyroLance gyro;
 
     private final TalonFXLance leftLeader = new TalonFXLance(Constants.Drivetrain.LEFT_LEADER_PORT, Constants.Drivetrain.LEFT_LEADER_CAN_BUS, "Left Leader");
     private final TalonFXLance leftFollower = new TalonFXLance(Constants.Drivetrain.LEFT_FOLLOWER_PORT, Constants.Drivetrain.LEFT_FOLLOWER_CAN_BUS, "Left Follower");
@@ -84,6 +76,10 @@ public class Drivetrain extends SubsystemLance
     private final TalonFXLance rightFollower = new TalonFXLance(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, Constants.Drivetrain.RIGHT_FOLLOWER_CAN_BUS, "Right Follower");
 
     private final DifferentialDrive differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
+
+    private final DifferentialDriveKinematics kinematics;
+
+    private final DifferentialDriveOdometry odometry;
 
     // *** INNER ENUMS and INNER CLASSES ***
     // Put all inner enums and inner classes here
@@ -94,21 +90,56 @@ public class Drivetrain extends SubsystemLance
     /** 
      * Creates a new Drivetrain. 
      */
-    public Drivetrain()
+    public Drivetrain(GyroLance gyro)
     {
         super("Example Subsystem");
         System.out.println("  Constructor Started:  " + fullClassName);
 
-        gyro.reset();
-
-        leftEncoder.reset();
-        rightEncoder.reset();
-
-        // is this in the right spot?
-        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            leftLeader.getVelocity(), rightLeader.getVelocity(), Math.PI / 2.0, gyro.getRotation2d() );
+        this.gyro = gyro;
 
         configMotors();
+
+        // gyro.reset();
+
+        kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(TRACKWIDTH)); // find track width
+        
+        odometry = new DifferentialDriveOdometry(
+            gyro.getRotation2d(),
+            leftLeader.getPosition(),
+            rightLeader.getPosition(),      // set the gear ratio up
+            new Pose2d()
+        );
+
+        
+        try
+        {
+            RobotConfig config = RobotConfig.fromGUISettings();
+
+            AutoBuilder.configure(
+                this::getPose,
+                this::resetOdometry,
+                this::getRobotRelativeSpeeds,
+                (speeds, feedforwards) -> driveRobotRelative(speeds),
+                new PPLTVController(0.02),
+                config,
+                () -> {
+                    var alliance = DriverStation.getAlliance();
+                    if(alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+                },
+                this
+            );
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+        }
+
+    
+
+        
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -137,16 +168,57 @@ public class Drivetrain extends SubsystemLance
         rightFollower.setupInverted(false);
     }
 
-
-    // *** OVERRIDEN METHODS ***
-    // Put all methods that are Overridden here
-
-    @Override
-    public void periodic()
+    public Pose2d getPose()
     {
-        var gryoAngle = gyro.getRotation2d();
+        return odometry.getPoseMeters();
+    }
 
-        // pose = odometry.update(gryoAngle, leftEncoder.getDistance(), rightEncoder.getDistance());
+    public void resetOdometry(Pose2d pose)
+    {
+        odometry.resetPosition(
+            gyro.getRotation2d(),
+            leftLeader.getPosition(),
+            rightLeader.getPosition(),
+            pose
+        );
+    }
+
+    public ChassisSpeeds getRobotRelativeSpeeds()
+    {
+        DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(
+            leftLeader.getVelocity(),
+            rightLeader.getVelocity()
+        );
+
+        return kinematics.toChassisSpeeds(wheelSpeeds);
+    }
+
+    public void driveRobotRelative(ChassisSpeeds chassisSpeeds)
+    {
+        DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
+
+        differentialDrive.tankDrive(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond);
+    }
+
+    public DifferentialDriveOdometry getOdometry()
+    {
+        return odometry;
+    }
+
+    public DifferentialDriveKinematics getKinematics()
+    {
+        return kinematics;
+    }
+
+    public double getLeftLeaderDistance()
+    {
+        return leftLeader.getPosition();
+    }
+
+    public double getRightLeaderDistance()
+
+    {
+        return rightLeader.getPosition();
     }
 
     /**
@@ -357,6 +429,14 @@ public class Drivetrain extends SubsystemLance
             .withName("Autonomous Turn And Drive Command");
     }
 
+    // *** OVERRIDEN METHODS ***
+    // Put all methods that are Overridden here
+
+    @Override
+    public void periodic()
+    {
+        odometry.update(gyro.getRotation2d(), leftLeader.getPosition(), rightLeader.getPosition());
+    }
 
     @Override
     public String toString()
