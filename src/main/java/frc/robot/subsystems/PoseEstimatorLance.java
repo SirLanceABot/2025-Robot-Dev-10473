@@ -11,6 +11,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
@@ -48,6 +50,15 @@ public class PoseEstimatorLance extends SubsystemLance
     private final NetworkTable ASTable;
     private final DoubleArrayEntry poseEstimatorEntry;
 
+    Pose2d poseA = new Pose2d();
+    Pose2d poseB = new Pose2d();
+
+    StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
+            .getStructTopic("MyPose", Pose2d.struct).publish();
+
+    StructArrayPublisher<Pose2d> arrayPublisher = NetworkTableInstance.getDefault()
+            .getStructArrayTopic("MyPoseArray", Pose2d.struct).publish();
+
     private final double[] defaultValues = {0.0, 0.0, 0.0};
     private final double MAX_TARGET_DISTANCE = 5.0; // meters
 
@@ -69,6 +80,7 @@ public class PoseEstimatorLance extends SubsystemLance
         this.camera = camera;
 
         ASTable = NetworkTableInstance.getDefault().getTable(Constants.ADVANTAGE_SCOPE_TABLE_NAME);
+        // periodicData.odometryEntry = ASTable.getDoubleArrayTopic("Odometry").getEntry(defaultValues);
         poseEstimatorEntry = ASTable.getDoubleArrayTopic("PoseEstimator").getEntry(defaultValues);
         
         if(drivetrain != null && gyro != null)
@@ -140,11 +152,27 @@ public class PoseEstimatorLance extends SubsystemLance
             drivetrain.getLeftLeaderDistance(),
             drivetrain.getRightLeaderDistance()
         );
+
+        publisher.set(poseA);
+        arrayPublisher.set(new Pose2d[] {poseA, poseB} );
     }
+
+    // public Pose2d getEstimatedPose()
+    // {
+    //     if(poseEstimator != null)
+    //     {
+    //         return periodicData.estimatedPose;
+    //     }
+    //     else
+    //     {
+    //         return new Pose2d();
+    //     }
+    // }
 
     @Override
     public String toString()
     {
+        // return getEstimatedPose();
         return "";
     }
 }
