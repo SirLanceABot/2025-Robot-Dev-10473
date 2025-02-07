@@ -55,21 +55,21 @@ public final class Constants
         public static final int RIGHT_LEADER_PORT                       = 0;
         public static final int RIGHT_FOLLOWER_PORT                     = 0;
 
-        public static final String LEFT_LEADER_CAN_BUS                  = CANIVORE;
-        public static final String LEFT_FOLLOWER_CAN_BUS                = CANIVORE;
-        public static final String RIGHT_LEADER_CAN_BUS                 = CANIVORE;
-        public static final String RIGHT_FOLLOWER_CAN_BUS               = CANIVORE;
+        public static final String LEFT_LEADER_CAN_BUS                  = ROBORIO;
+        public static final String LEFT_FOLLOWER_CAN_BUS                = ROBORIO;
+        public static final String RIGHT_LEADER_CAN_BUS                 = ROBORIO;
+        public static final String RIGHT_FOLLOWER_CAN_BUS               = ROBORIO;
     }
 
     public static class Pivot
     {
-        public static final int MOTOR_PORT                              = 2;
+        public static final int MOTOR_PORT                              = 3;
         public static final String MOTOR_CAN_BUS                        = ROBORIO;
     }
 
     public static class Roller
     {
-        public static final int MOTOR_PORT                              = 3;
+        public static final int MOTOR_PORT                              = 12;
 
         public static final String MOTOR_CAN_BUS                        = ROBORIO;
     }
@@ -83,7 +83,7 @@ public final class Constants
     public static class Controllers
     {
         public static final int DRIVER_CONTROLLER_PORT                  = 0;
-        public static final int OPERATOR_CONTROLLER_PORT                = 1;
+        public static final int OPERATOR_CONTROLLER_PORT                = 0;
     }
 
     public static class Camera

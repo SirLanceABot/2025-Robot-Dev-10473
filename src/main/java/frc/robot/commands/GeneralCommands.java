@@ -3,6 +3,7 @@ package frc.robot.commands;
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -12,7 +13,6 @@ import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Pivot.TargetPosition;
 import frc.robot.subsystems.Roller;
-// import frc.robot.subsystems.LEDs.CustomColor;
 
 
 public final class GeneralCommands 
@@ -45,6 +45,7 @@ public final class GeneralCommands
         operatorController = robotContainer.getOperatorController();
         leds = robotContainer.getLEDs();
         intakeAlgaeTriggersRumble.onTrue(operatorRumble());
+        
     }
 
     public static Command resetPivotAndRollerCommand()
@@ -52,13 +53,16 @@ public final class GeneralCommands
         if(pivot != null && roller != null)
         {
             return
-                pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
+                setLEDSolid(Color.kWhite)
+                .andThen(pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
                     .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1)
                     .withTimeout(2.0)
+                )
                 .andThen(
                     Commands.parallel(
                         roller.stopCommand(),
-                        operatorRumble()
+                        operatorRumble(),
+                        setLEDOff()
                     )
                 );    
         }
@@ -76,11 +80,11 @@ public final class GeneralCommands
      */
     public static Command intakeAlgaeCommand()
     {
-        if(pivot != null && roller != null /*&& leds != null */)
+        if(pivot != null && roller != null)
         {
             return
             Commands.parallel(
-                // leds.setColorSolidCommand(CustomColor.kCyan),
+                setLEDSolid(Color.kGreen),
                 roller.intakeCommand(),
                 pivot.moveToSetPositionCommand(TargetPosition.kGrabAlgaePosition)
                     .until( () -> Math.abs(TargetPosition.kGrabAlgaePosition.pivot - pivot.getPosition()) < 0.1)
@@ -90,8 +94,8 @@ public final class GeneralCommands
             .andThen(
                 Commands.parallel(
                     roller.stopCommand(),
-                    // operatorRumble(),
                     Commands.runOnce( () -> intakeAlgaeTriggersRumble.setPressed(true) ),
+                    setLEDSolid(Color.kBlue),
                     pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
                         .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1)
                         .withTimeout(2.0)
@@ -116,12 +120,16 @@ public final class GeneralCommands
         if(roller != null)
         {
             return
-            roller.ejectCoralCommand()
-            .andThen(Commands.waitSeconds(2.0))
+            Commands.parallel(
+                setLEDBlink(Color.kRed),
+                roller.ejectCoralCommand()
+            )
+            .withTimeout(2.0)
             .andThen(
                 Commands.parallel(
                     operatorRumble(),
-                    roller.stopCommand()
+                    roller.stopCommand(),
+                    setLEDOff()
                 )
             );
         }
@@ -142,12 +150,16 @@ public final class GeneralCommands
         if(roller != null)
         {
             return
-            roller.ejectAlgaeCommand()
-            .andThen(Commands.waitSeconds(2.0))
+            Commands.parallel(
+                setLEDBlink(Color.kBlue),
+                roller.ejectAlgaeCommand()
+            )
+            .withTimeout(2.0)
             .andThen(
                 Commands.parallel(
                     operatorRumble(),
-                    roller.stopCommand()
+                    roller.stopCommand(),
+                    setLEDOff()
                 )
             );
         }
@@ -196,6 +208,65 @@ public final class GeneralCommands
                 () -> driverController.getHID().setRumble(RumbleType.kBothRumble, 0)
             )
             .withTimeout(0.2);
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    /**
+     * Command to make LEDs a solid color
+     * @param color of the LEDs
+     * @return command to make LEDs a solid color
+     * @author Brady Woodard
+     * @author Mason Bellinger
+     */
+    public static Command setLEDSolid(Color color)
+    {
+        if(leds != null)
+        {
+            return leds.setColorSolidCommand(color);
+            
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    /**
+     * Command to make LEDs blink
+     * @param color of the LEDs
+     * @return command to make LEDs blink
+     * @author Brady Woodard
+     * @author Mason Bellinger
+     */
+    public static Command setLEDBlink(Color color)
+    {
+        if(leds != null)
+        {
+            return leds.setColorBlinkCommand(color);
+            
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    /**
+     * Command to turn the LEDs off
+     * @return command to turn the LEDs off
+     * @author Brady Woodard
+     * @author Mason Bellinger
+     */
+    public static Command setLEDOff()
+    {
+        if(leds != null)
+        {
+            return leds.offCommand();
+            
         }
         else
         {
