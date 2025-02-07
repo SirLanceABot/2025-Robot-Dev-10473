@@ -14,6 +14,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Reef to Right (Tests)",
+  "folder": "Test",
   "choreoAuto": false
 }

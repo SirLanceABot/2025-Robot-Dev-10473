@@ -26,6 +26,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Left Wall Starts",
+  "folder": "Test",
   "choreoAuto": false
 }

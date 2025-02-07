@@ -7,17 +7,17 @@
     "Left Station Starts",
     "Left Wall Starts",
     "Middle Starts",
+    "Indirect Paths",
     "Reef Back Out",
     "Reef Starts",
     "Right Station Starts",
     "Right Wall Starts"
   ],
   "autoFolders": [
-    "Left Wall (1st Tests)",
     "Left Wall Starts",
     "Middle Starts",
-    "Reef to Right (Tests)",
-    "Reef to Left (Tests)"
+    "Right Starts",
+    "Test"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

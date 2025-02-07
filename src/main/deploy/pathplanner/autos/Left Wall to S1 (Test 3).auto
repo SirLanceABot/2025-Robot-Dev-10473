@@ -14,6 +14,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Left Wall (1st Tests)",
+  "folder": "Test",
   "choreoAuto": false
 }

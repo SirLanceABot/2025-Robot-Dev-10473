@@ -37,7 +37,7 @@
       },
       "prevControl": {
         "x": 2.2839788732394357,
-        "y": 1.6581866197183086
+        "y": 1.6581866197183088
       },
       "nextControl": null,
       "isLocked": false,
@@ -61,7 +61,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Reef Starts",
+  "folder": "Indirect Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
