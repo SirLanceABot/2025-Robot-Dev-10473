@@ -83,7 +83,9 @@ public class LEDs extends SubsystemLance
     // Distance ledSpacing = Meters.of(1 / 120.0);
     
     private LEDPattern base;
+    private LEDPattern breathePattern;
     private LEDPattern blinkPattern;
+
 
     // public Map<Double, Color> maskSteps = Map.of(0, Color.kWhite, 0.5, Color.kBlack);
     // private LEDPattern mask = LEDPattern.steps(Map.of(0, Color.kWhite, 0.5, Color.kBlack)).scrollAtRelativeSpeed(Percent.per(Second).of(0.25));
@@ -111,7 +113,7 @@ public class LEDs extends SubsystemLance
         // m_led = new AddressableLED(5);
         // m_ledBuffer = new AddressableLEDBuffer(5);
 
-        led.setLength(200);
+        led.setLength(49);
         // blankBuffer = new AddressableLEDBuffer(5);
         // setBuffer = new AddressableLEDBuffer(5);
 
@@ -172,21 +174,28 @@ public class LEDs extends SubsystemLance
         // }
     // }
 
-    private void setColorRainbow()
+    public void setColorRainbow()
     {
         rainbow.applyTo(ledBuffer);
     }
 
-    public void setColorGradient(Color color1, Color color2, Color color3, Color color4, Color color5)
+    public void setColorGradient(Color... colors)
     {
-        gradient = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, color1, color2, color3, color4, color5);
+        gradient = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors);
         gradient.applyTo(ledBuffer);
     }
 
-    public void setColorBlink(Color color1, Color color2, Color color3, Color color4, Color color5, Color color6, Color color7, Color color8, Color color9, Color color10)
+    public void setColorBreathe(Color... colors)
     {
-        base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, color1, color2, color3, color4, color5, color6, color7, color8, color9, color10);
-        blinkPattern = base.breathe(Units.Seconds.of(2));
+        base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colors);
+        breathePattern = base.breathe(Units.Seconds.of(2));
+        breathePattern.applyTo(ledBuffer);
+    }
+
+    public void setColorBlink(Color... colors)
+    {
+        base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colors);
+        blinkPattern = base.breathe(Units.Seconds.of(0.5));
         blinkPattern.applyTo(ledBuffer);
     }
 
@@ -224,14 +233,19 @@ public class LEDs extends SubsystemLance
         return runOnce(() -> setColorRainbow()).withName("Set LED Rainbow");
     }
 
-    public Command setColorGradientCommand(Color color1, Color color2, Color color3, Color color4, Color color5)
+    public Command setColorGradientCommand(Color... colors)
     {
-        return runOnce(() -> setColorGradient(color1, color2, color3, color4, color5)).withName("Set LED Gradient");
+        return runOnce(() -> setColorGradient(colors)).withName("Set LED Gradient");
     }
 
-    public Command setColorBlinkCommand(Color color1, Color color2, Color color3, Color color4, Color color5, Color color6, Color color7, Color color8, Color color9, Color color10)
+    public Command setColorBreatheCommand(Color... colors)
     {
-        return run(() -> setColorBlink(color1, color2, color3, color4, color5, color6, color7, color8, color9, color10)).withName("Set LED Blink");
+        return run(() -> setColorBreathe(colors)).withName("Set LED Breathe");
+    }
+
+    public Command setColorBlinkCommand(Color... colors)
+    {
+        return run(() -> setColorBlink(colors)).withName("Set LED Blink");
     }
 
     // public Command setColorMovingMaskCommand(Color color1, Color color2, Color color3)

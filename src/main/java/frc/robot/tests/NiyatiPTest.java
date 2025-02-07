@@ -74,7 +74,7 @@ public class NiyatiPTest implements Test
     {
         if(joystick.getRawButton(1))
         {
-            leds.setColorGradientCommand(Color.kFuchsia, Color.kGold, Color.kSeaGreen, Color.kRoyalBlue, Color.kRosyBrown).schedule();
+            leds.setColorGradientCommand(Color.kFuchsia, Color.kGold).schedule();
         }
         else if(joystick.getRawButton(2))
         {
@@ -90,7 +90,11 @@ public class NiyatiPTest implements Test
         }
         else if(joystick.getRawButton(5))
         {
-            leds.setColorBlinkCommand(Color.kRed, Color.kOrangeRed, Color.kOrange, Color.kYellow, Color.kYellowGreen, Color.kLimeGreen, Color.kBurlywood, Color.kBlue, Color.kBlueViolet, Color.kFuchsia).schedule();
+            leds.setColorBlinkCommand(Color.kRed, Color.kFuchsia).schedule();
+        }
+        else if(joystick.getRawButton(6))
+        {
+            leds.setColorBreatheCommand(Color.kOrange, Color.kAliceBlue).schedule();
         }
         // else if(joystick.getRawButton(6))
         // {
