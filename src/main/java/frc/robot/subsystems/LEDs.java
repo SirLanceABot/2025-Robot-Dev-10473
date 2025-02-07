@@ -1,11 +1,11 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Percent;
-import static edu.wpi.first.units.Units.Second;
+// import static edu.wpi.first.units.Units.Percent;
+// import static edu.wpi.first.units.Units.Second;
 
 import java.lang.invoke.MethodHandles;
 // import java.util.function.DoubleSupplier;
-import java.util.Map;
+// import java.util.Map;
 
 // import edu.wpi.first.units.measure.Distance;
 // import edu.wpi.first.math.MathUtil;
@@ -71,7 +71,7 @@ public class LEDs extends SubsystemLance
     // private final AddressableLEDBuffer blankBuffer;
     // private final AddressableLEDBuffer setBuffer;
     // private final Timer timer = new Timer();
-    public LEDPattern gradient;
+    private LEDPattern gradient;
     private AddressableLED led = new AddressableLED(1);
     private AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(49);
 
@@ -174,25 +174,25 @@ public class LEDs extends SubsystemLance
         // }
     // }
 
-    public void setColorRainbow()
+    private void setColorRainbow()
     {
         rainbow.applyTo(ledBuffer);
     }
 
-    public void setColorGradient(Color... colors)
+    private void setColorGradient(Color... colors)
     {
         gradient = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors);
         gradient.applyTo(ledBuffer);
     }
 
-    public void setColorBreathe(Color... colors)
+    private void setColorBreathe(Color... colors)
     {
         base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colors);
         breathePattern = base.breathe(Units.Seconds.of(2));
         breathePattern.applyTo(ledBuffer);
     }
 
-    public void setColorBlink(Color... colors)
+    private void setColorBlink(Color... colors)
     {
         base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colors);
         blinkPattern = base.breathe(Units.Seconds.of(0.5));
@@ -210,7 +210,7 @@ public class LEDs extends SubsystemLance
 
     public Command offCommand()
     {
-        return runOnce(() -> off()).withName("Turn Off");
+        return runOnce(() -> off()).withName("Turn Off LED");
     }
 
     // public Command stopCommand()
