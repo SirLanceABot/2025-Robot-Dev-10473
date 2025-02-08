@@ -5,13 +5,21 @@
 package frc.robot;
 
 import java.lang.invoke.MethodHandles;
+
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.PathfindingCommand;
+
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.GeneralCommands;
 import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
+import frc.robot.loggers.CommandSchedulerLog;
+import frc.robot.loggers.DataLogFile;
+import frc.robot.motors.MotorControllerLance;
 import frc.robot.subsystems.Pneumatics;
 
 public class Robot extends TimedRobot 
@@ -35,10 +43,25 @@ public class Robot extends TimedRobot
      */
     Robot() 
     {
+        // The order matters here:
+
+        // (1) Configure loggers
+        DataLogFile.config();
+        CommandSchedulerLog.config(false, false, false);
+
+        // (2) Create the subsystems, sensors, etc.
         robotContainer = new RobotContainer();
+
+        // (3) Create the commands
         GeneralCommands.createGeneralCommands(robotContainer);
+
+        // (4) Bind the commands to triggers
         DriverBindings.createBindings(robotContainer);
         OperatorBindings.createBindings(robotContainer);
+
+        // (5) Create PathPlanner warmup commands
+        // FollowPathCommand.warmupCommand().schedule();
+        // PathfindingCommand.warmupCommand().schedule();
     }
 
     /**
@@ -56,6 +79,13 @@ public class Robot extends TimedRobot
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
     }
+
+    /**
+     * This method runs one time after the driver station connects.
+     */
+    @Override
+    public void driverStationConnected()
+    {}
 
     /**
      * This method runs one time when the robot enters disabled mode.
@@ -140,7 +170,10 @@ public class Robot extends TimedRobot
      */
     @Override
     public void teleopExit() 
-    {}
+    {
+        MotorControllerLance.logAllStickyFaults();
+        DataLogManager.stop();
+    }
 
     /**
      * This method runs one time when the robot enters test mode.

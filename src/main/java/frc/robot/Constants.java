@@ -15,10 +15,6 @@ public final class Constants
     // This string gets the full name of the class, including the package name
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
 
-    public static final double MAX_BATTERY_VOLTAGE          = 12.0;
-    public static final double END_OF_MATCH_BATTERY_VOLTAGE = 11.5; // This is the estimated voltage at the end of each match, used in subsystems with setVoltage()
-    public static final int MATCH_LENGTH                    = 135;
-
     // *** STATIC INITIALIZATION BLOCK ***
     // This block of code is run first when the class is loaded
     static
@@ -26,28 +22,36 @@ public final class Constants
         System.out.println("Loading: " + fullClassName);
     }
 
-    public static final String NETWORK_TABLE_NAME = "TeamLHS";
+    public static final double MAX_BATTERY_VOLTAGE          = 12.0;
+    public static final double END_OF_MATCH_BATTERY_VOLTAGE = 11.5; // This is the estimated voltage at the end of each match, used in subsystems with setVoltage()
+
+    public static final String NETWORK_TABLE_NAME = "TeamLance";
     public static final String ADVANTAGE_SCOPE_TABLE_NAME = "ASTable";
 
     // These are the names of the CAN bus set on the roboRIO and CANivore
-    public static final String CANIVORE = "CANivore";
+    // public static final String CANIVORE = "CANivore";
     public static final String ROBORIO  = "rio";
 
-    public static class Shifter
+
+    public static class Camera
     {
-        public static final int FORWARD_CHANNEL_PORT                    = 0;
-        public static final int REVERSE_CHANNEL_PORT                    = 1;        
+        public static final String CAMERA = "limelight";
+        public static final String BOT_POSE = "botpose_wpiblue";
+        public static final String CAMERA_BOT_POSE = CAMERA + "/" + BOT_POSE;
     }
 
-    public static class Pneumatics
+    public static class Climb
     {
-        public static final int Pneumatic_HUB_PORT                      = 1;
-        
-        public static final double MAX_PRESSURE                         = 120;
-        public static final double MIN_PRESSURE                         = 90;
-
+        public static final int MOTOR_PORT                              = 0;
+        public static final String MOTOR_CAN_BUS                        = ROBORIO;
     }
 
+    public static class Controllers
+    {
+        public static final int DRIVER_CONTROLLER_PORT                  = 0;
+        public static final int OPERATOR_CONTROLLER_PORT                = 0;
+    }
+    
     public static class Drivetrain
     {
         public static final int LEFT_LEADER_PORT                        = 0;
@@ -67,6 +71,15 @@ public final class Constants
         public static final String MOTOR_CAN_BUS                        = ROBORIO;
     }
 
+    public static class Pneumatics
+    {
+        public static final int Pneumatic_HUB_PORT                      = 1;
+        
+        public static final double MAX_PRESSURE                         = 120;
+        public static final double MIN_PRESSURE                         = 90;
+
+    }
+
     public static class Roller
     {
         public static final int MOTOR_PORT                              = 12;
@@ -74,20 +87,9 @@ public final class Constants
         public static final String MOTOR_CAN_BUS                        = ROBORIO;
     }
 
-    public static class Climb
+    public static class Shifter
     {
-        public static final int MOTOR_PORT                              = 0;
-        public static final String MOTOR_CAN_BUS                        = ROBORIO;
-    }
-
-    public static class Controllers
-    {
-        public static final int DRIVER_CONTROLLER_PORT                  = 0;
-        public static final int OPERATOR_CONTROLLER_PORT                = 0;
-    }
-
-    public static class Camera
-    {
-        public static final String CAMERA                               = "limelight";
+        public static final int FORWARD_CHANNEL_PORT                    = 0;
+        public static final int REVERSE_CHANNEL_PORT                    = 1;        
     }
 }
