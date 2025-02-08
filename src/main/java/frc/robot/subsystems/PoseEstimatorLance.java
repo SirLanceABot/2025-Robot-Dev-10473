@@ -121,7 +121,7 @@ public class PoseEstimatorLance extends SubsystemLance
     {
         if(camera != null)
         {
-            if(camera.isTargetFound() && camera.getAverageDistanceFromTarget() < MAX_TARGET_DISTANCE)
+            if(camera.isTargetFound() && camera.getAverageTagDistance() < MAX_TARGET_DISTANCE)
             {
                 LimelightHelpers.PoseEstimate limelightMeasurement = camera.getPoseEstimate();
                 if(limelightMeasurement.tagCount >= 2 )     // only trusting if multiple tags are seen
