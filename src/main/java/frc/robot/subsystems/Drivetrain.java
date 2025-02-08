@@ -65,11 +65,12 @@ public class Drivetrain extends SubsystemLance
     private final double HIGHGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (44.0 / 22.0);    // 0.3
     private final double LOWGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (34.0 / 32.0);     // 0.159375
     
-    private final double MAXLOWGEARSPEED = 0.53125;
+    private final double MAXLOWGEARSPEED = 0.53125; // where the max high gear speed is 1.0
 
     // divisor is the number to divide the high gear speed ouputs by to match the max low gear speed
     // to allow smooth shifting
     private double divisor = 1.0;
+
 
     private final GyroLance gyro;
 
@@ -165,11 +166,18 @@ public class Drivetrain extends SubsystemLance
         rightFollower.setupInverted(false);
     }
 
+    /**
+     * @return
+     * the robot's estimated postion of on the field
+     */
     public Pose2d getPose()
     {
         return odometry.getPoseMeters();
     }
 
+    /**
+     * resets odometry by reseting, the gryo, pose, and the left / right motors
+     */
     public void resetOdometry(Pose2d pose)
     {
         odometry.resetPosition(
@@ -180,6 +188,10 @@ public class Drivetrain extends SubsystemLance
         );
     }
 
+    /**
+     * @return
+     * the robot's estimated chassis spee based on the left and right velocities
+     */
     public ChassisSpeeds getRobotRelativeSpeeds()
     {
         DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(
@@ -190,34 +202,54 @@ public class Drivetrain extends SubsystemLance
         return kinematics.toChassisSpeeds(wheelSpeeds);
     }
 
+    /**
+     * @param chassisSpeeds
+     * the robot's chassis speed
+     */
     public void driveRobotRelative(ChassisSpeeds chassisSpeeds)
     {
         DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
 
         differentialDrive.tankDrive(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond);
     }
-
+    
+    /**
+     * @return odometry
+     * the robot's esimated position based on the left / right encoders and the gyro
+     */
     public DifferentialDriveOdometry getOdometry()
     {
         return odometry;
     }
 
+    /**
+     * @return kinematics
+     * converts the chassi speed to left and right wheel speeds
+     */
     public DifferentialDriveKinematics getKinematics()
     {
         return kinematics;
     }
 
+    /**
+     * @return the position of the left leader encoder
+     */
     public double getLeftLeaderDistance()
     {
         return leftLeader.getPosition();
     }
 
+    /**
+     * @return the position of the right reader encoder
+     */
     public double getRightLeaderDistance()
-
     {
         return rightLeader.getPosition();
     }
 
+    /**
+     * @return if we should flip out auto pahts based on our alliance
+     */
     public BooleanSupplier shouldFlipPath()
     {
         return 
@@ -258,7 +290,7 @@ public class Drivetrain extends SubsystemLance
         differentialDrive.tankDrive(driveSpeed.getAsDouble() / divisor, rotationSpeed.getAsDouble() / divisor, squared);
     }
 
-    /*
+    /**
      * limits velocity when in high gear to allow shifting to low gear while moving (divisor)
      * temporaily sets motors to coast mode for smoother transition
      */
@@ -271,7 +303,7 @@ public class Drivetrain extends SubsystemLance
     
     }
 
-    /*
+    /**
      * resets the velocity limitations (divisor)
      * resets motors back to brake mode
      */
@@ -308,16 +340,6 @@ public class Drivetrain extends SubsystemLance
     {
         differentialDrive.stopMotor();
     }
-
-    // public Command leftLeaderVelocityCommand()
-    // {
-    //     return run( () -> leftLeaderVelocity() ).withName("Get Left Leader Velocity");
-    // }
-
-    // public Command rightLeaderVelocityCommand()
-    // {
-    //     return run ( () -> rightLeaderVelocity() ).withName("Get Right Leader Velocity");
-    // }
 
     /**
      * @param speed
@@ -374,7 +396,7 @@ public class Drivetrain extends SubsystemLance
             .withName("Autonomous Drive Command");
     }
 
-    /*
+    /**
      * runs the prepareShiftToLow() method
      */
     public Command prepareShiftToLowCommand()
@@ -382,7 +404,7 @@ public class Drivetrain extends SubsystemLance
         return run( () -> prepareShiftToLow()).withName("Prepare Shift to Low");
     }
 
-    /*
+    /**
      * runs the postShiftToLow() method
      */
     public Command postShiftToLowCommand()
@@ -390,7 +412,7 @@ public class Drivetrain extends SubsystemLance
         return run( () -> postShiftToLow()).withName("Shifted to Low");
     }
 
-    /*
+    /**
      * runs the prepareShiftToHigh() method
      */
     public Command prepareShiftToHighCommand()
@@ -398,7 +420,7 @@ public class Drivetrain extends SubsystemLance
         return run( () -> prepareShiftToHigh()).withName("Prepare Shift to High");
     }
 
-    /*
+    /**
      * runs the postShiftToHigh() method
      */
     public Command postShiftToHighCommand()
