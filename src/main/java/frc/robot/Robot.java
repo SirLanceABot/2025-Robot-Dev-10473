@@ -9,11 +9,16 @@ import java.lang.invoke.MethodHandles;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathfindingCommand;
 
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.Pivot;
 import frc.robot.commands.GeneralCommands;
 import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
@@ -24,6 +29,7 @@ import frc.robot.subsystems.Pneumatics;
 
 public class Robot extends TimedRobot 
 {
+    // :)
     // This string gets the full name of the class, including the package name
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
 
@@ -72,6 +78,15 @@ public class Robot extends TimedRobot
     {
         // Run periodic tasks
         PeriodicTask.runAllPeriodicTasks();
+
+        SmartDashboard.putNumber("Voltage", RobotController.getBatteryVoltage());
+        SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+        SmartDashboard.putNumber("CAN Utilization %", RobotController.getCANStatus().percentBusUtilization*100.00);
+        SmartDashboard.putNumber("CPU Temperature", RobotController.getCPUTemp());
+        // SmartDashboard.putNumber("Pivot", Pivot.getPosition());
+
+        // SmartDashboard.putNumber(":)", LEDs.getLEDs());
+        //SmartDashboard.putBoolean("Alerts Working", Alerts)
 
         // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
         // commands, running already-scheduled commands, removing finished or interrupted commands,
