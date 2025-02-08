@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.176,
-        "y": 0.603
+        "x": 5.816427546628407,
+        "y": 3.7480272596843616
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.224384845075265,
-        "y": 0.6030000000000001
+        "x": 8.203427546628408,
+        "y": 3.7480272596843616
       },
       "isLocked": false,
-      "linkedName": "Right Wall"
+      "linkedName": "S1 Right"
     },
     {
       "anchor": {
-        "x": 5.025638343789641,
-        "y": 2.699425562526419
+        "x": 1.745,
+        "y": 1.1899999999999988
       },
       "prevControl": {
-        "x": 5.348166199027179,
-        "y": 2.1407909303987833
+        "x": 0.7359513992423996,
+        "y": -0.14905272039869555
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "S2 Right"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -70.63457508099978
   },
-  "reversed": false,
-  "folder": "Right Wall Starts",
+  "reversed": true,
+  "folder": "Reef Back Out",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

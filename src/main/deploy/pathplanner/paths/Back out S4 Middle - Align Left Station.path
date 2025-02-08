@@ -3,58 +3,51 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.745,
-        "y": 7.262
+        "x": 3.14850352112676,
+        "y": 4.024999999999999
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9116538336108895,
-        "y": 6.481997289307688
+        "x": 2.1485035211267602,
+        "y": 4.024999999999999
       },
       "isLocked": false,
-      "linkedName": "Left Station"
+      "linkedName": "S4 Middle"
     },
     {
       "anchor": {
-        "x": 2.891232638888888,
-        "y": 2.920920138888888
+        "x": 2.695572916673471,
+        "y": 6.163281249997076
       },
       "prevControl": {
-        "x": 2.645122914586445,
-        "y": 3.932704561021151
+        "x": 2.903948796955161,
+        "y": 5.496281249997075
       },
       "nextControl": {
-        "x": 3.142795138888888,
-        "y": 1.8867187499999993
+        "x": 2.4871970363917812,
+        "y": 6.830281249997077
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.22,
-        "y": 2.921
+        "x": 1.815,
+        "y": 6.693
       },
       "prevControl": {
-        "x": 5.678436863570127,
-        "y": 2.126964060234018
+        "x": 1.3981311194923831,
+        "y": 7.272557916648261
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "S2 Middle"
+      "linkedName": "Align Left Station"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -67,8 +60,8 @@
     "velocity": 0,
     "rotation": 0.0
   },
-  "reversed": false,
-  "folder": "Left Station Starts",
+  "reversed": true,
+  "folder": "Reef Back Out",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
