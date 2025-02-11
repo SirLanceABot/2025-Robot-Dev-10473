@@ -29,6 +29,8 @@ import frc.robot.subsystems.Pneumatics;
 import frc.robot.subsystems.PoseEstimatorLance;
 import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Shifter;
+import frc.robot.util.Elastic;
+import frc.robot.util.DriverTab;
 import frc.robot.commands.GeneralCommands;
 import frc.robot.sensors.Camera;
 import frc.robot.sensors.GyroLance;
@@ -62,7 +64,7 @@ public class RobotContainer
 
     public final boolean fullRobot;
     private final Pivot pivot;
-    private final Drivetrain drivetrain;
+    public final Drivetrain drivetrain;
     private final Roller roller;
     private final Shifter shifter;
     private final Pneumatics pneumatics;
@@ -96,6 +98,8 @@ public class RobotContainer
         operatorController  = (useFullRobot || useOperatorController)   ? new CommandXboxController(Constants.Controllers.OPERATOR_CONTROLLER_PORT)                                    : null;
 
         // registerNamedCommands();
+
+        // Elastic = (useFullRobot || useElastic)   ? new Elastic(this) : null;
 
         if(drivetrain != null)
         {

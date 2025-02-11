@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Drivetrain;
+// import frc.robot.subsystems.Intake;
 import frc.robot.RobotContainer;
 
 
@@ -39,8 +41,9 @@ public class DriverTab
     private String intakeString = " ";
     
     private GenericEntry pivotAngleBox;
-    private GenericEntry intakeStatusBox;
+    // private GenericEntry intakeStatusBox;
     private ComplexWidget fieldBox;
+    private Drivetrain drivetrain;
    
     
  
@@ -57,7 +60,7 @@ public class DriverTab
         // this.pivot = robotContainer.pivot;
         // this.intake = robotContainer.intake;
         // this.intakePositioning = robotContainer.intakePositioning;
-        // this.drivetrain = robotContainer.getCommandSwerveDrivetrain();
+        this.drivetrain = robotContainer.drivetrain;
         SmartDashboard.putData("Field", field);
         // field.setRobotPose(drivetrain.getEstimatedPose());
         // return driverTab.add("Field", field)
@@ -66,11 +69,6 @@ public class DriverTab
         // .withSize(19,12);  // sets size of widget
         
 
-        
-        
-        
-
-        
         // if(pivot != null)
         // {
         //     pivotAngleBox = createPivotAngleBox();
@@ -81,18 +79,22 @@ public class DriverTab
         //     intakeStatusBox = createIntakeStatusBox();
         // }
 
-        // if(drivetrain != null)
-        // {
-           
-        // }
-
-        
-
+        if(drivetrain != null)
+        {
+            createFieldBox();
+        }
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
  
-
+    private ComplexWidget createFieldBox()
+    {
+        field.setRobotPose(drivetrain.getPose());
+        return driverTab.add("Field", field)
+        .withWidget(BuiltInWidgets.kField) //specifies type of widget: "kField
+        .withPosition(7,1) // sets position of widget
+        .withSize(19,12);  // sets size of widget
+    }
 
     
 
