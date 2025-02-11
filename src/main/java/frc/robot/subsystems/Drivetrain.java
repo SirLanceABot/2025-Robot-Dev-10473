@@ -375,22 +375,6 @@ public class Drivetrain extends SubsystemLance
     }
 
     /**
-     * @param driveSpeed
-     * sets speed of arcadeDriveCommand
-     * @param driveTime
-     * time for which the Command will run
-     * @return
-     * the command
-     */
-    public Command autonomousDriveCommand(double driveSpeed, double driveTime)
-    {
-        return arcadeDriveCommand(() -> driveSpeed, () -> 0.0, false)
-            .withTimeout(driveTime)
-            .andThen(stopDriveCommand())
-            .withName("Autonomous Drive Command");
-    }
-
-    /**
      * runs the prepareShiftToLow() method
      */
     public Command prepareShiftToLowCommand()
@@ -430,12 +414,22 @@ public class Drivetrain extends SubsystemLance
      * @return
      * the command
      */
-    public Command autonomousTurnCommand(double rotationSpeed, double driveTime)
+    public Command turnCommand(double rotationSpeed)
     {
-        return arcadeDriveCommand(() -> 0.0, () -> rotationSpeed, false)
-            .withTimeout(driveTime)
-            .andThen(stopDriveCommand())
-            .withName("Autonomous Turn Command");
+        return arcadeDriveCommand(() -> 0.0, () -> rotationSpeed, false).withName("Turn Command");
+    }
+
+    /**
+     * @param driveSpeed
+     * sets speed of arcadeDriveCommand
+     * @param driveTime
+     * time for which the Command will run
+     * @return
+     * the command
+     */
+    public Command driveCommand(double driveSpeed)
+    {
+        return arcadeDriveCommand(() -> driveSpeed, () -> 0.0, false).withName("Drive Command");
     }
 
     /**
@@ -448,12 +442,14 @@ public class Drivetrain extends SubsystemLance
      * @return
      * the commmand
      */
-    public Command autonomousTurnAndDriveCommand(double driveSpeed, double rotationSpeed, double driveTime)
+    public Command turnAndDriveCommand(double driveSpeed, double rotationSpeed, double driveTime)
     {
-        return arcadeDriveCommand(() -> driveSpeed, () -> rotationSpeed, false)
-            .withTimeout(driveTime)
-            .andThen(stopDriveCommand())
-            .withName("Autonomous Turn And Drive Command");
+        return arcadeDriveCommand(() -> driveSpeed, () -> rotationSpeed, false).withName("Turn And Drive Command");
+    }
+
+    public Command rotateToSetAngleCommand(Rotation2d targetYaw)
+    {
+        return run(() -> turnCommand(0.5));
     }
 
     // *** OVERRIDEN METHODS ***

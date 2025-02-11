@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import java.lang.invoke.MethodHandles;
-// import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.BooleanSupplier;
@@ -17,6 +17,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.sensors.Camera;
@@ -52,6 +53,8 @@ public class PoseEstimatorLance extends SubsystemLance
     private final NetworkTable ASTable;
     private final DoubleArrayEntry poseEstimatorEntry;
 
+    private boolean isRight;
+
     private Pose2d estimatedPose = new Pose2d();
 
     Pose2d poseA = new Pose2d();
@@ -65,6 +68,27 @@ public class PoseEstimatorLance extends SubsystemLance
 
     private final double[] defaultValues = {0.0, 0.0, 0.0};
     private final double MAX_TARGET_DISTANCE = 5.0; // meters
+
+    private final List<Pose2d> aprilTagLocations = new ArrayList<Pose2d>(){{
+        new Pose2d(new Translation2d(13.474446, 3.306318) , new Rotation2d(Math.toRadians(120.0)  ));  // check angle values
+        new Pose2d(new Translation2d(13.890498, 4.0259)   , new Rotation2d(Math.toRadians(180.0)  ));
+        new Pose2d(new Translation2d(13.474446, 4.745482) , new Rotation2d(Math.toRadians(-120.0) ));
+        new Pose2d(new Translation2d(12.643358, 4.745482) , new Rotation2d(Math.toRadians(-60.0)  ));
+        new Pose2d(new Translation2d(12.227306, 4.0259)   , new Rotation2d(Math.toRadians(0.0)    ));
+        new Pose2d(new Translation2d(12.643358, 3.306318) , new Rotation2d(Math.toRadians(60.0)   ));
+
+        new Pose2d(new Translation2d(4.073906, 3.30618)   , new Rotation2d(Math.toRadians(60.0)   ));
+        new Pose2d(new Translation2d(3.6576, 4.0259)      , new Rotation2d(Math.toRadians(0.0)    ));
+        new Pose2d(new Translation2d(4.073906, 4.745482)  , new Rotation2d(Math.toRadians(-60.0)  ));
+        new Pose2d(new Translation2d(4.90474, 4.745482)   , new Rotation2d(Math.toRadians(-120.0) ));
+        new Pose2d(new Translation2d(5.321046, 4.0259)    , new Rotation2d(Math.toRadians(180.0)  ));
+        new Pose2d(new Translation2d(4.90474, 3.306318)   , new Rotation2d(Math.toRadians(120.0)  ));
+    
+        // order should stay the same
+    }};
+
+    private final HashMap<Integer, Pose2d> rightSideMap = new HashMap<Integer, Pose2d>();
+    private final HashMap<Integer, Pose2d> leftSideMap = new HashMap<Integer, Pose2d>();
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -107,7 +131,6 @@ public class PoseEstimatorLance extends SubsystemLance
         System.out.println("  Constructor Finished: " + fullClassName);
     }
 
-
     // *** CLASS METHODS & INSTANCE METHODS ***
     // Put all class methods and instance methods here
 
@@ -139,27 +162,6 @@ public class PoseEstimatorLance extends SubsystemLance
             }
         }
     }
-
-    // private final List<Pose2d> aprilTagLocations = new ArrayList<Pose2d>(){{
-    //     new Pose2d(new Translation2d(13.474446, 3.306318) , new Rotation2d(Math.toRadians(120.0)  ));  // double check angle values
-    //     new Pose2d(new Translation2d(13.890498, 4.0259)   , new Rotation2d(Math.toRadians(180.0)  ));
-    //     new Pose2d(new Translation2d(13.474446, 4.745482) , new Rotation2d(Math.toRadians(-120.0) ));
-    //     new Pose2d(new Translation2d(12.643358, 4.745482) , new Rotation2d(Math.toRadians(-60.0)  ));
-    //     new Pose2d(new Translation2d(12.227306, 4.0259)   , new Rotation2d(Math.toRadians(0.0)    ));
-    //     new Pose2d(new Translation2d(12.643358, 3.306318) , new Rotation2d(Math.toRadians(60.0)   ));
-
-    //     new Pose2d(new Translation2d(4.073906, 3.30618)   , new Rotation2d(Math.toRadians(60.0)   ));
-    //     new Pose2d(new Translation2d(3.6576, 4.0259)      , new Rotation2d(Math.toRadians(0.0)    ));
-    //     new Pose2d(new Translation2d(4.073906, 4.745482)  , new Rotation2d(Math.toRadians(-60.0)  ));
-    //     new Pose2d(new Translation2d(4.90474, 4.745482)   , new Rotation2d(Math.toRadians(-120.0) ));
-    //     new Pose2d(new Translation2d(5.321046, 4.0259)    , new Rotation2d(Math.toRadians(180.0)  ));
-    //     new Pose2d(new Translation2d(4.90474, 3.306318)   , new Rotation2d(Math.toRadians(120.0)  ));
-    
-    //     // order should stay the same
-    // }};
-
-    private final HashMap<Integer, Pose2d> rightSideMap = new HashMap<Integer, Pose2d>();
-    private final HashMap<Integer, Pose2d> leftSideMap = new HashMap<Integer, Pose2d>();
 
     public void fillMaps()
     {
@@ -193,8 +195,9 @@ public class PoseEstimatorLance extends SubsystemLance
         rightSideMap.put(19, new Pose2d( new Translation2d(3.888206, 4.8824092 )   , new Rotation2d(Math.toRadians(-60.0) )));
         rightSideMap.put(20, new Pose2d( new Translation2d(5.09044, 4.8824092 )    , new Rotation2d(Math.toRadians(-120.0))));
         rightSideMap.put(21, new Pose2d( new Translation2d(5.447446, 3.8659 )      , new Rotation2d(Math.toRadians(0.0)   )));
-        rightSideMap.put(22,  new Pose2d( new Translation2d(5.0405233, 3.1393908 ) , new Rotation2d(Math.toRadians(60.0)  )));
+        rightSideMap.put(22, new Pose2d( new Translation2d(5.0405233, 3.1393908 ) , new Rotation2d(Math.toRadians(60.0)  )));
     }
+
 
     public Pose2d getEstimatedPose()
     {
@@ -209,24 +212,10 @@ public class PoseEstimatorLance extends SubsystemLance
 
     }
 
-    // public boolean isReefTag(double tagID)
-    // {
-    //     if((tagID >= 6 && tagID <= 11) || (tagID >= 17 && tagID <= 22))
-    //     {
-    //         return true;
-    //     }
-    //     else
-    //     {
-    //         return false;
-    //     }
-    // }
-
-    // public Pose2d getAprilTagPose(int index)
-    // {
-    //     return aprilTagLocations.get(index);
-    // }
-
-    // do we need both?
+    public Pose2d getAprilTagPose(int index)
+    {
+        return aprilTagLocations.get(index);
+    }
 
     public BooleanSupplier isReefTagSupplier(double tagID)
     {
@@ -238,6 +227,43 @@ public class PoseEstimatorLance extends SubsystemLance
         {
             return () -> false;
         }
+    }
+
+    public Pose2d closestBranchLocation(int aprilTagID, boolean isRight)
+    {
+        if(isRight)
+        {
+            return rightSideMap.get(aprilTagID);
+        }
+        else
+        {
+            return leftSideMap.get(aprilTagID);
+        }
+    }
+
+    public boolean getIsRight()
+    {
+        return isRight;
+    }
+
+    public void setPlacingSideLeft()
+    {
+        isRight = false;
+    }
+
+    public void setPlacingSideRight()
+    {
+        isRight = true;
+    }
+
+    public Command setPlacingSideLeftCommand()
+    {
+        return run(() -> setPlacingSideLeft());
+    }
+
+    public Command setPlacingSideRightCommand()
+    {
+        return run(() -> setPlacingSideRight());
     }
 
     // *** OVERRIDEN METHODS ***

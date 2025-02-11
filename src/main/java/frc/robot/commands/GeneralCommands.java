@@ -9,9 +9,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.InternalButton;
 import frc.robot.RobotContainer;
+import frc.robot.sensors.GyroLance;
+import frc.robot.Constants.Drivetrain;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Pivot.TargetPosition;
+import frc.robot.subsystems.PoseEstimatorLance;
 import frc.robot.subsystems.Roller;
 
 
@@ -29,6 +32,9 @@ public final class GeneralCommands
 
     private static Pivot pivot;
     private static Roller roller;
+    private static Drivetrain drivetrain;
+    private static PoseEstimatorLance poseEstimator;
+    private static GyroLance gyro;
     private static CommandXboxController driverController;
     private static CommandXboxController operatorController;
     private static LEDs leds;
@@ -168,6 +174,18 @@ public final class GeneralCommands
             return Commands.none();
         }
     }
+
+    // public static Command rotateToNearestScoringLocationCommand()
+    // {
+    //     if(drivetrain != null && poseEstimator != null && gyro != null)
+    //     {
+    //         return run()
+    //     }
+    //     else
+    //     {
+    //         return Commands.none();
+    //     }
+    // }
 
     /**
      * Command to activate rumble on operator controller
