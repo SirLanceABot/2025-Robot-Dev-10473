@@ -72,7 +72,7 @@ public class Camera extends SensorLance
 
         // double[] bow = botpose_orb_wpiblue.getDoubleArray(new double[11]);
         // Translation2d translation = new Translation2d(bow[0], bow[1]);
-        // Rotation2d rotation = new Rotation2d();
+        // Rotation2d rotation = new Rotation2d(bow[5]);
     }
 
     /** @return the timestamp calculated by LimelightHelpers */
