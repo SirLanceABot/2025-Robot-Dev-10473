@@ -20,7 +20,7 @@
         "y": 0.9503472222222217
       },
       "prevControl": {
-        "x": 1.936057658450702,
+        "x": 1.9360576584507019,
         "y": 1.97708665884194
       },
       "nextControl": null,
@@ -45,7 +45,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Reef Starts",
+  "folder": "Unlabeled Reef Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -173.98344983000774

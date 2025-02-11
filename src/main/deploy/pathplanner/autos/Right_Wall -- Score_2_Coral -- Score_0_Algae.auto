@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Wall to S3 Right"
+            "pathName": "Right Wall to S3 Left"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Back out S3 Right - Align Right Station"
+            "pathName": "Back out S3 Left - Align Right Station"
           }
         },
         {
@@ -21,11 +21,23 @@
           "data": {
             "pathName": "Move Forward to Right Station"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Station to Align Right Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Align Right Station to S4 Right"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Right Starts",
   "choreoAuto": false
 }

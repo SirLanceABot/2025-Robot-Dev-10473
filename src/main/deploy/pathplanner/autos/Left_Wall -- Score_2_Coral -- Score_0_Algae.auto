@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Wall to S6 Right"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Back out S6 Right - Align Left Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move Forward to Left Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Backout left Station - left align"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Align Left Station to S4 Left"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Left Wall Starts",
+  "choreoAuto": false
+}

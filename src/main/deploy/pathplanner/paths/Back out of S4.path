@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 1.7170774647887315,
-        "y": 3.8407570422535198
+        "y": 3.84075704225352
       },
       "isLocked": false,
       "linkedName": "S4"
@@ -45,7 +45,7 @@
     "rotation": -173.98344983000774
   },
   "reversed": true,
-  "folder": "Reef Back Out",
+  "folder": "Unlabeled Reef Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -173.98344983000774

@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 1.815,
-        "y": 6.693
+        "y": 6.687
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6477173484102854,
-        "y": 6.878786206369348
+        "x": 1.6477173484102852,
+        "y": 6.872786206369349
       },
       "isLocked": false,
       "linkedName": "Align Left Station"
@@ -20,7 +20,7 @@
         "y": 7.1415798611111105
       },
       "prevControl": {
-        "x": 1.6654624063325865,
+        "x": 1.665462406332587,
         "y": 6.868022677962754
       },
       "nextControl": null,
@@ -48,7 +48,7 @@
   "folder": "New Folder",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 71.70924176151732
   },
   "useDefaultConstraints": true
 }

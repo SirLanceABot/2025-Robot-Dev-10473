@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.125,
-        "y": 3.95
+        "x": 3.14850352112676,
+        "y": 4.421830985915492
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5470070422535198,
-        "y": 4.039172535211267
-      },
-      "isLocked": false,
-      "linkedName": "S4"
-    },
-    {
-      "anchor": {
-        "x": 5.75625,
-        "y": 2.8345070422535197
-      },
-      "prevControl": {
-        "x": 4.773219568074581,
-        "y": 0.9659367997506578
-      },
-      "nextControl": {
-        "x": 7.47112676056338,
-        "y": 6.09419014084507
+        "x": 4.148503521126759,
+        "y": 4.421830985915492
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.45173611111111,
-        "y": 7.1415798611111105
+        "x": 1.815,
+        "y": 6.693
       },
       "prevControl": {
-        "x": 1.9907149843505456,
-        "y": 6.51232633998435
+        "x": 2.7016109785202866,
+        "y": 5.805131264916468
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Left Station"
+      "linkedName": "Align Left Station"
     }
   ],
   "rotationTargets": [],
@@ -58,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 71.70924176151732
   },
   "reversed": false,
-  "folder": "Indirect Paths",
+  "folder": "Reef Starts",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -173.98344983000774
+    "rotation": -89.26547896582521
   },
   "useDefaultConstraints": true
 }

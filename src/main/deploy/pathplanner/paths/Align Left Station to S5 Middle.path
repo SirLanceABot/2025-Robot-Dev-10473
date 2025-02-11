@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.826128472222222,
-        "y": 3.997048611111111
+        "x": 1.815,
+        "y": 6.693
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.826128472222222,
-        "y": 3.997048611111111
+        "x": 2.23309805288619,
+        "y": 6.447577944502128
       },
       "isLocked": false,
-      "linkedName": "S1"
+      "linkedName": "Align Left Station"
     },
     {
       "anchor": {
-        "x": 4.551584507042253,
-        "y": 5.768221830985915
+        "x": 3.8429577464788722,
+        "y": 5.14463028169014
       },
       "prevControl": {
-        "x": 5.546233671924279,
-        "y": 5.871532231234257
-      },
-      "nextControl": {
-        "x": 2.1836267605633783,
-        "y": 5.522271126760562
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.3539062499999988,
-        "y": 0.9503472222222217
-      },
-      "prevControl": {
-        "x": 2.318716109154927,
-        "y": 2.09046694053208
+        "x": 3.4427104232686823,
+        "y": 5.83787898108363
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Station"
+      "linkedName": "S5 Middle"
     }
   ],
   "rotationTargets": [],
@@ -61,10 +45,10 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Indirect Paths",
+  "folder": "Align Starts",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 71.70924176151732
   },
   "useDefaultConstraints": true
 }

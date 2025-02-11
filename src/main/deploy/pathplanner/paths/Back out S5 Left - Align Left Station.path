@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 1.815,
-        "y": 6.693
+        "y": 6.687
       },
       "prevControl": {
         "x": 1.1783577348,
-        "y": 7.578101004469918
+        "y": 7.572101004469919
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 71.70924176151732
   },
   "reversed": true,
   "folder": "Reef Back Out",

@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.7856770833333324,
-        "y": 2.8789930555555556
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 3.162676056338027,
-        "y": 1.927464788732393
-      },
-      "isLocked": false,
-      "linkedName": "S3"
-    },
-    {
-      "anchor": {
-        "x": 6.280633802816901,
-        "y": 4.067517605633801
-      },
-      "prevControl": {
-        "x": 6.195598591549295,
-        "y": 2.423503521126758
-      },
-      "nextControl": {
-        "x": 6.366171739192995,
-        "y": 5.721251042238296
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
         "x": 1.45173611111111,
         "y": 7.1415798611111105
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.2659499047417613,
+        "y": 7.308862512700825
+      },
+      "isLocked": false,
+      "linkedName": "Left Station"
+    },
+    {
+      "anchor": {
+        "x": 1.815,
+        "y": 6.693
+      },
       "prevControl": {
-        "x": 1.8348170970266016,
-        "y": 6.3139108470266025
+        "x": 2.559419426189556,
+        "y": 6.55264996388141
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Left Station"
+      "linkedName": "Align Left Station"
     }
   ],
   "rotationTargets": [],
@@ -58,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 71.70924176151732
   },
-  "reversed": false,
-  "folder": "Indirect Paths",
+  "reversed": true,
+  "folder": "Left Station Starts",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
