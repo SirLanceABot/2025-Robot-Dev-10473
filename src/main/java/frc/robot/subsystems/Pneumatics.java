@@ -57,6 +57,7 @@ public class Pneumatics extends SubsystemLance
         System.out.println("  Constructor Started:  " + fullClassName);
 
         configCompressor();
+        configAnalogSwitch(Constants.Pneumatics.MIN_PRESSURE, Constants.Pneumatics.MAX_PRESSURE);
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -73,7 +74,7 @@ public class Pneumatics extends SubsystemLance
     private void configCompressor()
     {
         // pneumaticHub.enableCompressorDigital();
-        pneumaticHub.enableCompressorAnalog(Constants.Pneumatics.MIN_PRESSURE, Constants.Pneumatics.MAX_PRESSURE);
+        // pneumaticHub.enableCompressorAnalog(Constants.Pneumatics.MIN_PRESSURE, Constants.Pneumatics.MAX_PRESSURE);
         // One full tank can power one solenoid for 90 shifts
         
         // Disables compressor once the tank has filled once
@@ -88,9 +89,9 @@ public class Pneumatics extends SubsystemLance
             .onTrue(Commands.runOnce(()-> compressor.disable()));
     }
 
-    public void configAnalogSwitch()
+    public void configAnalogSwitch(double min, double max)
     {
-        
+        pneumaticHub.enableCompressorAnalog(min, max); 
     }
 
 
