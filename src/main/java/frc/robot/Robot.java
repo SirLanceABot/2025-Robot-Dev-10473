@@ -62,8 +62,8 @@ public class Robot extends TimedRobot
         GeneralCommands.createGeneralCommands(robotContainer);
 
         // (4) Bind the commands to triggers
-            DriverBindings.createBindings(robotContainer);
-            OperatorBindings.createBindings(robotContainer);
+        DriverBindings.createBindings(robotContainer);
+        OperatorBindings.createBindings(robotContainer);
 
         // (5) Create PathPlanner warmup commands
         // FollowPathCommand.warmupCommand().schedule();

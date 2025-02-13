@@ -2,6 +2,7 @@ package frc.robot.controls;
 
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Drivetrain;
 
 public final class DriverBindings
 {
@@ -26,6 +28,11 @@ public final class DriverBindings
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
     private static CommandXboxController controller;
+    private static RobotContainer robotContainer;
+    private static Drivetrain drivetrain;
+
+    private static DoubleSupplier yAxisSupplier;
+    private static DoubleSupplier xAxisSupplier;
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -48,10 +55,11 @@ public final class DriverBindings
         System.out.println("Creating Driver Bindings:" + fullClassName);
         
         controller = robotContainer.getDriverController();
+        drivetrain = robotContainer.getDrivetrain();
 
         if(controller != null)   
         {  
-            // configSuppliers();
+            configSuppliers();
             // configAButton();
             // configBButton();
             // configXButton();
@@ -68,11 +76,15 @@ public final class DriverBindings
             // configDpadDown();
             configRumble(10);
             configRumble(5);
+            configDefaultDrivetrain();
         }
     }
 
-    // private static void configSuppliers()
-    // {}
+    private static void configSuppliers()
+    {
+        xAxisSupplier = () -> controller.getRawAxis(1);
+        yAxisSupplier = () -> controller.getRawAxis(0);
+    }
 
     // private static void configAButton()
     // {
@@ -135,6 +147,11 @@ public final class DriverBindings
 
     // private static void configDpadDown()
     // {}
+
+    private static void configDefaultDrivetrain()
+    {
+        drivetrain.setDefaultCommand(drivetrain.arcadeDriveCommand(yAxisSupplier, xAxisSupplier, true) );
+    }
 
     /**
      * Configures rumble to happen at a certain match time on the driver controller
