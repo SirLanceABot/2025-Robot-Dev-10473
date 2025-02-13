@@ -3,8 +3,12 @@ package frc.robot.motors;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import frc.robot.Constants;
 
 /**
  * This abstract class defines the abstract methods that all motor controllers have.
@@ -28,6 +32,9 @@ public abstract class MotorControllerLance extends MotorSafety implements MotorC
     // final static DataLog log = DataLogManager.getLog();
     private final static ArrayList<MotorControllerLance> allMotorControllersLance = new ArrayList<MotorControllerLance>();
 
+    private static final NetworkTable networkTable = NetworkTableInstance.getDefault().getTable(Constants.NETWORK_TABLE_NAME);
+    protected static final StringPublisher motorSetupPublisher = networkTable.getStringTopic("Motors/Setup").publish();
+    protected static final StringPublisher motorFaultsPublisher = networkTable.getStringTopic("Motors/Faults").publish();
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
