@@ -56,8 +56,8 @@ public class Drivetrain extends SubsystemLance
     // Put all class variables and instance variables here
 
 
-    private static final double WHEELRADIUS = 4237.0;
-    private static final double TRACKWIDTH = 18.8495559215;  // inches // radius = 3.0 in
+    private static final double WHEELRADIUS = 3.0;  // inches
+    private static final double TRACKWIDTH = 18.8495559215;  // inches
     private static final int ENCODERERESOLUTION = 4237;
 
     private final double FIRSTSTAGEGEARRATIO = 12.0 / 60.0;
@@ -135,10 +135,6 @@ public class Drivetrain extends SubsystemLance
             e.printStackTrace();
         }
 
-    
-
-        
-
         System.out.println("  Constructor Finished: " + fullClassName);
     }
 
@@ -160,10 +156,8 @@ public class Drivetrain extends SubsystemLance
 
         leftFollower.setupFollower(Constants.Drivetrain.LEFT_LEADER_PORT, false);
         rightFollower.setupFollower(Constants.Drivetrain.RIGHT_LEADER_PORT, false);
-
+        
         // all motors should be running in the same direction
-        leftLeader.setupInverted(true);
-        rightFollower.setupInverted(false);
     }
 
     /**
@@ -176,7 +170,7 @@ public class Drivetrain extends SubsystemLance
     }
 
     /**
-     * resets odometry by reseting, the gryo, pose, and the left / right motors
+     * resets odometry by reseting the gryo, pose, and the left / right motors
      */
     public void resetOdometry(Pose2d pose)
     {
@@ -381,22 +375,6 @@ public class Drivetrain extends SubsystemLance
     }
 
     /**
-     * @param driveSpeed
-     * sets speed of arcadeDriveCommand
-     * @param driveTime
-     * time for which the Command will run
-     * @return
-     * the command
-     */
-    public Command autonomousDriveCommand(double driveSpeed, double driveTime)
-    {
-        return arcadeDriveCommand(() -> driveSpeed, () -> 0.0, false)
-            .withTimeout(driveTime)
-            .andThen(stopDriveCommand())
-            .withName("Autonomous Drive Command");
-    }
-
-    /**
      * runs the prepareShiftToLow() method
      */
     public Command prepareShiftToLowCommand()
@@ -436,12 +414,22 @@ public class Drivetrain extends SubsystemLance
      * @return
      * the command
      */
-    public Command autonomousTurnCommand(double rotationSpeed, double driveTime)
+    public Command turnCommand(double rotationSpeed)
     {
-        return arcadeDriveCommand(() -> 0.0, () -> rotationSpeed, false)
-            .withTimeout(driveTime)
-            .andThen(stopDriveCommand())
-            .withName("Autonomous Turn Command");
+        return arcadeDriveCommand(() -> 0.0, () -> rotationSpeed, false).withName("Turn Command");
+    }
+
+    /**
+     * @param driveSpeed
+     * sets speed of arcadeDriveCommand
+     * @param driveTime
+     * time for which the Command will run
+     * @return
+     * the command
+     */
+    public Command driveCommand(double driveSpeed)
+    {
+        return arcadeDriveCommand(() -> driveSpeed, () -> 0.0, false).withName("Drive Command");
     }
 
     /**
@@ -454,12 +442,14 @@ public class Drivetrain extends SubsystemLance
      * @return
      * the commmand
      */
-    public Command autonomousTurnAndDriveCommand(double driveSpeed, double rotationSpeed, double driveTime)
+    public Command turnAndDriveCommand(double driveSpeed, double rotationSpeed, double driveTime)
     {
-        return arcadeDriveCommand(() -> driveSpeed, () -> rotationSpeed, false)
-            .withTimeout(driveTime)
-            .andThen(stopDriveCommand())
-            .withName("Autonomous Turn And Drive Command");
+        return arcadeDriveCommand(() -> driveSpeed, () -> rotationSpeed, false).withName("Turn And Drive Command");
+    }
+
+    public Command rotateToSetAngleCommand(Rotation2d targetYaw)
+    {
+        return run(() -> turnCommand(0.5));
     }
 
     // *** OVERRIDEN METHODS ***

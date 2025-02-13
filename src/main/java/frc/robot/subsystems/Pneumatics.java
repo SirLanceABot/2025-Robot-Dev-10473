@@ -42,14 +42,14 @@ public class Pneumatics extends SubsystemLance
 
     private final Compressor compressor=  new Compressor(PneumaticsModuleType.REVPH);
     private final PneumaticHub pneumaticHub = new PneumaticHub(Constants.Pneumatics.Pneumatic_HUB_PORT);
-    private final AnalogInput analogPressure = new AnalogInput(0);
+    // private final AnalogInput analogPressure = new AnalogInput(0);
 
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
 
     /** 
-     * Creates a new ExampleSubsystem. 
+     * Creates a new Pneumatics subsystem. 
      */
     public Pneumatics()
     {
@@ -57,6 +57,7 @@ public class Pneumatics extends SubsystemLance
         System.out.println("  Constructor Started:  " + fullClassName);
 
         configCompressor();
+        configAnalogSwitch(Constants.Pneumatics.MIN_PRESSURE, Constants.Pneumatics.MAX_PRESSURE);
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -72,8 +73,6 @@ public class Pneumatics extends SubsystemLance
      */
     private void configCompressor()
     {
-        // pneumaticHub.enableCompressorDigital();
-        pneumaticHub.enableCompressorAnalog(Constants.Pneumatics.MIN_PRESSURE, Constants.Pneumatics.MAX_PRESSURE);
         // One full tank can power one solenoid for 90 shifts
         
         // Disables compressor once the tank has filled once
@@ -88,15 +87,18 @@ public class Pneumatics extends SubsystemLance
             .onTrue(Commands.runOnce(()-> compressor.disable()));
     }
 
-    public void configAnalogSwitch()
+    /**
+     * 
+     * @param min Sets the minumum pressure, the compressor turns on below this value
+     * @param max Sets the maximum pressure, the compressor will turn off at this value
+     */
+    public void configAnalogSwitch(double min, double max)
     {
-        
+        pneumaticHub.enableCompressorAnalog(min, max); 
     }
-
 
     public void enableCompressor()
     {
-        // compressor.enableDigital();
         compressor.enableAnalog(Constants.Pneumatics.MIN_PRESSURE, Constants.Pneumatics.MAX_PRESSURE);
     }
 
