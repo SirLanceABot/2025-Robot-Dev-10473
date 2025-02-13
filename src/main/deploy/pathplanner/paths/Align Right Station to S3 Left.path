@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.416919189818714,
-        "y": 2.391864676713959
+        "x": 2.11601167824269,
+        "y": 1.9925469216903127
       },
       "isLocked": false,
       "linkedName": "Align Right Station"
@@ -20,8 +20,8 @@
         "y": 3.018749999999999
       },
       "prevControl": {
-        "x": 3.05950704225352,
-        "y": 2.1527245962155606
+        "x": 3.30950704225352,
+        "y": 2.5857372981077797
       },
       "nextControl": null,
       "isLocked": false,

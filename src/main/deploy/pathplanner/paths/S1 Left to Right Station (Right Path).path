@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.45173611111111,
-        "y": 7.1415798611111105
+        "x": 5.88,
+        "y": 4.295
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7901321245816266,
-        "y": 6.5231281916478245
+        "x": 7.113994767214398,
+        "y": 4.36546899452269
       },
-      "isLocked": true,
-      "linkedName": "Left Station"
+      "isLocked": false,
+      "linkedName": "S1 Left"
     },
     {
       "anchor": {
-        "x": 1.45173611111111,
-        "y": 7.1415798611111105
+        "x": 4.367341549295774,
+        "y": 2.055017605633801
       },
       "prevControl": {
-        "x": 2.1596947554159716,
-        "y": 7.596377919378682
+        "x": 5.029820058351058,
+        "y": 2.395457950564989
+      },
+      "nextControl": {
+        "x": 3.346919014084506,
+        "y": 1.5306338028169
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.3539062499999988,
+        "y": 0.9503472222222217
+      },
+      "prevControl": {
+        "x": 2.1344731514084483,
+        "y": 1.9770866588419396
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Left Station"
+      "linkedName": "Right Station"
     }
   ],
   "rotationTargets": [],
@@ -44,8 +60,8 @@
     "velocity": 0,
     "rotation": 0.0
   },
-  "reversed": true,
-  "folder": "Left Station Starts",
+  "reversed": false,
+  "folder": "Reef Starts",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

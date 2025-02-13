@@ -4,12 +4,10 @@
   "holonomicMode": false,
   "pathFolders": [
     "Align Starts",
-    "Barge Starts",
     "Left Station Starts",
     "Left Wall Starts",
     "Middle Starts",
-    "New Folder",
-    "Unlabeled Reef Paths",
+    "Move to Station",
     "Reef Back Out",
     "Reef Starts",
     "Right Station Starts",
@@ -18,8 +16,7 @@
   "autoFolders": [
     "Left Wall Starts",
     "Middle Starts",
-    "Right Starts",
-    "Test"
+    "Right Starts"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
