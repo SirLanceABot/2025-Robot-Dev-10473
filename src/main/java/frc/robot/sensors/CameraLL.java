@@ -1,43 +1,4 @@
-/**
- * typical usage:
- * 
- * <pre>
-    CameraLL LL1;
-  
-    LL1 = useLL1 ? CameraLL.makeCameraLL("limelight") : null;
-
-    if (LL1 != null)
-    {
-        LL1.setStreamMode_PiPSecondary();
-        LL1.setStreamMode(CameraLL.StreamMode.External);
-    }
-
-      if (LL1 != null)
-      {
-        LimelightHelpers.getLatestResults("limelight"); // 0.2 milliseconds (1 tag) to 0.3 milliseconds (2 tags), roughly
-
-          // for MegaTag2 set the robot orientation from the gyro heading and rate.
-          //FIXME get the gyro values somehow but here are zeros for test data - limits what AprilTags make sense
-          LL1.setRobotOrientation(0., 0., 0., 0., 0., 0.);
-          LL1.update();
-          if (LL1.isValid())
-          {
-              LL1.poseToAS();
-              // data usage for pose estimation
-              // m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999)); //FIXME need stddev tuning/filtering
-              // m_poseEstimator.addVisionMeasurement(LL1.getPose2d(), LL1.getPoseTime());
-              LL1.getPose2d();
-              LL1.getPoseTime();
-              LL1.getTX();
-              LL1.getTXNC();
-              LL1.getTY();
-              LL1.getTYNC();
-          }
-      }
-  </pre>
- */
-
-package frc.robot.sensors;
+package frc.robot;
 
 import static edu.wpi.first.units.Units.Milliseconds;
 import static edu.wpi.first.units.Units.Seconds;
@@ -53,18 +14,73 @@ import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.DoubleSubscriber;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
- 
-public class CameraLL {
 
-    private static final NetworkTableInstance inst = NetworkTableInstance.getDefault();
+/**
+ * typical usage:
+ * 
+ <pre>
+
+    // construct the LL1 object once
+    CameraLL LL1;
+  
+    LL1 = useLL1 ? CameraLL.makeCameraLL("limelight") : null; // make a limelight - null if it doesn't exist or not requested
+
+    // set the camera stream mode as often as necessary
+    if (LL1 != null)
+    {
+      // example of two ways to specify the view of the external camera (method overloads)
+      LL1.setStreamMode_PiPSecondary();
+      // or
+      LL1.setStreamMode(CameraLL.StreamMode.External);
+    }
+
+    // periodically set and get data
+    if (LL1 != null)
+    {
+      // example use of interpreting the JSON string from LL - it's a bit slow; not implemented yet unless wanted
+      LimelightHelpers.getLatestResults("limelight"); // 0.2 milliseconds (1 tag) to 0.3 milliseconds (2 tags), roughly
+
+      // for MegaTag2 set the robot orientation from the gyro heading and rate.
+      //FIXME get the gyro values somehow but here are zeros for test data - limits what AprilTags make sense
+      LL1.setRobotOrientation(0., 0., 0., 0., 0., 0.);
+
+      LL1.update(); // get the latest values from the LL
+      if (LL1.isValid()) // if there are new values then use them
+      {
+          LL1.poseToAS(); // example send the pose to AdvantageScope
+
+          // some methods we might use
+          LL1.getPose2d(); // MegaTag2 pose
+          LL1.getPoseTime(); // Time of the pose
+          LL1.getTX(); // LL tx
+          LL1.getTXNC(); // LL txnc
+          LL1.getTY(); // LL ty
+          LL1.getTYNC(); LL tync
+
+          // data usage for pose estimation
+          // m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999)); //FIXME need stddev tuning/filtering
+          // m_poseEstimator.addVisionMeasurement(LL1.getPose2d(), LL1.getPoseTime());
+      }
+    }
+</pre>
+ */
+public class CameraLL extends CameraLance {
+
     private final String name;
     private boolean valid;
-    private Pose2d poseForAddVisionMeasurement;
-    private double adjustedTimestampSeconds;
+
+    // associated with Megatag2 blue pose
+    private Pose2d pose;
+    private double timestampSeconds;
+    private double latency;
+    private int tagCount;
+    private double tagSpan;
+    private double avgTagDist;
+    private double avgTagArea;
+    private Pose3d pose3d = new Pose3d(); // initialize in case it's used before being set (not supposed to happen)
+
     private long previousTimestamp = 0; // arbitrary initial time to start
     private DoubleSubscriber tx;
     private DoubleSubscriber ty;
@@ -75,11 +91,10 @@ public class CameraLL {
     // private final DoubleArraySubscriber stddevs;
     private final DoubleArrayPublisher robot_orientation_set;
     private final DoublePublisher stream;
-    private final StructPublisher<Pose3d> botpose_orb_wpiblueAS;
-    private Pose3d robotPoseBlueMT2 = new Pose3d(); // initialize in case it's used before being set (not supposed to happen)
+
 
     private CameraLL(String name) {
-
+        super(name);
         if (!isAvailable(name))
         {
           throw new RuntimeException("Limelight named " + name + " is not available");
@@ -88,10 +103,7 @@ public class CameraLL {
         this.name = name;
 
         // Get the limelight table
-        var table = inst.getTable(name);
-
-        // Get the AdvantageScope table
-        var AStable = inst.getTable(name + "AS");
+        var table = CameraLance.inst.getTable(name);
 
         /*
         tx
@@ -193,9 +205,6 @@ public class CameraLL {
                     2	PiP Secondary - The primary camera stream is placed in the lower-right corner of the secondary camera stream
          */
         stream = table.getDoubleTopic("stream").publish();
-
-        // LL pose formatted to publish to AdvantageScope
-        botpose_orb_wpiblueAS = AStable.getStructTopic("botpose_orb_wpiblueAS", Pose3d.struct).publish();
     }
 
     public static CameraLL makeCameraLL(String name)
@@ -256,7 +265,7 @@ public class CameraLL {
         gyro[4] = roll;
         gyro[5] = rollRate;
         robot_orientation_set.set(gyro); // robot orientation sent to LL for MegaTag2
-        inst.flush();
+        CameraLance.inst.flush();
     }
 
     /**
@@ -305,22 +314,85 @@ public class CameraLL {
   }
 
     /**
-     * MegaTag2 pose for PoseEstimator.addVisionMeasurement
+     * MegaTag2 blue pose getter from pose for PoseEstimator.addVisionMeasurement
      * @return
      */
     public Pose2d getPose2d()
     {
-      return poseForAddVisionMeasurement;
+      return pose;
     }
 
     /**
-     * MegaTag2 pose timestamp for PoseEstimator.addVisionMeasurement
+     * MegaTag2 blue pose getter from pose
      * @return
      */
-    public double getPoseTime()
+    public Pose3d getPose3d()
     {
-        return adjustedTimestampSeconds;
+      return pose3d;
     }
+
+    /**
+     * Timestamp getter from pose for PoseEstimator.addVisionMeasurement
+     * @return
+     */
+    public double getPoseTimestampSeconds()
+    {
+        return timestampSeconds;
+    }
+
+    /**
+     * Total latency getter from pose
+     * @return
+     */
+    public double getLatency()
+    {
+        return latency;
+    }
+
+    /**
+     * Tag count getter from pose
+     * @return
+     */
+    public int getTagCount()
+    {
+        return tagCount;
+    }
+
+
+    /**
+     * Tag span getter from pose
+     * @return
+     */
+    public double getTagSpan()
+    {
+        return tagSpan;
+    }
+
+
+    /**
+     * Average tag distance getter from pose
+     * @return
+     */
+    public double getAvgTagDist()
+    {
+        return avgTagDist;
+    }
+
+
+    /**
+     * Average tag area getter from pose
+     * @return
+     */
+    public double getAvgTagArea()
+    {
+        return avgTagArea;
+    }
+
+// average distance " + pose.value[9]
+// pose.tagCount);
+//         System.out.printf("Tag Span: %.2f meters%n", pose.tagSpan);
+//         System.out.printf("Average Tag Distance: %.2f meters%n", pose.avgTagDist);
+//         System.out.printf("Average Tag Area: %.2f%% of image%n", pose.avgTagArea);
 
     /**
      * Read the latest Limelight values.
@@ -337,14 +409,17 @@ public class CameraLL {
 
         if (valid)
         {
-            var pose = botpose_orb_wpiblue.getAtomic(); // get the LL MegaTag2 pose data
-            robotPoseBlueMT2 = new Pose3d(pose.value[0], pose.value[1], pose.value[2], new Rotation3d(pose.value[3], pose.value[4], pose.value[5])); // robot in field 3d pose
-            poseForAddVisionMeasurement = new Pose2d(pose.value[0], pose.value[1], new Rotation2d(Units.degreesToRadians(pose.value[5]))); // robot in field 2d pose
+            var poseTemp = botpose_orb_wpiblue.getAtomic(); // get the LL MegaTag2 pose data
 
-            // timestamp of data for pose estimation
-            var timestampSeconds = pose.timestamp;
-            var latency = pose.value[6];
-            adjustedTimestampSeconds = (timestampSeconds / 1000000.0) - (latency / 1000.0); // Convert server timestamp from microseconds to seconds and adjust for latency
+            pose3d = new Pose3d(poseTemp.value[0], poseTemp.value[1], poseTemp.value[2], new Rotation3d(poseTemp.value[3], poseTemp.value[4], poseTemp.value[5])); // robot in field 3d pose
+            pose = new Pose2d(poseTemp.value[0], poseTemp.value[1], new Rotation2d(Units.degreesToRadians(poseTemp.value[5]))); // robot in field 2d pose
+            var timestampSecondsTemp = poseTemp.timestamp;
+            latency = poseTemp.value[6];
+            timestampSeconds = (timestampSecondsTemp / 1000000.0) - (latency / 1000.0); // Convert server timestamp from microseconds to seconds and adjust for latency
+            tagCount = (int)poseTemp.value[7];
+            tagSpan = poseTemp.value[8];
+            avgTagDist = poseTemp.value[9];
+            avgTagArea = poseTemp.value[10];
         }
         else
         if (stats.value.length == 0)
@@ -361,8 +436,8 @@ public class CameraLL {
             // + ", valid " + stats.value[0] + ", count " + stats.value[1] + " total latency " + (stats.value[2]+stats.value[3])
             // + ", horizontal offset " + stats.value[4] + " tag id " + stats.value[9] + " ,skew deg " +stats.value[16]);
 
-            // sb.append("addVisionMeasurement: Pose2d " + poseForAddVisionMeasurement + ", timestamp " + adjustedTimestampSeconds);
-            // sb.append(robotPoseBlueMT2.toString());
+            // sb.append("addVisionMeasurement: Pose2d " + pose + ", timestamp " + timestampSeconds);
+            // sb.append(pose3d.toString());
             // sb.append("total latency " + pose.value[6] + ", count " + pose.value[7] + ", span "
             //  + pose.value[8] + ", average distance " + pose.value[9] + ", average area " + pose.value[10]);
 
@@ -383,15 +458,6 @@ public class CameraLL {
         return sb.toString();
     }
 
-    /**
-     * Publish the limelight 3d pose to NT in AdvantageScope format
-     * for MegaTag2 blue
-     */
-    public void poseToAS()
-    {
-        botpose_orb_wpiblueAS.set(robotPoseBlueMT2);
-    }
-
   /**
    * Verify limelight name exists as a table in NT.
    * <p>
@@ -409,7 +475,7 @@ public class CameraLL {
     // put in a delay if needed to help assure NT has latched onto the LL if it is transmitting
     for (int i = 1; i <= 15; i++)
     {
-      if (inst.getTable(limelightName).containsKey("getpipe"))
+      if (CameraLance.inst.getTable(limelightName).containsKey("getpipe"))
       {
         return true;
       }
@@ -425,7 +491,7 @@ public class CameraLL {
     String errMsg = "Your limelight name \"" + limelightName +
                     "\" is invalid; doesn't exist on the network (no getpipe key).\n" +
                     "These may be available:" +
-                    NetworkTableInstance.getDefault().getTable("/").getSubTables().stream()
+                    CameraLance.inst.getTable("/").getSubTables().stream()
                                         .filter(ntName -> ((String) (ntName)).startsWith("limelight"))
                                         .collect(Collectors.joining("\n")) +
                                         "If in simulation, check LL Dashboard: Settings / Custom NT Server IP:";
