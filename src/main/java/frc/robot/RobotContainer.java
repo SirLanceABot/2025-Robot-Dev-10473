@@ -33,6 +33,7 @@ import frc.robot.util.Elastic;
 import frc.robot.util.DriverTab;
 import frc.robot.commands.GeneralCommands;
 import frc.robot.sensors.Camera;
+import frc.robot.sensors.CameraLL;
 import frc.robot.sensors.GyroLance;
 import frc.robot.subsystems.Climb;
 
@@ -64,7 +65,7 @@ public class RobotContainer
 
     public final boolean fullRobot;
     private final Pivot pivot;
-    public final Drivetrain drivetrain;
+    private final Drivetrain drivetrain;
     private final Roller roller;
     private final Shifter shifter;
     private final Pneumatics pneumatics;
@@ -72,7 +73,7 @@ public class RobotContainer
     private final LEDs leds;
     private final GyroLance gyro;
     private final PoseEstimatorLance poseEstimator;
-    private final Camera camera;
+    private final CameraLL camera;
 
     private final CommandXboxController operatorController;
     private final CommandXboxController driverController;
@@ -91,9 +92,9 @@ public class RobotContainer
         leds                = (useFullRobot || useLEDs)                 ? new LEDs()                                                                                                   : null;
         climb               = (useFullRobot || useClimb)                ? new Climb()                                                                                                  : null;
         pneumatics          = (useFullRobot || usePneumatics)           ? new Pneumatics()                                                                                             : null;
-        camera              = (useFullRobot || useCamera)               ? new Camera(Constants.Camera.CAMERA)                                                                          : null;
+        camera              = (useFullRobot || useCamera)               ? CameraLL.makeCameraLL(Constants.Camera.CAMERA)                                                               : null;
+        // FIXME camera maybe null
         poseEstimator       = (useFullRobot || usePoseEstimator)        ? new PoseEstimatorLance(gyro, drivetrain, camera)                                                             : null;
-
         driverController    = (useFullRobot || useDriverController)     ? new CommandXboxController(Constants.Controllers.DRIVER_CONTROLLER_PORT)                                      : null;
         operatorController  = (useFullRobot || useOperatorController)   ? new CommandXboxController(Constants.Controllers.OPERATOR_CONTROLLER_PORT)                                    : null;
 
@@ -147,7 +148,7 @@ public class RobotContainer
         return leds;
     }
 
-    public Camera getCamera()
+    public CameraLL getCamera()
     {
         return camera;
     }

@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.sensors.Camera;
+import frc.robot.sensors.CameraLL;
 import frc.robot.sensors.GyroLance;
 
 /**
@@ -48,7 +49,7 @@ public class PoseEstimatorLance extends SubsystemLance
     
     private final GyroLance gyro;
     private final Drivetrain drivetrain;
-    private final Camera camera;
+    private final CameraLL camera;
     private final DifferentialDrivePoseEstimator poseEstimator;
     private final NetworkTable ASTable;
     private final DoubleArrayEntry poseEstimatorEntry;
@@ -98,14 +99,14 @@ public class PoseEstimatorLance extends SubsystemLance
      * 
      * tracks the robot's pose using data from the gyro, drivetrain, and the camera
      */
-    public PoseEstimatorLance(GyroLance gyro, Drivetrain drivetrain, Camera camera)
+    public PoseEstimatorLance(GyroLance gyro, Drivetrain drivetrain, CameraLL camera2)
     {
         super("PoseEstimator");
         System.out.println("  Constructor Started:  " + fullClassName);
 
         this.gyro = gyro;
         this.drivetrain = drivetrain;
-        this.camera = camera;
+        this.camera = camera2;
 
         ASTable = NetworkTableInstance.getDefault().getTable(Constants.ADVANTAGE_SCOPE_TABLE_NAME);
         // periodicData.odometryEntry = ASTable.getDoubleArrayTopic("Odometry").getEntry(defaultValues);
@@ -148,17 +149,13 @@ public class PoseEstimatorLance extends SubsystemLance
     {
         if(camera != null)
         {
-            if(camera.isTargetFound() && camera.getAverageTagDistance() < MAX_TARGET_DISTANCE)
+            if(camera.isValid() )//&& camera.getAverageTagDistance() < MAX_TARGET_DISTANCE)
             {
-                LimelightHelpers.PoseEstimate limelightMeasurement = camera.getPoseEstimate();
-                if(limelightMeasurement.tagCount >= 2 )     // only trusting if multiple tags are seen
-                {
-                    poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999999));
-                    poseEstimator.addVisionMeasurement(
-                        limelightMeasurement.pose,
-                        limelightMeasurement.timestampSeconds
-                    );
-                }
+                poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999999));
+                poseEstimator.addVisionMeasurement(
+                    camera.getPose2d(),
+                    camera.getPoseTime()
+                );
             }
         }
     }

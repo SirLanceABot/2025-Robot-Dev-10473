@@ -60,7 +60,7 @@ public class DriverTab
         // this.pivot = robotContainer.pivot;
         // this.intake = robotContainer.intake;
         // this.intakePositioning = robotContainer.intakePositioning;
-        this.drivetrain = robotContainer.drivetrain;
+        this.drivetrain = robotContainer.getDrivetrain();
         SmartDashboard.putData("Field", field);
         // field.setRobotPose(drivetrain.getEstimatedPose());
         // return driverTab.add("Field", field)
