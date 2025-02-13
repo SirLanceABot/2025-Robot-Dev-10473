@@ -175,7 +175,13 @@ public final class GeneralCommands
         }
     }
 
-    // public static Command rotateToNearestScoringLocationCommand()
+    // public static Command getAngleToNearestReefSideCommand()
+    // {
+    //     poseEstimator.getAngleToNearestReefSideCommand();
+    // }
+    // need to make command in poseEstimator
+
+    // public static Command rotateToNearestReedSideCommand()
     // {
     //     if(drivetrain != null && poseEstimator != null && gyro != null)
     //     {
