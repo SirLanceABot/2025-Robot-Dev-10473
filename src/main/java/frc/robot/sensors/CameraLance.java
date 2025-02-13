@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.sensors;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.NetworkTableInstance;

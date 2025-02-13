@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.sensors;
 
 import static edu.wpi.first.units.Units.Milliseconds;
 import static edu.wpi.first.units.Units.Seconds;

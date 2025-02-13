@@ -99,14 +99,14 @@ public class PoseEstimatorLance extends SubsystemLance
      * 
      * tracks the robot's pose using data from the gyro, drivetrain, and the camera
      */
-    public PoseEstimatorLance(GyroLance gyro, Drivetrain drivetrain, CameraLL camera2)
+    public PoseEstimatorLance(GyroLance gyro, Drivetrain drivetrain, CameraLL camera)
     {
         super("PoseEstimator");
         System.out.println("  Constructor Started:  " + fullClassName);
 
         this.gyro = gyro;
         this.drivetrain = drivetrain;
-        this.camera = camera2;
+        this.camera = camera;
 
         ASTable = NetworkTableInstance.getDefault().getTable(Constants.ADVANTAGE_SCOPE_TABLE_NAME);
         // periodicData.odometryEntry = ASTable.getDoubleArrayTopic("Odometry").getEntry(defaultValues);
@@ -154,7 +154,7 @@ public class PoseEstimatorLance extends SubsystemLance
                 poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999999));
                 poseEstimator.addVisionMeasurement(
                     camera.getPose2d(),
-                    camera.getPoseTime()
+                    camera.getPoseTimestampSeconds()
                 );
             }
         }
