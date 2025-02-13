@@ -53,7 +53,7 @@ public class Robot extends TimedRobot
 
         // (1) Configure loggers
         DataLogFile.config();
-        CommandSchedulerLog.config(false, false, false);
+        // CommandSchedulerLog.config(false, false, false);
 
         // (2) Create the subsystems, sensors, etc.
         robotContainer = new RobotContainer();
@@ -62,8 +62,8 @@ public class Robot extends TimedRobot
         GeneralCommands.createGeneralCommands(robotContainer);
 
         // (4) Bind the commands to triggers
-        DriverBindings.createBindings(robotContainer);
-        OperatorBindings.createBindings(robotContainer);
+            DriverBindings.createBindings(robotContainer);
+            OperatorBindings.createBindings(robotContainer);
 
         // (5) Create PathPlanner warmup commands
         // FollowPathCommand.warmupCommand().schedule();
@@ -187,7 +187,7 @@ public class Robot extends TimedRobot
     public void teleopExit() 
     {
         MotorControllerLance.logAllStickyFaults();
-        DataLogManager.stop();
+        // DataLogManager.stop();
     }
 
     /**
