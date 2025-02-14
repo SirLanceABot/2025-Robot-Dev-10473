@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Score Coral"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "S1 Right - Align Right Station"
@@ -23,27 +29,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "Right Station to Align Right Station"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Align Right Station to S3 Left"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "S3 Left - Align Right Station"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right align to Right station"
+            "waitTime": 0
           }
         },
         {
@@ -56,12 +44,18 @@
           "type": "path",
           "data": {
             "pathName": "Align Right Station to S3 Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score Coral"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Middle Starts",
   "choreoAuto": false
 }

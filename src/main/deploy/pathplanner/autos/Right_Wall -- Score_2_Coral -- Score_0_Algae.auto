@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Score Coral"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "S3 Left - Align Right Station"
@@ -32,6 +38,12 @@
           "type": "path",
           "data": {
             "pathName": "Align Right Station to S4 Right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score Coral"
           }
         }
       ]

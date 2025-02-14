@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 3.325073370768055,
-        "y": 1.5503041283838739
+        "y": 1.550304128383874
       },
       "isLocked": false,
       "linkedName": "S3 Right"
@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 1.2475788404910588,
-        "y": 0.8400976214268931
+        "y": 0.8400976214268933
       },
       "nextControl": null,
       "isLocked": false,
