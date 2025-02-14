@@ -181,7 +181,7 @@ public class PoseEstimatorLance extends SubsystemLance
     {
         if(camera != null)
         {
-            if(camera.isValid() )//&& camera.getAverageTagDistance() < MAX_TARGET_DISTANCE)
+            if(camera.fresh() )//&& camera.getAverageTagDistance() < MAX_TARGET_DISTANCE)
             {
                 poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999999));
                 poseEstimator.addVisionMeasurement(
