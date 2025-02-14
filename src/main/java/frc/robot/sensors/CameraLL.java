@@ -13,13 +13,19 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 
 /**
  * Implementation of the camera class for Limelights
- * <p> This class acquires the robot pose in field from a Limelight MegaTag2
+ * <p>This class acquires the Limelight target data and the MegaTag2 robot pose in field.
+ * <p>Those are two mostly separate entities with some getters for the target and some
+ * getters for the MegaTag2 pose.
+ * <p>It is a highly stripped-down version of the LimelightHelpers with efficient
+ * use of NetworkTables Publisher/Subscriber techniques.
+ * <p>If additional functionality is needed, contact your mentors to add to this class.
  * <p>Typical usage:
  * 
  <pre>
@@ -46,61 +52,68 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
       //FIXME get the gyro values somehow but here are zeros for test data - limits what AprilTags make sense
       LL1.setRobotOrientation(0., 0., 0., 0., 0., 0.);
 
-      // example use of interpreting the JSON string from LL - it's a bit slow; not implemented here yet unless wanted
-      LimelightHelpers.getLatestResults("limelight"); // 0.2 milliseconds (1 tag) to 0.3 milliseconds (2 tags), roughly
-
       LL1.update();
 
-      // some methods we might use
+      // some methods to use:
       if (LL1.isFresh())
       {
           LL1.publishPose3d();
 
-          System.out.println(LL1.getPoseTimestampSeconds() + " Time of the pose");
-          System.out.println(LL1.getPose2d() + " MegaTag2 pose");
-          System.out.println(LL1.getPose3d() + " MegaTag2 pose");
+          // --- TARGET  STATISTICS ---
           System.out.println(LL1.getTX() + " tx");
           System.out.println(LL1.getTXNC() + " txnc");
           System.out.println(LL1.getTY() + " ty");
           System.out.println(LL1.getTYNC() + " tync");
+          System.out.println(LL1.getTA() + " area");
+          System.out.println(LL1.getTID() + " tag id");
+
+          // --- MEGATAG2 POSE ---
+          System.out.println(LL1.getTimestampSeconds() + " Time of the pose");
+          System.out.println(LL1.getPose2d() + " MegaTag2 pose 2-D");
+          System.out.println(LL1.getPose3d() + " MegaTag2 pose 3-D");
           System.out.println(LL1.getLatency() + " total latency of the pose");
           System.out.println(LL1.getTagCount() + " number of tags seen to make the pose");
           System.out.println(LL1.getTagSpan() + " span of the tags");
           System.out.println(LL1.getAvgTagDist() + " average distance from tags to robot");
           System.out.println(LL1.getAvgTagArea() + " average area of the tags in their frames\n");
 
-          // 23.088082194656373 Time of the pose
-          // Pose2d(Translation2d(X: 8.77, Y: 4.03), Rotation2d(Rads: 0.00, Deg: 0.00)) MegaTag2 pose      
-          // Pose3d(Translation3d(X: 8.77, Y: 4.03, Z: 0.00), Rotation3d(Quaternion(1.0, 0.0, 0.0, 0.0))) MegaTag2 pose
-          // 5.994534015655518 tx
-          // 7.574864387512207 txnc
-          // 5.370254039764404 ty
-          // 4.8771843910217285 tync
-          // 28.33680534362793 total latency of the pose
-          // 1 number of tags seen to make the pose
-          // 0.0 span of the tags
-          // 0.535089273470325 average distance from tags to robot
-          // 8.579281717538834 average area of the tags in their frames
+          System.out.println(LL1); // prints same data as above plus more statistics
       }
+
       LL1.setStreamMode_Standard();
       LL1.setStreamMode_PiPMain();
       LL1.setStreamMode_PiPSecondary();
+      // OR
       LL1.setStreamMode(streamMode);
 
-      // data usage for pose estimation
-      // m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999)); //FIXME need stddev tuning/filtering
-      // m_poseEstimator.addVisionMeasurement(LL1.getPose2d(), LL1.getPoseTime());
+      // simplistic data usage example for pose estimation
+      // m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+      // m_poseEstimator.addVisionMeasurement(LL1.getPose2d(), LL1.getTimestampSeconds());
       }
     }
 </pre>
  */
 public class CameraLL extends CameraLance {
 
-    private final String name;
-    private boolean isFresh;
+    private final String name; // name of the limelight
+    private final DoubleArraySubscriber t2d;
+    private final DoubleArraySubscriber botpose_orb_wpiblue;
+    private final DoubleArrayPublisher robot_orientation_set;
+    private final DoublePublisher stream;
 
-    // fields associated with Megatag2 blue pose
-    private Pose2d pose;
+    // fields associated with statistics and target    
+    private TimestampedDoubleArray stats;
+    private double tx;
+    private double ty;
+    private double txnc;
+    private double tync;
+    private double ta;
+    private int tid;
+    private boolean isFresh;
+    private long previousTimestamp = 0; // arbitrary initial time to start
+     
+    // fields associated with MegaTag2 blue pose
+    private Pose2d pose2d;
     private double timestampSeconds;
     private double latency;
     private int tagCount;
@@ -108,20 +121,7 @@ public class CameraLL extends CameraLance {
     private double avgTagDist;
     private double avgTagArea;
     private Pose3d pose3d = new Pose3d(); // initialize in case it's used before being set (not supposed to happen)
-
-    private long previousTimestamp = 0; // arbitrary initial time to start
-    
-    private DoubleSubscriber tx;
-    private DoubleSubscriber ty;
-    private DoubleSubscriber txnc;
-    private DoubleSubscriber tync;
-    private final DoubleArraySubscriber t2d;
-    private final DoubleArraySubscriber botpose_orb_wpiblue;
-    // private final DoubleArraySubscriber stddevs;
-    private final DoubleArrayPublisher robot_orientation_set;
-    private final DoublePublisher stream;
-
-
+  
     private CameraLL(String name) {
         super(name);
         if (!isAvailable(name))
@@ -133,33 +133,7 @@ public class CameraLL extends CameraLance {
 
         // Get the limelight table
         var table = CameraLance.NTinstance.getTable(name);
-
-        /*
-        tx
-        	double	Horizontal Offset From Crosshair To Target (LL1: -27 degrees to 27 degrees / LL2: -29.8 to 29.8 degrees)
-         */
-        tx = table.getDoubleTopic("tx").subscribe(Double.MAX_VALUE); // default is unrealistically big
-
-        /*
-        ty
-        	double	Vertical Offset From Crosshair To Target (LL1: -20.5 degrees to 20.5 degrees / LL2: -24.85 to 24.85 degrees)
-         */
-        ty = table.getDoubleTopic("ty").subscribe(Double.MAX_VALUE);
-
-
-        /*
-        txnc
-        	double	Horizontal Offset From Principal Pixel To Target (degrees)
-         */
-        txnc = table.getDoubleTopic("txnc").subscribe(Double.MAX_VALUE); // default is unrealistically big
-
-
-        /*
-        tync
-        	double	Vertical Offset From Principal Pixel To Target (degrees)
-         */
-        tync = table.getDoubleTopic("tync").subscribe(Double.MAX_VALUE);
-        
+     
         /*
         t2d
         	doubleArray containing several values for matched-timestamp statistics:
@@ -316,51 +290,95 @@ public class CameraLL extends CameraLance {
       return isFresh;
     }
 
+              /**
+               * 
+               * GETTERS FOR TARGET DATA 
+               * 
+               */
+
+
     /**
      * Gets the horizontal offset from the crosshair to the target in degrees.
+     * <p>not MegaTag2 pose
      * @return Horizontal offset angle in degrees
      */
-    public double getTX() {
-      return tx.get();
-  }
-
-  /**
-   * Gets the vertical offset from the crosshair to the target in degrees.
-   * @return Vertical offset angle in degrees
-   */
-  public double getTY() {
-      return ty.get();
-  }
-
-  /**
-   * Gets the horizontal offset from the principal pixel/point to the target in degrees.
-   * <p>This is the most accurate 2d metric if you are using a calibrated camera and you don't need adjustable crosshair functionality.
-   * @return Horizontal offset angle in degrees
-   */
-  public double getTXNC() {
-      return txnc.get();
-  }
-
-  /**
-   * Gets the vertical offset from the principal pixel/point to the target in degrees.
-   * <p>This is the most accurate 2d metric if you are using a calibrated camera and you don't need adjustable crosshair functionality.
-   * @return Vertical offset angle in degrees
-   */
-  public double getTYNC() {
-      return tync.get();
-  }
+    public double getTX()
+    {
+      return tx;
+    }
 
     /**
-     * MegaTag2 blue pose getter from pose for PoseEstimator.addVisionMeasurement
+     * Gets the vertical offset from the crosshair to the target in degrees.
+     * <p>not MegaTag2 pose
+     * @return Vertical offset angle in degrees
+     */
+    public double getTY() {
+        return ty;
+    }
+
+    /**
+     * Gets the horizontal offset from the principal pixel/point to the target in degrees.
+     * <p>This is the most accurate 2d metric if you are using a calibrated camera and you don't need adjustable crosshair functionality.
+     * <p>not MegaTag2 pose
+     * @return Horizontal offset angle in degrees
+     */
+    public double getTXNC()
+    {
+        return txnc;
+    }
+
+    /**
+     * Gets the vertical offset from the principal pixel/point to the target in degrees.
+     * <p>This is the most accurate 2d metric if you are using a calibrated camera and you don't need adjustable crosshair functionality.
+     * <p>not MegaTag2 pose
+     * @return Vertical offset angle in degrees
+     */
+    public double getTYNC()
+    {
+        return tync;
+    }
+
+    /**
+     * Gets the area of the target
+     * <p>not MegaTag2 pose
+     * @return area of the target
+     */
+    public double getTA()
+    {
+        return ta;
+    }
+
+    /**
+     * Primary targeted tag id for use with getTX, getTXNC, getTY, getTYNC
+     * <p>Beware of usage with pose2d or pose3d as a tag id is not an inherent property of the pose
+     * <p>not MegaTag2 pose
+     * @return tag id
+     */
+    public int getTID()
+    {
+        return tid;
+    }
+
+            /**
+             * 
+             * GETTERS FOR MEGATAG2 POSE
+             * 
+             */
+            
+    /**
+     * MegaTag2 blue pose getter
+     * <p>use for PoseEstimator.addVisionMeasurement
+     * <p>not Target data
      * @return
      */
     public Pose2d getPose2d()
     {
-      return pose;
+      return pose2d;
     }
 
     /**
-     * MegaTag2 blue pose getter from pose
+     * MegaTag2 blue pose getter
+     * <p>not Target data
      * @return
      */
     public Pose3d getPose3d()
@@ -369,16 +387,19 @@ public class CameraLL extends CameraLance {
     }
 
     /**
-     * Timestamp getter from pose for PoseEstimator.addVisionMeasurement
-     * @return
+     * MegaTag2 Timestamp getter from pose
+     * <p>use for PoseEstimator.addVisionMeasurement
+     * <p>not Target data
+      * @return
      */
-    public double getPoseTimestampSeconds()
+    public double getTimestampSeconds()
     {
         return timestampSeconds;
     }
 
     /**
-     * Total latency getter from pose
+     * MegaTag2 Total latency getter
+     * <p>not Target data
      * @return
      */
     public double getLatency()
@@ -387,7 +408,8 @@ public class CameraLL extends CameraLance {
     }
 
     /**
-     * Tag count getter from pose
+     * MegaTag2 Tag count getter
+     * <p>not Target data
      * @return
      */
     public int getTagCount()
@@ -395,9 +417,9 @@ public class CameraLL extends CameraLance {
         return tagCount;
     }
 
-
     /**
-     * Tag span getter from pose
+     * MegaTag2 Tag span getter
+     * <p>not Target data
      * @return
      */
     public double getTagSpan()
@@ -405,9 +427,9 @@ public class CameraLL extends CameraLance {
         return tagSpan;
     }
 
-
     /**
-     * Average tag distance getter from pose
+     * MegaTag2 Average tag distance getter
+     * <p>not Target data
      * @return
      */
     public double getAvgTagDist()
@@ -415,21 +437,15 @@ public class CameraLL extends CameraLance {
         return avgTagDist;
     }
 
-
     /**
-     * Average tag area getter from pose
+     * MegaTag2 Average tag area getter
+     * <p>not Target data
      * @return
      */
     public double getAvgTagArea()
     {
         return avgTagArea;
     }
-
-// average distance " + pose.value[9]
-// pose.tagCount);
-//         System.out.printf("Tag Span: %.2f meters%n", pose.tagSpan);
-//         System.out.printf("Average Tag Distance: %.2f meters%n", pose.avgTagDist);
-//         System.out.printf("Average Tag Area: %.2f%% of image%n", pose.avgTagArea);
 
     /**
      * Read the latest Limelight values.
@@ -438,25 +454,44 @@ public class CameraLL extends CameraLance {
     public void update() {
 
         // get LL data needed to determine validity
-        var stats = t2d.getAtomic();
+        stats = t2d.getAtomic();
 
         // check if new data
-        isFresh = stats.timestamp == previousTimestamp && 17 == stats.value.length && 1.0 == stats.value[0];
+        isFresh = stats.timestamp != previousTimestamp && stats.value.length >= 17 && stats.value[0] == 1.0;
         previousTimestamp = stats.timestamp;
 
         if (isFresh())
         {
-            var poseTemp = botpose_orb_wpiblue.getAtomic(); // get the LL MegaTag2 pose data
+            tx = stats.value[4];
+            ty = stats.value[5];
+            txnc = stats.value[6];
+            tync = stats.value[7];
+            ta = stats.value[8];
+            tid = (int)stats.value[9];
 
-            pose3d = new Pose3d(poseTemp.value[0], poseTemp.value[1], poseTemp.value[2], new Rotation3d(poseTemp.value[3], poseTemp.value[4], poseTemp.value[5])); // robot in field 3d pose
-            pose = new Pose2d(poseTemp.value[0], poseTemp.value[1], new Rotation2d(Units.degreesToRadians(poseTemp.value[5]))); // robot in field 2d pose
-            var timestampSecondsTemp = poseTemp.timestamp;
-            latency = poseTemp.value[6];
-            timestampSeconds = (timestampSecondsTemp / 1000000.0) - (latency / 1000.0); // Convert server timestamp from microseconds to seconds and adjust for latency
-            tagCount = (int)poseTemp.value[7];
-            tagSpan = poseTemp.value[8];
-            avgTagDist = poseTemp.value[9];
-            avgTagArea = poseTemp.value[10];
+            var poseRaw = botpose_orb_wpiblue.getAtomic(); // get the LL MegaTag2 pose data
+
+            if (poseRaw.value.length >= 11)
+            {
+                pose3d = new Pose3d(poseRaw.value[0], poseRaw.value[1], poseRaw.value[2], new Rotation3d(poseRaw.value[3], poseRaw.value[4], poseRaw.value[5])); // robot in field 3d pose
+                pose2d = new Pose2d(poseRaw.value[0], poseRaw.value[1], new Rotation2d(Units.degreesToRadians(poseRaw.value[5]))); // robot in field 2d pose
+                latency = poseRaw.value[6];
+                timestampSeconds = (poseRaw.timestamp / 1000000.0) - (latency / 1000.0); // Convert server timestamp from microseconds to seconds and adjust for latency
+                tagCount = (int)poseRaw.value[7];
+                tagSpan = poseRaw.value[8];
+                avgTagDist = poseRaw.value[9];
+                avgTagArea = poseRaw.value[10];
+            }
+            else
+            {
+                isFresh = false;
+                tx = Double.MAX_VALUE;
+                ty = Double.MAX_VALUE;
+                txnc = Double.MAX_VALUE;
+                tync = Double.MAX_VALUE;
+                ta = Double.MAX_VALUE;
+                tid = Integer.MAX_VALUE;
+            }
         }
         else
         if (stats.value.length == 0)
@@ -465,33 +500,45 @@ public class CameraLL extends CameraLance {
         }   
     }
 
+    /**
+     * Format Target data and MegaTag2 data to print
+     * 
+     * @return formatted string of fresh target and MegaTag2 data or "\nno fresh data\n"
+     */
     public String toString()
     {
-      StringBuilder sb = new StringBuilder(500);
+        StringBuilder sb = new StringBuilder(900);
 
-            // sb.append("local time " + stats.timestamp + ", server time " + stats.serverTime
-            // + ", valid " + stats.value[0] + ", count " + stats.value[1] + " total latency " + (stats.value[2]+stats.value[3])
-            // + ", horizontal offset " + stats.value[4] + " tag id " + stats.value[9] + " ,skew deg " +stats.value[16]);
+        if (this.isFresh())
+        {
+            sb.append("\n--- TARGET  STATISTICS ---\n");
+            sb.append(stats.timestamp + " local time\n");
+            sb.append(stats.serverTime + " server time\n");
+            sb.append(stats.value[0] + " valid\n"); // useless print always 1.0 since it's a subset of the check for "isFresh"
+            sb.append(stats.value[1] + " count\n");
+            sb.append(stats.value[2] + " target latency\n");
+            sb.append(stats.value[3] + "  capture latency\n");
+            sb.append(getTX() + " horizontal offset\n");
+            sb.append(getTY() + " vertical offset\n");
+            sb.append(getTXNC() + "horizontal offset no crosshair\n");
+            sb.append(getTYNC() + " vertical offset no crosshair\n");
+            sb.append(getTA() + " area\n");
+            sb.append(getTID() + " tag id\n"); 
+            sb.append("\n--- MEGATAG2 POSE ---\n");
+            sb.append(getTimestampSeconds() + " Time of the pose\n");
+            sb.append(getPose2d() + " pose 2-D\n");
+            sb.append(getPose3d() + " pose 3-D\n");
+            sb.append(getLatency() + " total latency of the pose\n");
+            sb.append(getTagCount() + " number of tags seen to make the pose\n");
+            sb.append(getTagSpan() + " span of the tags\n");
+            sb.append(getAvgTagDist() + " average distance from tags to robot\n");
+            sb.append(getAvgTagArea() + " average area of the tags in their frames\n");
+        }
+        else
+        {
+            sb.append("\nno fresh data\n");
+        }
 
-            // sb.append("addVisionMeasurement: Pose2d " + pose + ", timestamp " + timestampSeconds);
-            // sb.append(pose3d.toString());
-            // sb.append("total latency " + pose.value[6] + ", count " + pose.value[7] + ", span "
-            //  + pose.value[8] + ", average distance " + pose.value[9] + ", average area " + pose.value[10]);
-
-
-// addVisionMeasurement Pose2d Pose2d(Translation2d(X: 11.81, Y: 4.04), Rotation2d(Rads: 0.00, Deg: 0.00)), timestamp 97.64429015905762
-// local time 171282476, server time 171282476, valid 1.0, count 2.0 total latency 174.8796157836914, horizontal offset 10.477392196655273 tag id 12.0 ,skew deg 75.9100570678711
-// Pose3d(Translation3d(X: 1.26, Y: -0.07, Z: 0.00), Rotation3d(Quaternion(1.0, 0.0, 0.0, 0.0)))
-// total latency 174.87960815429688, count 2.0, span 0.335460891519132, average distance 0.7605234507148955, average area 4.441176541149616
-
-            // var sd = stddevs.get();
-            // System.out.println("standard deviations - x, y, z, roll, pitch, yaw");
-            // System.out.format("MegaTag1 %6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f%n", sd[0], sd[1], sd[2], sd[3], sd[4], sd[5]);
-            // System.out.format("MegaTag2 %6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f%n", sd[6], sd[7], sd[8], sd[9], sd[10], sd[11]);
-
-// standard deviations - x, y, z, roll, pitch, yaw
-// MegaTag1   3.48,   0.56,   0.53,  18.04,   8.94,  66.13
-// MegaTag2   0.12,   0.03,   0.00,   0.00,   0.00,   0.00
         return sb.toString();
     }
 
@@ -527,12 +574,22 @@ public class CameraLL extends CameraLance {
     }
     String errMsg = "Your limelight name \"" + limelightName +
                     "\" is invalid; doesn't exist on the network (no getpipe key).\n" +
-                    "These may be available:" +
+                    "These may be available:> " +
                     CameraLance.NTinstance.getTable("/").getSubTables().stream()
                                         .filter(ntName -> ((String) (ntName)).startsWith("limelight"))
                                         .collect(Collectors.joining("\n")) +
-                                        "If in simulation, check LL Dashboard: Settings / Custom NT Server IP:";
+                                        " < If in simulation, check LL Dashboard: Settings / Custom NT Server IP:";
     new Alert(errMsg, AlertType.kError).set(true);
+    DriverStation.reportWarning(errMsg, false);
     return false;
   }
 }
+
+// private final DoubleArraySubscriber stddevs;
+// var sd = stddevs.get();
+// System.out.println("standard deviations - x, y, z, roll, pitch, yaw");
+// System.out.format("MegaTag1 %6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f%n", sd[0], sd[1], sd[2], sd[3], sd[4], sd[5]);
+// System.out.format("MegaTag2 %6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f%n", sd[6], sd[7], sd[8], sd[9], sd[10], sd[11]);
+
+// example use of interpreting the JSON string from LL - it's a bit slow; not implemented here yet unless wanted
+// LimelightHelpers.getLatestResults("limelight"); // 0.2 milliseconds (1 tag) to 0.3 milliseconds (2 tags), roughly

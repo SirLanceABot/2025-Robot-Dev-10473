@@ -1,5 +1,6 @@
 package frc.robot.sensors;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
@@ -22,14 +23,21 @@ public abstract class CameraLance
         botpose_orb_wpiblue = tableLogged.getStructTopic("botpose_orb_wpiblue", Pose3d.struct).publish();
     }
 
+    abstract boolean isFresh();
     abstract Pose3d getPose3d();
+    abstract Pose2d getPose2d();
+    abstract double getTX();
+    abstract double getTY();
+    abstract void update();
 
     /**
      * Publish the limelight MegaTag2 blue 3d pose to NT; that's AdvantageScope format
      */
     public void publishPose3d()
     {
-        botpose_orb_wpiblue.set(getPose3d());
+        if (isFresh())
+        {
+            botpose_orb_wpiblue.set(getPose3d());
+        }
     }
-
 }
