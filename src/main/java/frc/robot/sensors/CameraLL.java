@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 
 /**
  * Implementation of the camera class for Limelights
+ * <p> This class acquires the robot pose in field from a Limelight MegaTag2
  * <p>Typical usage:
  * 
  <pre>
@@ -41,41 +42,54 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
     // periodically set and get data
     if (LL1 != null)
     {
-      // example use of interpreting the JSON string from LL - it's a bit slow; not implemented yet unless wanted
-      LimelightHelpers.getLatestResults("limelight"); // 0.2 milliseconds (1 tag) to 0.3 milliseconds (2 tags), roughly
-
       // for MegaTag2 set the robot orientation from the gyro heading and rate.
       //FIXME get the gyro values somehow but here are zeros for test data - limits what AprilTags make sense
       LL1.setRobotOrientation(0., 0., 0., 0., 0., 0.);
 
-      LL1.update(); // get the latest values from the LL
-      if (LL1.fresh()) // if there are new values then use them
+      // example use of interpreting the JSON string from LL - it's a bit slow; not implemented here yet unless wanted
+      LimelightHelpers.getLatestResults("limelight"); // 0.2 milliseconds (1 tag) to 0.3 milliseconds (2 tags), roughly
+
+      LL1.update();
+
+      // some methods we might use
+      if (LL1.fresh())
       {
-          LL1.poseToAS(); // example send the pose to AdvantageScope
+          LL1.publishPose3d();
 
-          // some methods we might use
-          LL1.getPose2d(); // MegaTag2 pose
-          LL1.getPose3d(); // MegaTag2 pose
-          LL1.getPoseTimestampSeconds(); // Time of the pose
-          LL1.getTX(); // LL tx
-          LL1.getTXNC(); // LL txnc
-          LL1.getTY(); // LL ty
-          LL1.getTYNC(); // LL tync
-          LL1.fresh(); // new data
-          LL1.getLatency(); // total latency of the pose
-          LL1.getTagCount(); // number of tags seen to make the pose
-          LL1.getTagSpan(); // span of the tags
-          LL1.getAvgTagDist(); // average distance from tags to robot
-          LL1.getAvgTagArea(); // average area of the tags in their frames
+          System.out.println(LL1.getPoseTimestampSeconds() + " Time of the pose");
+          System.out.println(LL1.getPose2d() + " MegaTag2 pose");
+          System.out.println(LL1.getPose3d() + " MegaTag2 pose");
+          System.out.println(LL1.getTX() + " tx");
+          System.out.println(LL1.getTXNC() + " txnc");
+          System.out.println(LL1.getTY() + " ty");
+          System.out.println(LL1.getTYNC() + " tync");
+          System.out.println(LL1.getLatency() + " total latency of the pose");
+          System.out.println(LL1.getTagCount() + " number of tags seen to make the pose");
+          System.out.println(LL1.getTagSpan() + " span of the tags");
+          System.out.println(LL1.getAvgTagDist() + " average distance from tags to robot");
+          System.out.println(LL1.getAvgTagArea() + " average area of the tags in their frames\n");
 
-          LL1.setStreamMode_Standard();
-          LL1.setStreamMode_PiPMain();
-          LL1.setStreamMode_PiPSecondary();
-          LL1.setStreamMode(streamMode);
+          // 23.088082194656373 Time of the pose
+          // Pose2d(Translation2d(X: 8.77, Y: 4.03), Rotation2d(Rads: 0.00, Deg: 0.00)) MegaTag2 pose      
+          // Pose3d(Translation3d(X: 8.77, Y: 4.03, Z: 0.00), Rotation3d(Quaternion(1.0, 0.0, 0.0, 0.0))) MegaTag2 pose
+          // 5.994534015655518 tx
+          // 7.574864387512207 txnc
+          // 5.370254039764404 ty
+          // 4.8771843910217285 tync
+          // 28.33680534362793 total latency of the pose
+          // 1 number of tags seen to make the pose
+          // 0.0 span of the tags
+          // 0.535089273470325 average distance from tags to robot
+          // 8.579281717538834 average area of the tags in their frames
+      }
+      LL1.setStreamMode_Standard();
+      LL1.setStreamMode_PiPMain();
+      LL1.setStreamMode_PiPSecondary();
+      LL1.setStreamMode(streamMode);
 
-          // data usage for pose estimation
-          // m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999)); //FIXME need stddev tuning/filtering
-          // m_poseEstimator.addVisionMeasurement(LL1.getPose2d(), LL1.getPoseTime());
+      // data usage for pose estimation
+      // m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999)); //FIXME need stddev tuning/filtering
+      // m_poseEstimator.addVisionMeasurement(LL1.getPose2d(), LL1.getPoseTime());
       }
     }
 </pre>
