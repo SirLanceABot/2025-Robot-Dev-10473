@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -134,6 +137,35 @@ public class PoseEstimatorLance extends SubsystemLance
 
     // *** CLASS METHODS & INSTANCE METHODS ***
     // Put all class methods and instance methods here
+
+    public AprilTag getNearestTag()
+    {
+        AprilTag nearestTag = null;
+        AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+        List<AprilTag> aprilTagList = aprilTagFieldLayout.getTags();
+        double min = 100.0;
+        double dist;
+
+        for(AprilTag tag : aprilTagList)
+        {
+            dist = tag.pose.getTranslation().toTranslation2d().getDistance(getEstimatedPose().getTranslation());
+
+            if(dist < min)
+            {
+                min = dist;
+                nearestTag = tag;
+            }
+        }
+        return nearestTag;
+    }
+
+    private void test()
+    {
+        AprilTag tag = getNearestTag();
+
+        // tag.ID;
+        tag.pose.getRotation().toRotation2d().getDegrees();
+    }
 
     public void resetPoseEstimator(Pose2d pose)
     {
