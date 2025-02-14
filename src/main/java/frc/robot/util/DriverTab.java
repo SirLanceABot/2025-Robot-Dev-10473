@@ -79,22 +79,22 @@ public class DriverTab
         //     intakeStatusBox = createIntakeStatusBox();
         // }
 
-        if(drivetrain != null)
-        {
-            createFieldBox();
-        }
+        // if(drivetrain != null)
+        // {
+        //     createFieldBox();
+        // }
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
  
-    private ComplexWidget createFieldBox()
-    {
-        field.setRobotPose(drivetrain.getPose());
-        return driverTab.add("Field", field)
-        .withWidget(BuiltInWidgets.kField) //specifies type of widget: "kField
-        .withPosition(7,1) // sets position of widget
-        .withSize(19,12);  // sets size of widget
-    }
+    // private ComplexWidget createFieldBox()
+    // {
+    //     field.setRobotPose(drivetrain.getPose());
+    //     return driverTab.add("Field", field)
+    //     .withWidget(BuiltInWidgets.kField) //specifies type of widget: "kField
+    //     .withPosition(7,1) // sets position of widget
+    //     .withSize(19,12);  // sets size of widget
+    // }
 
     
 
@@ -108,18 +108,18 @@ public class DriverTab
     // }
 
 
-    private GenericEntry createIntakeStatusBox()
-    {
+    // private GenericEntry createIntakeStatusBox()
+    // {
 
 
-        return driverTab.add("Intake Status", "Down")
-        .withWidget(BuiltInWidgets.kTextView)
-        .withPosition(1, 8)
-        .withSize(5, 2)
-        .getEntry();
+    //     return driverTab.add("Intake Status", "Down")
+    //     .withWidget(BuiltInWidgets.kTextView)
+    //     .withPosition(1, 8)
+    //     .withSize(5, 2)
+    //     .getEntry();
        
             
-    }
+    // }
 
     
     public void updateData()
