@@ -2,34 +2,25 @@ package frc.robot.motors;
 
 import java.lang.invoke.MethodHandles;
 
-import com.ctre.phoenix6.configs.SlotConfigs;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
-import com.revrobotics.spark.SparkLimitSwitch;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.Faults;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.Warnings;
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.SparkBaseConfigAccessor;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.SparkMaxConfigAccessor;
+import com.revrobotics.spark.SparkLimitSwitch;
+import com.revrobotics.spark.SparkLowLevel;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.LimitSwitchConfig.Type;
-import com.revrobotics.spark.SparkLowLevel;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StringEntry;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.Constants;
 
 public class SparkMaxLance extends MotorControllerLance
 {
@@ -61,10 +52,6 @@ public class SparkMaxLance extends MotorControllerLance
     private final ResetMode resetMode = ResetMode.kNoResetSafeParameters;
     private final PersistMode persistMode = PersistMode.kNoPersistParameters;
 
-    // private final NetworkTable canSparkMaxTable;
-    // private StringEntry strEntry;
-    // private StringLogEntry motorLogEntry;
-
     private final int SETUP_ATTEMPT_LIMIT = 5;
     private int setupErrorCount = 0;
 
@@ -83,21 +70,14 @@ public class SparkMaxLance extends MotorControllerLance
 
         this.motorControllerName = motorControllerName;
 
-        // canSparkMaxTable = NetworkTableInstance.getDefault().getTable(Constants.NETWORK_TABLE_NAME);
-        // strEntry = canSparkMaxTable.getStringTopic("Motors/Setup").getEntry("");
-        // strEntry.setDefault("");
-        // motorLogEntry = new StringLogEntry(log, "/motors/setup", "Setup");
-
         motor = new SparkMax(deviceId, SparkLowLevel.MotorType.kBrushless);
         encoder = motor.getEncoder();
         // sparkPIDController = motor.getPIDController();                       // 2024 version
         sparkPIDController = motor.getClosedLoopController();
+
         clearStickyFaults();
         setupFactoryDefaults();
-
-        SparkMaxConfig motorConfig = new SparkMaxConfig();
-        motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
-        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Feedback Sensor");
+        setupFeedbackSensor();
         
         System.out.println("  Constructor Finished: " + fullClassName + " >> " + motorControllerName);
     }
@@ -123,8 +103,7 @@ public class SparkMaxLance extends MotorControllerLance
                 DriverStation.reportWarning(logMessage, false);
             
             motorSetupPublisher.set(logMessage);
-            // strEntry.set(logMessage);
-            // motorLogEntry.append(logMessage);
+
             attemptCount++;
         }
         while(errorCode != REVLibError.kOk && attemptCount < SETUP_ATTEMPT_LIMIT);
@@ -132,9 +111,14 @@ public class SparkMaxLance extends MotorControllerLance
         setupErrorCount += (attemptCount - 1);
     }
 
-    public void burnFlash()
+    /**
+     * Setup feedback sensor to built-in encoder
+     */
+    private void setupFeedbackSensor()
     {
-        // motor.burnFlash();
+        SparkMaxConfig motorConfig = new SparkMaxConfig();
+        motorConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Feedback Sensor");
     }
 
     /**
@@ -518,64 +502,52 @@ public class SparkMaxLance extends MotorControllerLance
         int faultsCount = 0;
         Faults faults = motor.getStickyFaults();
         Warnings warnings = motor.getStickyWarnings();
-        // strEntry = canSparkMaxTable.getStringTopic("Motors/Faults").getEntry("");
+
+        if(setupErrorCount > 0)
+        {
+            motorSetupPublisher.set(motorControllerName + " : " + setupErrorCount + " setup errors");
+        }
 
         if(faults.can)
         {
             motorFaultsPublisher.set(motorControllerName + " : Fault - CAN");
-            // strEntry.set(motorControllerName + " : Fault - CAN");
-            // motorLogEntry.append(motorControllerName + " : Fault - CAN");
             faultsCount++;
         }
         if(faults.sensor)
         {
             motorFaultsPublisher.set(motorControllerName + " : Fault - Sensor");
-            // strEntry.set(motorControllerName + " : Fault - Sensor");
-            // motorLogEntry.append(motorControllerName + " : Fault - Sensor");
             faultsCount++;
         }
         if(faults.temperature)
         {
             motorFaultsPublisher.set(motorControllerName + " : Fault - Temperature");
-            // strEntry.set(motorControllerName + " : Fault - Temperature");
-            // motorLogEntry.append(motorControllerName + " : Fault - Temperature");
             faultsCount++;
         }
 
         if(warnings.brownout)
         {
             motorFaultsPublisher.set(motorControllerName + " : Warning - Brownout");
-            // strEntry.set(motorControllerName + " : Warning - Brownout");
-            // motorLogEntry.append(motorControllerName + " : Warning - Brownout");
             faultsCount++;
         }
         if(warnings.hasReset)
         {
             motorFaultsPublisher.set(motorControllerName + " : Warning - Has Reset");
-            // strEntry.set(motorControllerName + " : Warning - Has Reset");
-            // motorLogEntry.append(motorControllerName + " : Warning - Has Reset");
             faultsCount++;
         }
         if(warnings.overcurrent)
         {
             motorFaultsPublisher.set(motorControllerName + " : Warning - Overcurrent");
-            // strEntry.set(motorControllerName + " : Warning - Overcurrent");
-            // motorLogEntry.append(motorControllerName + " : Warning - Overcurrent");
             faultsCount++;
         }
         if(warnings.stall)
         {
             motorFaultsPublisher.set(motorControllerName + " : Warning - Stall");
-            // strEntry.set(motorControllerName + " : Warning - Stall");
-            // motorLogEntry.append(motorControllerName + " : Warning - Stall");
             faultsCount++;
         }
 
         if(faultsCount == 0)
         {
             motorFaultsPublisher.set(motorControllerName + " : No Sticky Faults");
-            // strEntry.set(motorControllerName + " : No Sticky Faults");
-            // motorLogEntry.append(motorControllerName + " : No Sticky Faults");
         }
 
         clearStickyFaults();
@@ -732,19 +704,9 @@ public class SparkMaxLance extends MotorControllerLance
         return motor.get();
     }
 
-    // /**
-    //  * @deprecated Use <b>setupInverted()</b> instead
-    //  */
-    // @Override
-    // public void setInverted(boolean isInverted)
-    // {
-    //     setupInverted(isInverted);
-    // }
-
     @Override
     public boolean getInverted()
     {
-        // return motor.getInverted();
         return motor.configAccessor.getInverted();
     }
 

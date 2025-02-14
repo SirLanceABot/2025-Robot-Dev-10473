@@ -29,7 +29,6 @@ public abstract class MotorControllerLance extends MotorSafety implements MotorC
 
     // *** CLASS and INSTANCE VARAIBLES ***
     // These varaibles are class and instance variables
-    // final static DataLog log = DataLogManager.getLog();
     private final static ArrayList<MotorControllerLance> allMotorControllersLance = new ArrayList<MotorControllerLance>();
 
     private static final NetworkTable networkTable = NetworkTableInstance.getDefault().getTable(Constants.NETWORK_TABLE_NAME);
@@ -79,16 +78,9 @@ public abstract class MotorControllerLance extends MotorSafety implements MotorC
             motorControllerLance.logStickyFaults();
     }
 
-    public static void burnConfigurationsToFlash()
-    {
-        for(MotorControllerLance motorControllerLance : allMotorControllersLance)
-            motorControllerLance.burnFlash();
-    }
-
-
+    
     // *** ABSTRACT METHODS ***
     // These methods must be defined in any subclass that extends this class
-    public abstract void burnFlash();
     public abstract void clearStickyFaults();
     public abstract void setupFactoryDefaults();
     public abstract void setupRemoteCANCoder(int remoteSensorId);
