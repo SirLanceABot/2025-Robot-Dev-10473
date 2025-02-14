@@ -98,9 +98,9 @@ public class RobotContainer
         driverController    = (useFullRobot || useDriverController)     ? new CommandXboxController(Constants.Controllers.DRIVER_CONTROLLER_PORT)                                      : null;
         operatorController  = (useFullRobot || useOperatorController)   ? new CommandXboxController(Constants.Controllers.OPERATOR_CONTROLLER_PORT)                                    : null;
 
-        // registerNamedCommands();
-
         // Elastic = (useFullRobot || useElastic)   ? new Elastic(this) : null;
+
+        registerNamedCommands();
 
         if(drivetrain != null)
         {
@@ -182,12 +182,13 @@ public class RobotContainer
         };
     }
 
-    // public void registerNamedCommands()
-    // {
-    //     NamedCommands.registerCommand("Intake Algae", GeneralCommands.intakeAlgaeCommand());
-    //     NamedCommands.registerCommand("Score Algae", GeneralCommands.scoreAlgaeCommand());
-    //     NamedCommands.registerCommand("Score Coral", GeneralCommands.scoreAlgaeCommand());
-    // }
+    public void registerNamedCommands()
+    {
+        NamedCommands.registerCommand("Intake Algae", GeneralCommands.intakeAlgaeCommand());
+        NamedCommands.registerCommand("Score Algae", GeneralCommands.scoreAlgaeCommand());
+        NamedCommands.registerCommand("Score Coral", GeneralCommands.scoreAlgaeCommand());
+    }
+
 
     public Command getAutonomousCommand() 
     {

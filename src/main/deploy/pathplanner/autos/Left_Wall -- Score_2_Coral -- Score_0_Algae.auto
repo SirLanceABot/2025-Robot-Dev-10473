@@ -13,19 +13,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Back out S6 Right - Align Left Station"
+            "pathName": "S6 Right - Align Left Station"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Move Forward to Left Station"
+            "pathName": "Left align to Left station"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Backout left Station - left align"
+            "pathName": "left Station - left align"
           }
         },
         {

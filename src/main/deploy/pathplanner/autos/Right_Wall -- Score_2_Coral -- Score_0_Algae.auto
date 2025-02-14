@@ -13,13 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Back out S3 Left - Align Right Station"
+            "pathName": "S3 Left - Align Right Station"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Move Forward to Right Station"
+            "pathName": "Right align to Right station"
           }
         },
         {
