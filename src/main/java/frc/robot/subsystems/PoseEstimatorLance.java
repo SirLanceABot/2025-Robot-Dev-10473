@@ -186,7 +186,7 @@ public class PoseEstimatorLance extends SubsystemLance
                 poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999999));
                 poseEstimator.addVisionMeasurement(
                     camera.getPose2d(),
-                    camera.getPoseTimestampSeconds()
+                    camera.getTimestampSeconds()
                 );
             }
         }
