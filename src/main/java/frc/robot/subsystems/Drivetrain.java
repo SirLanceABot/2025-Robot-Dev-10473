@@ -447,7 +447,7 @@ public class Drivetrain extends SubsystemLance
         return arcadeDriveCommand(() -> driveSpeed, () -> rotationSpeed, false).withName("Turn And Drive Command");
     }
 
-    public Command rotateToSetAngleCommand(Rotation2d targetYaw)
+    public Command rotateToSetAngleCommand()
     {
         return run(() -> turnCommand(0.5));
     }

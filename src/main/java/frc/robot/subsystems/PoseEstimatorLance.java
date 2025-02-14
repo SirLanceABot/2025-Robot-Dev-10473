@@ -159,6 +159,11 @@ public class PoseEstimatorLance extends SubsystemLance
         return nearestTag;
     }
 
+    public Rotation2d getAngleToNearestReefSideCommand()
+    {
+        return getEstimatedPose().getRotation();
+    }
+
     private void test()
     {
         AprilTag tag = getNearestTag();

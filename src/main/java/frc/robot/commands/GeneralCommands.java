@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.InternalButton;
 import frc.robot.RobotContainer;
 import frc.robot.sensors.GyroLance;
-import frc.robot.Constants.Drivetrain;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Pivot.TargetPosition;
@@ -175,17 +176,23 @@ public final class GeneralCommands
         }
     }
 
-    // public static Command getAngleToNearestReefSideCommand()
-    // {
-    //     poseEstimator.getAngleToNearestReefSideCommand();
-    // }
-    // need to make command in poseEstimator
+    
+    //need to make command in poseEstimator
 
     // public static Command rotateToNearestReedSideCommand()
     // {
+    //     Rotation2d targetYaw = poseEstimator.getAngleToNearestReefSideCommand();
+
     //     if(drivetrain != null && poseEstimator != null && gyro != null)
     //     {
-    //         return run()
+    //         return 
+    //         Commands.parallel(
+    //             drivetrain.rotateToSetAngleCommand()
+    //             setLEDBlink(Color.kPurple)
+    //         )
+    //         .until(
+    //             gyro.getYaw() == targetYaw.getRadians()
+    //         );
     //     }
     //     else
     //     {
