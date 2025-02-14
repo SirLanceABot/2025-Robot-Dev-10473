@@ -311,7 +311,7 @@ public class CameraLL extends CameraLance {
      * 
      * @return freshness of the last acquisition
      */
-    public boolean fresh()
+    public boolean isFresh()
     {
       return fresh;
     }
@@ -444,7 +444,7 @@ public class CameraLL extends CameraLance {
         fresh = stats.timestamp == previousTimestamp && 17 == stats.value.length && 1.0 == stats.value[0];
         previousTimestamp = stats.timestamp;
 
-        if (fresh())
+        if (isFresh())
         {
             var poseTemp = botpose_orb_wpiblue.getAtomic(); // get the LL MegaTag2 pose data
 
