@@ -5,7 +5,6 @@ import java.lang.invoke.MethodHandles;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Roller;
-import frc.robot.subsystems.Climb;
 
 public class BradyWTest implements Test
 {
@@ -27,9 +26,12 @@ public class BradyWTest implements Test
 
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
+
+    @SuppressWarnings("unused")
     private final RobotContainer robotContainer;
+
     private final Roller roller;
-    private final Climb climb;
+    // private final Climb climb;
     private final Joystick joystick = new Joystick(1);
 
     // private final ExampleSubsystem exampleSubsystem;
@@ -48,7 +50,7 @@ public class BradyWTest implements Test
 
         this.robotContainer = robotContainer;
         roller = robotContainer.getRoller();
-        climb = robotContainer.getClimb();
+        // climb = robotContainer.getClimb();
         // this.exampleSubsystem = robotContainer.exampleSubsystem;
 
         System.out.println("  Constructor Finished: " + fullClassName);

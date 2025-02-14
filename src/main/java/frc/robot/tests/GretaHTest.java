@@ -2,10 +2,7 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
-import javax.lang.model.util.ElementScanner14;
-
 import edu.wpi.first.wpilibj.Joystick;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Pivot.TargetPosition;
@@ -30,6 +27,9 @@ public class GretaHTest implements Test
 
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
+
+    @SuppressWarnings("unused")
+    
     private final RobotContainer robotContainer;
     private final Joystick joystick = new Joystick(0);
     private final Pivot pivot;

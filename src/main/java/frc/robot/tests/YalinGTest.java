@@ -24,7 +24,10 @@ public class YalinGTest implements Test
 
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
+
+    @SuppressWarnings("unused")
     private final RobotContainer robotContainer;
+    
     // private final ExampleSubsystem exampleSubsystem;
 
 

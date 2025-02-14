@@ -2,13 +2,7 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.motors.TalonFXLance;
-import frc.robot.subsystems.Roller;
-import frc.robot.subsystems.Climb;
 
 public class JWoodTest implements Test
 {
@@ -30,13 +24,14 @@ public class JWoodTest implements Test
 
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
+
+    @SuppressWarnings("unused")
     private final RobotContainer robotContainer;
-    private final TalonFXLance motor = new TalonFXLance(1, Constants.ROBORIO, "test motor");
+    
+    // private final TalonFXLance motor = new TalonFXLance(1, Constants.ROBORIO, "test motor");
     // private final Roller roller;
     // private final Climb climb;
     // private final Joystick joystick = new Joystick(1);
-    //
-
     // private final ExampleSubsystem exampleSubsystem;
 
 

@@ -2,8 +2,6 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Shifter;
@@ -28,7 +26,10 @@ public class RobbieJTest implements Test
 
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
+
+    @SuppressWarnings("unused")
     private final RobotContainer robotContainer;
+    
     private final Shifter shifter;
 
     // private final Joystick joystick = new Joystick(0);

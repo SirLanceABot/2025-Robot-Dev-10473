@@ -3,7 +3,6 @@ package frc.robot.tests;
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 
@@ -27,7 +26,10 @@ public class RobbieFTest implements Test
 
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
+
+    @SuppressWarnings("unused")
     private final RobotContainer robotContainer;
+    
     private final Drivetrain driveTrain;
 
     private final Joystick joystick = new Joystick(0);

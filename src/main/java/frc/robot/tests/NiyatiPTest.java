@@ -2,8 +2,6 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
-import javax.lang.model.util.ElementScanner14;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.RobotContainer;
@@ -29,7 +27,10 @@ public class NiyatiPTest implements Test
 
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
-    // private final RobotContainer robotContainer;
+
+    @SuppressWarnings("unused")
+    private final RobotContainer robotContainer;
+
     private final Joystick joystick = new Joystick(0);
     private final LEDs leds;
     // private final ExampleSubsystem exampleSubsystem;
@@ -45,7 +46,8 @@ public class NiyatiPTest implements Test
     public NiyatiPTest(RobotContainer robotContainer)
     {
         System.out.println("  Constructor Started:  " + fullClassName);
-
+        
+        this.robotContainer = robotContainer;
         leds = robotContainer.getLEDs();
         // this.exampleSubsystem = robotContainer.exampleSubsystem;
 
