@@ -18,13 +18,15 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 
 /**
- * typical usage:
+ * Implementation of the camera class for Limelights
+ * <p>Typical usage:
  * 
  <pre>
 
     // construct the LL1 object once
     CameraLL LL1;
-  
+    boolean useLL1 = true;
+
     LL1 = useLL1 ? CameraLL.makeCameraLL("limelight") : null; // make a limelight - null if it doesn't exist or not requested
 
     // set the camera stream mode as often as necessary
@@ -47,17 +49,29 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
       LL1.setRobotOrientation(0., 0., 0., 0., 0., 0.);
 
       LL1.update(); // get the latest values from the LL
-      if (LL1.isValid()) // if there are new values then use them
+      if (LL1.fresh()) // if there are new values then use them
       {
           LL1.poseToAS(); // example send the pose to AdvantageScope
 
           // some methods we might use
           LL1.getPose2d(); // MegaTag2 pose
-          LL1.getPoseTime(); // Time of the pose
+          LL1.getPose3d(); // MegaTag2 pose
+          LL1.getPoseTimestampSeconds(); // Time of the pose
           LL1.getTX(); // LL tx
           LL1.getTXNC(); // LL txnc
           LL1.getTY(); // LL ty
-          LL1.getTYNC(); LL tync
+          LL1.getTYNC(); // LL tync
+          LL1.fresh(); // new data
+          LL1.getLatency(); // total latency of the pose
+          LL1.getTagCount(); // number of tags seen to make the pose
+          LL1.getTagSpan(); // span of the tags
+          LL1.getAvgTagDist(); // average distance from tags to robot
+          LL1.getAvgTagArea(); // average area of the tags in their frames
+
+          LL1.setStreamMode_Standard();
+          LL1.setStreamMode_PiPMain();
+          LL1.setStreamMode_PiPSecondary();
+          LL1.setStreamMode(streamMode);
 
           // data usage for pose estimation
           // m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999)); //FIXME need stddev tuning/filtering
@@ -69,9 +83,9 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 public class CameraLL extends CameraLance {
 
     private final String name;
-    private boolean valid;
+    private boolean fresh;
 
-    // associated with Megatag2 blue pose
+    // fields associated with Megatag2 blue pose
     private Pose2d pose;
     private double timestampSeconds;
     private double latency;
@@ -82,6 +96,7 @@ public class CameraLL extends CameraLance {
     private Pose3d pose3d = new Pose3d(); // initialize in case it's used before being set (not supposed to happen)
 
     private long previousTimestamp = 0; // arbitrary initial time to start
+    
     private DoubleSubscriber tx;
     private DoubleSubscriber ty;
     private DoubleSubscriber txnc;
@@ -103,7 +118,7 @@ public class CameraLL extends CameraLance {
         this.name = name;
 
         // Get the limelight table
-        var table = CameraLance.inst.getTable(name);
+        var table = CameraLance.NTinstance.getTable(name);
 
         /*
         tx
@@ -207,6 +222,11 @@ public class CameraLL extends CameraLance {
         stream = table.getDoubleTopic("stream").publish();
     }
 
+    /**
+     * Essentially the constructor for a limelight cameraserver.java
+     * @param name set in the limelight
+     * @return a limelight object or null if it doesn't exist
+     */
     public static CameraLL makeCameraLL(String name)
     {
         if (!isAvailable(name))
@@ -220,25 +240,28 @@ public class CameraLL extends CameraLance {
     /**
      * Enables standard viewing of cameras mode. If both internal and external cameras available they are viewed side-by-side.
      */
-    public void setStreamMode_Standard(String limelightName) {
+    public void setStreamMode_Standard()
+    {
         stream.set(0.);
     }
 
     /**
      * Enables Picture-in-Picture mode viewing internal camera with external stream in the corner.
      */
-    public void setStreamMode_PiPMain(String limelightName) {
+    public void setStreamMode_PiPMain()
+    {
         stream.set(1.);
     }
 
     /**
      * Enables Picture-in-Picture mode viewing external camera with primary camera in the corner.
      */
-    public void setStreamMode_PiPSecondary() {
+    public void setStreamMode_PiPSecondary()
+    {
         stream.set(2.);
     }
 
-    enum StreamMode {Both, External, Internal}
+    public enum StreamMode {Both, External, Internal}
     public void setStreamMode(StreamMode streamMode)
     {
         stream.set((double)streamMode.ordinal());
@@ -265,19 +288,19 @@ public class CameraLL extends CameraLance {
         gyro[4] = roll;
         gyro[5] = rollRate;
         robot_orientation_set.set(gyro); // robot orientation sent to LL for MegaTag2
-        CameraLance.inst.flush();
+        CameraLance.NTinstance.flush();
     }
 
     /**
      * getter for validity of last acquisition
+     * <p>data must be valid and different timestamp than the previous data
      * 
-     * @return validity of last acquisition
+     * @return freshness of the last acquisition
      */
-    public boolean isValid()
+    public boolean fresh()
     {
-      return valid;
+      return fresh;
     }
-
 
     /**
      * Gets the horizontal offset from the crosshair to the target in degrees.
@@ -404,10 +427,10 @@ public class CameraLL extends CameraLance {
         var stats = t2d.getAtomic();
 
         // check if new data
-        valid = stats.timestamp == previousTimestamp && 17 == stats.value.length && 1.0 == stats.value[0];
+        fresh = stats.timestamp == previousTimestamp && 17 == stats.value.length && 1.0 == stats.value[0];
         previousTimestamp = stats.timestamp;
 
-        if (valid)
+        if (fresh())
         {
             var poseTemp = botpose_orb_wpiblue.getAtomic(); // get the LL MegaTag2 pose data
 
@@ -475,7 +498,7 @@ public class CameraLL extends CameraLance {
     // put in a delay if needed to help assure NT has latched onto the LL if it is transmitting
     for (int i = 1; i <= 15; i++)
     {
-      if (CameraLance.inst.getTable(limelightName).containsKey("getpipe"))
+      if (CameraLance.NTinstance.getTable(limelightName).containsKey("getpipe"))
       {
         return true;
       }
@@ -491,7 +514,7 @@ public class CameraLL extends CameraLance {
     String errMsg = "Your limelight name \"" + limelightName +
                     "\" is invalid; doesn't exist on the network (no getpipe key).\n" +
                     "These may be available:" +
-                    CameraLance.inst.getTable("/").getSubTables().stream()
+                    CameraLance.NTinstance.getTable("/").getSubTables().stream()
                                         .filter(ntName -> ((String) (ntName)).startsWith("limelight"))
                                         .collect(Collectors.joining("\n")) +
                                         "If in simulation, check LL Dashboard: Settings / Custom NT Server IP:";
