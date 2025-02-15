@@ -127,6 +127,9 @@ public class LEDs extends SubsystemLance
         System.out.println("  Constructor Finished: " + fullClassName);
     }
 
+    /**
+     * Starts LEDs
+     */
     private void configLEDs()
     {
         led.start();
@@ -142,12 +145,18 @@ public class LEDs extends SubsystemLance
     //     }
     // }
 
+    /**
+     * Turns the LEDs off
+     */
     private void off()
     {
         off.applyTo(ledBuffer);
         led.setData(ledBuffer);
     }
 
+    /**
+     * Sets the LEDs color to solid
+     */
     private void setColorSolid(Color color)
     {
         solid = LEDPattern.solid(color);
@@ -177,17 +186,26 @@ public class LEDs extends SubsystemLance
         // }
     // }
 
+    /**
+     * Sets LEDs color to rainbow
+     */
     private void setColorRainbow()
     {
         rainbow.applyTo(ledBuffer);
     }
 
+    /**
+     * Sets LEDs to gradient
+     */
     private void setColorGradient(Color... colors)
     {
         gradient = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, colors);
         gradient.applyTo(ledBuffer);
     }
 
+    /**
+     * Sets LEDs to blink slowly
+     */
     private void setColorBreathe(Color... colors)
     {
         base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colors);
@@ -195,6 +213,9 @@ public class LEDs extends SubsystemLance
         breathePattern.applyTo(ledBuffer);
     }
 
+    /**
+     * Sets LEDs to blink
+     */
     private void setColorBlink(Color... colors)
     {
         base = LEDPattern.gradient(LEDPattern.GradientType.kDiscontinuous, colors);
@@ -211,6 +232,9 @@ public class LEDs extends SubsystemLance
 
     //COMMANDS
 
+    /**
+     * This command turns LEDs off
+     */
     public Command offCommand()
     {
         return runOnce(() -> off()).withName("Turn Off LED");
@@ -221,6 +245,10 @@ public class LEDs extends SubsystemLance
     //     return runOnce(() -> off()).withName("Turn Off");
     // }
 
+    /**
+     * This command sets a solid LEDs color
+     * @param color
+     */
     public Command setColorSolidCommand(Color color)
     {
         return runOnce(() -> setColorSolid(color)).withName("Set LED Solid");
@@ -231,21 +259,36 @@ public class LEDs extends SubsystemLance
     //     return run(() -> setColorBlink(color.r, color.g, color.b)).withName("Set LED Blink");
     // }
 
+    /**
+     * This command sets LEDs to rainbow
+     */
     public Command setColorRainbowCommand()
     {
         return runOnce(() -> setColorRainbow()).withName("Set LED Rainbow");
     }
 
+    /**
+     * This command sets LEDs to a gradient
+     * @param colors
+     */
     public Command setColorGradientCommand(Color... colors)
     {
         return runOnce(() -> setColorGradient(colors)).withName("Set LED Gradient");
     }
 
+    /**
+     * This command sets LEDs to blink slowly
+     * @param colors
+     */
     public Command setColorBreatheCommand(Color... colors)
     {
         return run(() -> setColorBreathe(colors)).withName("Set LED Breathe");
     }
 
+    /**
+     * This command sets LEDs to blink
+     * @param colors
+     */
     public Command setColorBlinkCommand(Color... colors)
     {
         return run(() -> setColorBlink(colors)).withName("Set LED Blink");
