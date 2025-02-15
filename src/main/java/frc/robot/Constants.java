@@ -49,7 +49,7 @@ public final class Constants
     public static class Controllers
     {
         public static final int DRIVER_CONTROLLER_PORT                  = 0;
-        public static final int OPERATOR_CONTROLLER_PORT                = 0;
+        public static final int OPERATOR_CONTROLLER_PORT                = 1;
     }
     
     public static class Drivetrain
@@ -63,6 +63,8 @@ public final class Constants
         public static final String LEFT_FOLLOWER_CAN_BUS                = ROBORIO;
         public static final String RIGHT_LEADER_CAN_BUS                 = ROBORIO;
         public static final String RIGHT_FOLLOWER_CAN_BUS               = ROBORIO;
+  
+        public static final String MOTOR_CAN_BUS                        = ROBORIO;
     }
 
     public static class Pivot
@@ -73,7 +75,7 @@ public final class Constants
 
     public static class Pneumatics
     {
-        public static final int Pneumatic_HUB_PORT                      = 1;
+        public static final int PNEUMATIC_HUB_PORT                      = 1;
         
         public static final double MAX_PRESSURE                         = 120;
         public static final double MIN_PRESSURE                         = 90;

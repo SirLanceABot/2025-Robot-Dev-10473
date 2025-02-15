@@ -4,17 +4,14 @@ import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
-import frc.robot.motors.TalonFXLance;
 
 /**
  * This is an example of what a subsystem should look like.
@@ -41,7 +38,7 @@ public class Pneumatics extends SubsystemLance
     // Put all class variables and instance variables here
 
     private final Compressor compressor=  new Compressor(PneumaticsModuleType.REVPH);
-    private final PneumaticHub pneumaticHub = new PneumaticHub(Constants.Pneumatics.Pneumatic_HUB_PORT);
+    private final PneumaticHub pneumaticHub = new PneumaticHub(Constants.Pneumatics.PNEUMATIC_HUB_PORT);
     // private final AnalogInput analogPressure = new AnalogInput(0);
 
 
@@ -122,8 +119,15 @@ public class Pneumatics extends SubsystemLance
     // {
     //     return run( () -> stop() );
     // }
+    public Command disableCompressorCommand()
+    {
+        return runOnce(() -> disableCompressor()).withName("Disable compressor");
+    }
 
-
+    public Command enableCompressorCommand()
+    {
+        return runOnce(() -> enableCompressor()).withName("Enable compressor");
+    }
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here
 

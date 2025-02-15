@@ -3,14 +3,11 @@ package frc.robot.subsystems;
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 
-import com.revrobotics.AnalogInput;
-
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 
 /**
@@ -36,7 +33,7 @@ public class Shifter extends SubsystemLance
 
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
-    private final DoubleSolenoid solenoid = new DoubleSolenoid(1, PneumaticsModuleType.REVPH,
+    private final DoubleSolenoid solenoid = new DoubleSolenoid(Constants.Pneumatics.PNEUMATIC_HUB_PORT, PneumaticsModuleType.REVPH,
     Constants.Shifter.FORWARD_CHANNEL_PORT, Constants.Shifter.REVERSE_CHANNEL_PORT);
     private static boolean isHighGear;
 
@@ -51,6 +48,9 @@ public class Shifter extends SubsystemLance
     public Shifter()
     {
         super("Shifter");
+        System.out.println("  Constructor Started:  " + fullClassName);
+
+
         shiftHighCommand();
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -76,6 +76,9 @@ public class Shifter extends SubsystemLance
         isHighGear = false;
     }
 
+    /**
+     * Returns isHigh gear boolean
+     */
     public static boolean isHighGear()
     {
         return isHighGear;
