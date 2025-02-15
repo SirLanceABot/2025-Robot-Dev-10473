@@ -57,7 +57,7 @@ public class GyroLance extends SensorLance
     public static final double RESET_DELAY = 0.1;
 
     
-    private final Pigeon2 gyro = new Pigeon2(0, "CANivore");
+    private final Pigeon2 gyro = new Pigeon2(Constants.Gyro.PORT, Constants.Gyro.GYRO_CAN_BUS_STRING);
     private ResetState resetState = ResetState.kDone;
     private Timer timer = new Timer();
 
