@@ -74,7 +74,7 @@ public class Drivetrain extends SubsystemLance
 
 
     private final GyroLance gyro;
-    private final PoseEstimatorLance poseEstimator;
+    // private final PoseEstimatorLance poseEstimator;
 
     private final TalonFXLance leftLeader = new TalonFXLance(Constants.Drivetrain.LEFT_LEADER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Left Leader");
     private final TalonFXLance leftFollower = new TalonFXLance(Constants.Drivetrain.LEFT_FOLLOWER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Left Follower");
@@ -96,13 +96,12 @@ public class Drivetrain extends SubsystemLance
     /** 
      * Creates a new Drivetrain. 
      */
-    public Drivetrain(GyroLance gyro, PoseEstimatorLance poseEstimator)
+    public Drivetrain(GyroLance gyro)
     {
         super("Example Subsystem");
         System.out.println("  Constructor Started:  " + fullClassName);
 
         this.gyro = gyro;
-        this.poseEstimator = poseEstimator;
 
         configMotors();
 
@@ -115,7 +114,6 @@ public class Drivetrain extends SubsystemLance
             new Pose2d()
         );
 
-        
         try
         {
             RobotConfig config = RobotConfig.fromGUISettings();
@@ -487,13 +485,22 @@ public class Drivetrain extends SubsystemLance
         return arcadeDriveCommand(() -> driveSpeed, () -> rotationSpeed, false).withName("Turn And Drive Command");
     }
 
-    public Command snapToParallelNearestReefSideCommand(double turnSpeed)
+    public Command snapToParallelNearestReefSideCommand(double turnSpeed, double targetRotation)
     {
-        double targetRotation = optimizeRotation(gyro.getYaw(), poseEstimator.getAngleParallelToAprilTag());
+        // double targetRotation = optimizeRotation(gyro.getYaw(), );
 
         return run(() -> driveTurnCommand(turnSpeed))
                         .until(isAtRotationSupplier(targetRotation, 2.0)) // tolerance is in degrees
-                        .withName("Snap To Heading: " + targetRotation);
+                        .withName("Snap To Heading (parallel): " + targetRotation);
+    }
+
+    public Command snapToPerpendicularNearestReefSideCommand(double turnSpeed, double targetRotation)
+    {
+        // double targetRotation = optimizeRotation(gyro.getYaw(), );
+
+        return run(() -> driveTurnCommand(turnSpeed))
+                        .until(isAtRotationSupplier(targetRotation, 2.0)) // tolerance is in degrees
+                        .withName("Snap To Heading (perpendicular): " + targetRotation);
     }
 
     // *** OVERRIDEN METHODS ***
