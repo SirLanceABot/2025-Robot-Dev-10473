@@ -9,6 +9,7 @@ import java.util.function.BooleanSupplier;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -73,26 +74,10 @@ public class PoseEstimatorLance extends SubsystemLance
     private final double[] defaultValues = {0.0, 0.0, 0.0};
     private final double MAX_TARGET_DISTANCE = 5.0; // meters
 
-    private final List<Pose2d> aprilTagLocations = new ArrayList<Pose2d>(){{
-        new Pose2d(new Translation2d(13.474446, 3.306318) , new Rotation2d(Math.toRadians(120.0)  ));  // check angle values
-        new Pose2d(new Translation2d(13.890498, 4.0259)   , new Rotation2d(Math.toRadians(180.0)  ));
-        new Pose2d(new Translation2d(13.474446, 4.745482) , new Rotation2d(Math.toRadians(-120.0) ));
-        new Pose2d(new Translation2d(12.643358, 4.745482) , new Rotation2d(Math.toRadians(-60.0)  ));
-        new Pose2d(new Translation2d(12.227306, 4.0259)   , new Rotation2d(Math.toRadians(0.0)    ));
-        new Pose2d(new Translation2d(12.643358, 3.306318) , new Rotation2d(Math.toRadians(60.0)   ));
-
-        new Pose2d(new Translation2d(4.073906, 3.30618)   , new Rotation2d(Math.toRadians(60.0)   ));
-        new Pose2d(new Translation2d(3.6576, 4.0259)      , new Rotation2d(Math.toRadians(0.0)    ));
-        new Pose2d(new Translation2d(4.073906, 4.745482)  , new Rotation2d(Math.toRadians(-60.0)  ));
-        new Pose2d(new Translation2d(4.90474, 4.745482)   , new Rotation2d(Math.toRadians(-120.0) ));
-        new Pose2d(new Translation2d(5.321046, 4.0259)    , new Rotation2d(Math.toRadians(180.0)  ));
-        new Pose2d(new Translation2d(4.90474, 3.306318)   , new Rotation2d(Math.toRadians(120.0)  ));
-    
-        // order should stay the same
-    }};
-
     private final HashMap<Integer, Pose2d> rightSideMap = new HashMap<Integer, Pose2d>();
     private final HashMap<Integer, Pose2d> leftSideMap = new HashMap<Integer, Pose2d>();
+    private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+    private final List<AprilTag> aprilTagList = aprilTagFieldLayout.getTags();
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -141,8 +126,6 @@ public class PoseEstimatorLance extends SubsystemLance
     public AprilTag getNearestTag()
     {
         AprilTag nearestTag = null;
-        AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
-        List<AprilTag> aprilTagList = aprilTagFieldLayout.getTags();
         double min = 100.0;
         double dist;
 
@@ -164,12 +147,21 @@ public class PoseEstimatorLance extends SubsystemLance
         return getEstimatedPose().getRotation();
     }
 
-    private void test()
+    public double getAngleOfNearestAprilTag()
     {
         AprilTag tag = getNearestTag();
 
-        // tag.ID;
-        tag.pose.getRotation().toRotation2d().getDegrees();
+        return tag.pose.getRotation().toRotation2d().getDegrees();
+    }
+
+    public double getAngleParallelToAprilTag()
+    {
+        return MathUtil.inputModulus(getAngleOfNearestAprilTag() - 90, 0, 360);
+    }
+
+    public double getAnglePerpendicularToAprilTag()
+    {
+        return MathUtil.inputModulus(getAngleOfNearestAprilTag() + 180, 0, 360);
     }
 
     public void resetPoseEstimator(Pose2d pose)
@@ -246,9 +238,16 @@ public class PoseEstimatorLance extends SubsystemLance
 
     }
 
-    public Pose2d getAprilTagPose(int index)
+    public Pose2d getAprilTagPose(int ID)
     {
-        return aprilTagLocations.get(index);
+        if(aprilTagFieldLayout.getTagPose(ID).isEmpty())
+        {
+            return aprilTagFieldLayout.getTagPose(ID).get().toPose2d();
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public BooleanSupplier isReefTagSupplier(double tagID)
