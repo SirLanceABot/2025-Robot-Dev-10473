@@ -76,7 +76,7 @@ public class LEDs extends SubsystemLance
     // private final Timer timer = new Timer();
     private LEDPattern gradient;
     private AddressableLED led = new AddressableLED(Constants.LEDs.LED_PORT);
-    private AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(49);
+    private AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(Constants.LEDs.LED_LENGTH);
 
     private LEDPattern off = LEDPattern.solid(Color.kBlack);
     private final LEDPattern rainbow = LEDPattern.rainbow(255, 255);
