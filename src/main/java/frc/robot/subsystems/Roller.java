@@ -36,7 +36,7 @@ public class Roller extends SubsystemLance
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
     private final SparkFlexLance motor = new SparkFlexLance(Constants.Roller.MOTOR_PORT, Constants.Roller.MOTOR_CAN_BUS, "Roller Motor");
-    private final Proximity sensor = new Proximity(0);
+    private final Proximity sensor = new Proximity(Constants.Roller.PROXIMITY_SENSOR_PORT);
 
     private final double GEAR_RATIO = 1.0 / 5.0; // Ask Build team 
     private final double WHEEL_DIAMETER_FEET = 2.25 / 12.0; // Ask Build Team

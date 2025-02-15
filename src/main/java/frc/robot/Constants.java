@@ -93,13 +93,14 @@ public final class Constants
         public static final int MOTOR_PORT                              = 12;
 
         public static final String MOTOR_CAN_BUS                        = ROBORIO;
+
+        public static final int PROXIMITY_SENSOR_PORT                          = 0;
+
     }
 
     public static class Shifter
     {
         public static final int FORWARD_CHANNEL_PORT                    = 0;
-        public static final int REVERSE_CHANNEL_PORT                    = 1;    
-    
-        public static final int PROXIMITY_PORT                          = 0;
+        public static final int REVERSE_CHANNEL_PORT                    = 1;        
     }
 }
