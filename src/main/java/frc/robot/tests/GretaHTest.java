@@ -7,6 +7,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Pivot.TargetPosition;
 
+@SuppressWarnings("unused")
 public class GretaHTest implements Test
 {
     // This string gets the full name of the class, including the package name
@@ -27,9 +28,6 @@ public class GretaHTest implements Test
 
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
-
-    @SuppressWarnings("unused")
-    
     private final RobotContainer robotContainer;
     private final Joystick joystick = new Joystick(0);
     private final Pivot pivot;

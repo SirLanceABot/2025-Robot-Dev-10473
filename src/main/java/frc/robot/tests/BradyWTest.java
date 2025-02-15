@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Roller;
 
+@SuppressWarnings("unused")
 public class BradyWTest implements Test
 {
     // This string gets the full name of the class, including the package name

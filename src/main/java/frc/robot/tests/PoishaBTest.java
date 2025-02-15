@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 
 import frc.robot.RobotContainer;
 
+@SuppressWarnings("unused")
 public class PoishaBTest implements Test
 {
     // This string gets the full name of the class, including the package name
@@ -24,8 +25,6 @@ public class PoishaBTest implements Test
 
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
-
-    @SuppressWarnings("unused")
     private final RobotContainer robotContainer;
     
     // private final ExampleSubsystem exampleSubsystem;

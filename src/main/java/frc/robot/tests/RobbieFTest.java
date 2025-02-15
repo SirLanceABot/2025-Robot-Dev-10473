@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 
+@SuppressWarnings("unused")
 public class RobbieFTest implements Test
 {
     // This string gets the full name of the class, including the package name
@@ -26,8 +27,6 @@ public class RobbieFTest implements Test
 
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
-
-    @SuppressWarnings("unused")
     private final RobotContainer robotContainer;
     
     private final Drivetrain driveTrain;

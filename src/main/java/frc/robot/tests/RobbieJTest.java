@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Shifter;
 
+@SuppressWarnings("unused")
 public class RobbieJTest implements Test
 {
     // This string gets the full name of the class, including the package name
@@ -26,8 +27,6 @@ public class RobbieJTest implements Test
 
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
-
-    @SuppressWarnings("unused")
     private final RobotContainer robotContainer;
     
     private final Shifter shifter;

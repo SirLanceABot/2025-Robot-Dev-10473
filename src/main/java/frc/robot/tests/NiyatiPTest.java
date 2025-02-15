@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.LEDs;
 
+@SuppressWarnings("unused")
 public class NiyatiPTest implements Test
 {
     // This string gets the full name of the class, including the package name
@@ -27,8 +28,6 @@ public class NiyatiPTest implements Test
 
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
-
-    @SuppressWarnings("unused")
     private final RobotContainer robotContainer;
 
     private final Joystick joystick = new Joystick(0);
