@@ -335,6 +335,13 @@ public class Drivetrain extends SubsystemLance
         differentialDrive.stopMotor();
     }
 
+    public BooleanSupplier isAtRotationSupplier(double targetRotation, double tolerance)
+    {
+        return () -> (Math.abs(gyro.getYaw() - targetRotation) < tolerance);
+
+        //
+    }
+
     /**
      * @param speed
      * sets motor speed of arcadeDrive method
@@ -414,7 +421,7 @@ public class Drivetrain extends SubsystemLance
      * @return
      * the command
      */
-    public Command turnCommand(double rotationSpeed)
+    public Command driveTurnCommand(double rotationSpeed)
     {
         return arcadeDriveCommand(() -> 0.0, () -> rotationSpeed, false).withName("Turn Command");
     }
@@ -427,7 +434,7 @@ public class Drivetrain extends SubsystemLance
      * @return
      * the command
      */
-    public Command driveCommand(double driveSpeed)
+    public Command driveStraightCommand(double driveSpeed)
     {
         return arcadeDriveCommand(() -> driveSpeed, () -> 0.0, false).withName("Drive Command");
     }
@@ -447,9 +454,11 @@ public class Drivetrain extends SubsystemLance
         return arcadeDriveCommand(() -> driveSpeed, () -> rotationSpeed, false).withName("Turn And Drive Command");
     }
 
-    public Command rotateToSetAngleCommand()
+    public Command snapToHeadingCommand(double targetRotation, double turnSpeed)
     {
-        return run(() -> turnCommand(0.5));
+        return run(() -> driveTurnCommand(turnSpeed))
+                        .until(isAtRotationSupplier(targetRotation, 2.0)) // tolerance is in degrees
+                        .withName("Snap To Heading: " + targetRotation);
     }
 
     // *** OVERRIDEN METHODS ***
