@@ -74,10 +74,10 @@ public class Drivetrain extends SubsystemLance
 
     private final GyroLance gyro;
 
-    private final TalonFXLance leftLeader = new TalonFXLance(Constants.Drivetrain.LEFT_LEADER_PORT, Constants.Drivetrain.LEFT_LEADER_CAN_BUS, "Left Leader");
-    private final TalonFXLance leftFollower = new TalonFXLance(Constants.Drivetrain.LEFT_FOLLOWER_PORT, Constants.Drivetrain.LEFT_FOLLOWER_CAN_BUS, "Left Follower");
-    private final TalonFXLance rightLeader = new TalonFXLance(Constants.Drivetrain.RIGHT_LEADER_PORT, Constants.Drivetrain.RIGHT_LEADER_CAN_BUS, "Right Leader");
-    private final TalonFXLance rightFollower = new TalonFXLance(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, Constants.Drivetrain.RIGHT_FOLLOWER_CAN_BUS, "Right Follower");
+    private final TalonFXLance leftLeader = new TalonFXLance(Constants.Drivetrain.LEFT_LEADER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Left Leader");
+    private final TalonFXLance leftFollower = new TalonFXLance(Constants.Drivetrain.LEFT_FOLLOWER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Left Follower");
+    private final TalonFXLance rightLeader = new TalonFXLance(Constants.Drivetrain.RIGHT_LEADER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Right Leader");
+    private final TalonFXLance rightFollower = new TalonFXLance(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Right Follower");
 
     private final DifferentialDrive differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
 
@@ -325,6 +325,38 @@ public class Drivetrain extends SubsystemLance
     {
         leftLeader.setupBrakeMode();
         rightLeader.setupBrakeMode();
+    }
+
+    // public boolean optimizeSpeed(double targetRotation, double tagRotation)
+    // {
+    //     double positiveRotation = tagRotation + 90.0;
+    //     double negativeRotation = tagRotation - 90.0;
+    //     double difference = Math.abs(positiveRotation - currentRotation);
+
+    //     if(difference < 90.0)
+    //     {
+    //         return true;
+    //     }
+    //     else
+    //     {
+    //         return negativeRotation;
+    //     }
+    // }
+
+    public double optimizeRotation(double currentRotation, double tagRotation)
+    {
+        double positiveRotation = tagRotation + 90.0;
+        double negativeRotation = tagRotation - 90.0;
+        double difference = Math.abs(positiveRotation - currentRotation);
+
+        if(difference < 90.0)
+        {
+            return positiveRotation;
+        }
+        else
+        {
+            return negativeRotation;
+        }
     }
 
     /**
