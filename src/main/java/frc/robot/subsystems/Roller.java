@@ -67,9 +67,10 @@ public class Roller extends SubsystemLance
     private void configMotors()
     {
         motor.setupFactoryDefaults();
-        motor.setupVelocityConversionFactor(RPM_TO_FPS);
+        // motor.setupVelocityConversionFactor(RPM_TO_FPS);
 
         motor.setSafetyEnabled(false);
+        motor.setPosition(0.0);
     }
 
     /**
@@ -81,22 +82,9 @@ public class Roller extends SubsystemLance
         motor.set(speed);
     }
     
-    /**
-     * Makes the rollers intake
-     * @param speed The motor speed
-     */
-    private void intake(double speed)
+    public void on(double speed)
     {
-        set(speed);
-    }
-
-    /**
-     * Makes the rollers eject
-     * @param speed The motor speed
-     */
-    private void eject(double speed)
-    {
-        set(-speed);
+        motor.set(speed);
     }
 
     /**
@@ -111,9 +99,9 @@ public class Roller extends SubsystemLance
      * Command to make the rollers intake
      * @return Returns intake command
      */
-    public Command intakeCommand()
+    public Command intakeAlgaeCommand()
     {
-        return runOnce( () -> intake(0.5) )
+        return runOnce( () -> set(0.5) )
         .withName("Intake Roller");
     }
 
@@ -123,7 +111,7 @@ public class Roller extends SubsystemLance
      */
     public Command ejectCoralCommand()
     {
-        return runOnce( () -> eject(-0.5) )
+        return runOnce( () -> set(0.5) )
         .withName("Eject Roller");
     }
 
@@ -133,7 +121,7 @@ public class Roller extends SubsystemLance
      */
     public Command ejectAlgaeCommand()
     {
-        return runOnce( () -> eject(0.5) )
+        return runOnce( () -> set(-0.5) )
         .withName("Eject Roller");
     }
 
@@ -151,13 +139,13 @@ public class Roller extends SubsystemLance
      * @param speed Speed of the motors
      * @return Returns intake until detected command
      */
-    public Command intakeUntilDetectedCommand()
-    {
-        return 
-        runOnce( () -> intake(0.5) )
-        .andThen(Commands.waitUntil(sensor.isDetectedSupplier()) )
-        .andThen(stopCommand());
-    }
+    // public Command intakeUntilDetectedCommand()
+    // {
+    //     return 
+    //     runOnce( () -> set(0.5) )
+    //     .andThen(Commands.waitUntil(sensor.isDetectedSupplier()) )
+    //     .andThen(stopCommand());
+    // }
 
     public BooleanSupplier isDetectedSupplier()
     {

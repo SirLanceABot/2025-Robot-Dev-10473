@@ -66,43 +66,44 @@ public class RobbieFTest implements Test
      * This method runs one time before the periodic() method.
      */
     public void init()
-    {}
+    {
+        driveTrain.arcadeDriveCommand(() -> -joystick.getRawAxis(1), () -> -joystick.getRawAxis(0), true).schedule();
+    }
 
     /**
      * This method runs periodically (every 20ms).
      */ 
     public void periodic()
     {
-        // driveTrain.arcadeDriveCommand(() -> joystick.getRawAxis(1), () -> joystick.getRawAxis(0), true).schedule();
+        
+        // if(joystick.getRawButton(1))
+        // {
+        //     driveTrain.prepareShiftToLowCommand().schedule();
 
-        if(joystick.getRawButton(1))
-        {
-            driveTrain.prepareShiftToLowCommand().schedule();
+        //     System.out.println("Prepare Shift Low");
+        // }
+        // else if(joystick.getRawButton(2))
+        // {
+        //     driveTrain.postShiftToLowCommand().schedule();
 
-            System.out.println("Prepare Shift Low");
-        }
-        else if(joystick.getRawButton(2))
-        {
-            driveTrain.postShiftToLowCommand().schedule();
+        //     System.out.println("Post Shift Low");
+        // }
+        // else if(joystick.getRawButton(3))
+        // {
+        //     driveTrain.prepareShiftToHighCommand().schedule();
 
-            System.out.println("Post Shift Low");
-        }
-        else if(joystick.getRawButton(3))
-        {
-            driveTrain.prepareShiftToHighCommand().schedule();
+        //     System.out.println("Prepare Shift High");
+        // }
+        // else if(joystick.getRawButton(4))
+        // {
+        //     driveTrain.postShiftToHighCommand().schedule();
 
-            System.out.println("Prepare Shift High");
-        }
-        else if(joystick.getRawButton(4))
-        {
-            driveTrain.postShiftToHighCommand().schedule();
-
-            System.out.println("Post Shift High");
-        }
-        else
-        {
-            driveTrain.arcadeDriveCommand(() -> joystick.getRawAxis(1), () -> joystick.getRawAxis(0), true).schedule();
-        }
+        //     System.out.println("Post Shift High");
+        // }
+        // else
+        // {
+        //     driveTrain.arcadeDriveCommand(() -> joystick.getRawAxis(1), () -> joystick.getRawAxis(0), true).schedule();
+        // }
 
         // System.out.println(driveTrain.toString());
     }

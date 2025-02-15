@@ -92,7 +92,7 @@ public final class GeneralCommands
             return
             Commands.parallel(
                 setLEDSolid(Color.kGreen),
-                roller.intakeCommand(),
+                roller.intakeAlgaeCommand(),
                 pivot.moveToSetPositionCommand(TargetPosition.kGrabAlgaePosition)
                     .until( () -> Math.abs(TargetPosition.kGrabAlgaePosition.pivot - pivot.getPosition()) < 0.1)
                     .withTimeout(2.0)
@@ -128,10 +128,11 @@ public final class GeneralCommands
         {
             return
             Commands.parallel(
-                setLEDBlink(Color.kRed),
+                setLEDBlink(Color.kRed)
+                    .withTimeout(2.0),
                 roller.ejectCoralCommand()
             )
-            .withTimeout(2.0)
+            .andThen(Commands.waitSeconds(2.0))
             .andThen(
                 Commands.parallel(
                     operatorRumble(),
@@ -158,10 +159,11 @@ public final class GeneralCommands
         {
             return
             Commands.parallel(
-                setLEDBlink(Color.kBlue),
+                setLEDBlink(Color.kBlue)
+                    .withTimeout(2.0),
                 roller.ejectAlgaeCommand()
             )
-            .withTimeout(2.0)
+            .andThen(Commands.waitSeconds(2.0))
             .andThen(
                 Commands.parallel(
                     operatorRumble(),
@@ -278,7 +280,6 @@ public final class GeneralCommands
         if(leds != null)
         {
             return leds.setColorBlinkCommand(color);
-            
         }
         else
         {

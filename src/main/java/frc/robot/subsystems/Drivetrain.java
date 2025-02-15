@@ -81,7 +81,7 @@ public class Drivetrain extends SubsystemLance
     private final TalonFXLance rightLeader = new TalonFXLance(Constants.Drivetrain.RIGHT_LEADER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Right Leader");
     private final TalonFXLance rightFollower = new TalonFXLance(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Right Follower");
 
-    private final DifferentialDrive differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
+    private final DifferentialDrive differentialDrive;
 
     private final DifferentialDriveKinematics kinematics;
 
@@ -104,6 +104,8 @@ public class Drivetrain extends SubsystemLance
         this.gyro = gyro;
 
         configMotors();
+
+        differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
 
         kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(TRACKWIDTH)); // find track width
         
@@ -153,8 +155,19 @@ public class Drivetrain extends SubsystemLance
         rightLeader.setupBrakeMode();
         rightFollower.setupBrakeMode();
 
+        leftFollower.setSafetyEnabled(false);
+        rightFollower.setSafetyEnabled(false);
+
+        leftLeader.setupInverted(false);
+        rightLeader.setupInverted(true);
+
         leftFollower.setupFollower(Constants.Drivetrain.LEFT_LEADER_PORT, false);
         rightFollower.setupFollower(Constants.Drivetrain.RIGHT_LEADER_PORT, false);
+
+        leftLeader.setPosition(0.0);
+        rightLeader.setPosition(0.0);
+
+        
         
         // all motors should be running in the same direction
     }
@@ -515,6 +528,7 @@ public class Drivetrain extends SubsystemLance
     @Override
     public String toString()
     {
-        return "Left Leader Motor Velo = " + leftLeader.getVelocity() + " Left Follower Motor Velo = " + leftFollower.getVelocity() + " Right Leader Motor Velo = " + rightLeader.getVelocity() + " Right Follower Motor Velo = " + rightFollower.getVelocity();
+        // return "Left Leader Motor Velo = " + leftLeader.getVelocity() + " Right Leader Motor Velo = " + rightLeader.getVelocity();
+        return "Left = " + leftLeader.getPosition() + " Right = " + rightLeader.getPosition();
     }
 }

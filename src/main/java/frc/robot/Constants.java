@@ -77,7 +77,7 @@ public final class Constants
     public static class LEDs
     {
         public static final int LED_PORT                                = 1;
-        public static final int LED_LENGTH                              = 0;                               
+        public static final int LED_LENGTH                              = 49;
     }
 
     public static class Pivot
@@ -101,7 +101,7 @@ public final class Constants
 
         public static final String MOTOR_CAN_BUS                        = ROBORIO;
 
-        public static final int PROXIMITY_SENSOR_PORT                          = 0;
+        public static final int PROXIMITY_SENSOR_PORT                   = 0;
 
     }
 

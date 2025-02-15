@@ -83,8 +83,8 @@ public final class DriverBindings
 
     private static void configSuppliers()
     {
-        xAxisSupplier = () -> controller.getRawAxis(1);
-        yAxisSupplier = () -> controller.getRawAxis(0);
+        xAxisSupplier = () -> -controller.getRawAxis(0);
+        yAxisSupplier = () -> -controller.getRawAxis(1);
     }
 
     // private static void configAButton()

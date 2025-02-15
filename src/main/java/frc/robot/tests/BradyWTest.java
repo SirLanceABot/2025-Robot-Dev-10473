@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Roller;
 
 @SuppressWarnings("unused")
@@ -32,6 +33,7 @@ public class BradyWTest implements Test
     private final RobotContainer robotContainer;
 
     private final Roller roller;
+    private final Pivot pivot;
     // private final Climb climb;
     private final Joystick joystick = new Joystick(1);
 
@@ -51,6 +53,7 @@ public class BradyWTest implements Test
 
         this.robotContainer = robotContainer;
         roller = robotContainer.getRoller();
+        pivot = robotContainer.getPivot();
         // climb = robotContainer.getClimb();
         // this.exampleSubsystem = robotContainer.exampleSubsystem;
 
@@ -79,19 +82,28 @@ public class BradyWTest implements Test
     {
         if(joystick.getRawButton(1))
         {
-            roller.intakeCommand().schedule();
+            pivot.on(0.1);
         }
         else if(joystick.getRawButton(2))
         {
-            roller.ejectCoralCommand().schedule();
+            pivot.on(-0.1);
         }
-        else if(joystick.getRawButton(3))
+        else
         {
-            roller.intakeUntilDetectedCommand().schedule();
+            pivot.on(0.0);
+        }
+
+        if(joystick.getRawButton(3))
+        {
+            roller.on(0.1);
         }
         else if(joystick.getRawButton(4))
         {
-            roller.stopCommand().schedule();
+            roller.on(-0.1);
+        }
+        else
+        {
+            roller.on(0.0);
         }
 
         // if(joystick.getRawButton(1))
