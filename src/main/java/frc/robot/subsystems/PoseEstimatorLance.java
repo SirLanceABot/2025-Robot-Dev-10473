@@ -1,8 +1,7 @@
 package frc.robot.subsystems;
 
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
-import java.util.HashMap;
+// import java.util.HashMap;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
@@ -13,23 +12,21 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.LimelightHelpers;
-import frc.robot.sensors.Camera;
 import frc.robot.sensors.CameraLL;
 import frc.robot.sensors.GyroLance;
 
 /**
  * @author Robbie Frank
+ * @author Mason Bellinger
+ * @author Brady Woodard
+ * @author Aditya Yadav
  */
 public class PoseEstimatorLance extends SubsystemLance
 {
@@ -58,7 +55,7 @@ public class PoseEstimatorLance extends SubsystemLance
     private final NetworkTable ASTable;
     private final DoubleArrayEntry poseEstimatorEntry;
 
-    private boolean isRight;
+    // private boolean isRight;
 
     private Pose2d estimatedPose = new Pose2d();
 
@@ -74,8 +71,8 @@ public class PoseEstimatorLance extends SubsystemLance
     private final double[] defaultValues = {0.0, 0.0, 0.0};
     private final double MAX_TARGET_DISTANCE = 5.0; // meters
 
-    private final HashMap<Integer, Pose2d> rightSideMap = new HashMap<Integer, Pose2d>();
-    private final HashMap<Integer, Pose2d> leftSideMap = new HashMap<Integer, Pose2d>();
+    // private final HashMap<Integer, Pose2d> rightSideMap = new HashMap<Integer, Pose2d>();
+    // private final HashMap<Integer, Pose2d> leftSideMap = new HashMap<Integer, Pose2d>();
     private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
     private final List<AprilTag> aprilTagList = aprilTagFieldLayout.getTags();
 
@@ -142,11 +139,10 @@ public class PoseEstimatorLance extends SubsystemLance
         return nearestTag;
     }
 
-    public Rotation2d getAngleToNearestReefSideCommand()
-    {
-        return getEstimatedPose().getRotation();
-    }
-
+    /**
+     * @return
+     * the angle of the nearest april tag
+     */
     public double getAngleOfNearestAprilTag()
     {
         AprilTag tag = getNearestTag();
@@ -154,16 +150,30 @@ public class PoseEstimatorLance extends SubsystemLance
         return tag.pose.getRotation().toRotation2d().getDegrees();
     }
 
+    /**
+     * @return
+     * the angle the robot needs to be parrallel to the closest side of the reef
+     */
     public double getAngleParallelToAprilTag()
     {
         return MathUtil.inputModulus(getAngleOfNearestAprilTag() - 90.0, 0.0, 360.0);
     }
 
+    /**
+     * @return
+     * the angle the robot needs to be perpendicular to the closest side of the reef
+     */
     public double getAnglePerpendicularToAprilTag()
     {
         return MathUtil.inputModulus(getAngleOfNearestAprilTag() + 180.0, 0.0, 360.0);
     }
 
+    /**
+     * @param pose
+     * the pose of the robot
+     * 
+     * resets the PoseEstimator by reseting the gyro and drivetrain position
+     */
     public void resetPoseEstimator(Pose2d pose)
     {
         poseEstimator.resetPosition(
@@ -189,42 +199,45 @@ public class PoseEstimatorLance extends SubsystemLance
         }
     }
 
-    public void fillMaps()
-    {
-        //Red Left
-        leftSideMap.put( 6,  new Pose2d( new Translation2d(13.6102433, 3.1393908 ) , new Rotation2d(Math.toRadians(120.0)  )));
-        leftSideMap.put( 7,  new Pose2d( new Translation2d(14.016898, 3.8659 )     , new Rotation2d(Math.toRadians(180.0)  )));
-        leftSideMap.put( 8,  new Pose2d( new Translation2d(13.660146, 4.8824092 )  , new Rotation2d(Math.toRadians(-120.0) )));
-        leftSideMap.put( 9,  new Pose2d( new Translation2d(12.457658, 4.8827472 )  , new Rotation2d(Math.toRadians(-60.0)  )));
-        leftSideMap.put( 10, new Pose2d( new Translation2d(12.100906, 3.8659 )     , new Rotation2d(Math.toRadians(0.0)    )));
-        leftSideMap.put( 11, new Pose2d( new Translation2d(12.5075747, 3.1393908 ) , new Rotation2d(Math.toRadians(60.0)   )));
+    // public void fillMaps()
+    // {
+    //     //Red Left
+    //     leftSideMap.put( 6,  new Pose2d( new Translation2d(13.6102433, 3.1393908 ) , new Rotation2d(Math.toRadians(120.0)  )));
+    //     leftSideMap.put( 7,  new Pose2d( new Translation2d(14.016898, 3.8659 )     , new Rotation2d(Math.toRadians(180.0)  )));
+    //     leftSideMap.put( 8,  new Pose2d( new Translation2d(13.660146, 4.8824092 )  , new Rotation2d(Math.toRadians(-120.0) )));
+    //     leftSideMap.put( 9,  new Pose2d( new Translation2d(12.457658, 4.8827472 )  , new Rotation2d(Math.toRadians(-60.0)  )));
+    //     leftSideMap.put( 10, new Pose2d( new Translation2d(12.100906, 3.8659 )     , new Rotation2d(Math.toRadians(0.0)    )));
+    //     leftSideMap.put( 11, new Pose2d( new Translation2d(12.5075747, 3.1393908 ) , new Rotation2d(Math.toRadians(60.0)   )));
 
-        //Blue Left
-        leftSideMap.put( 17, new Pose2d( new Translation2d(3.888206, 3.1693908 )   , new Rotation2d(Math.toRadians(60.0)   )));
-        leftSideMap.put( 18, new Pose2d( new Translation2d(3.5312, 4.1859 )        , new Rotation2d(Math.toRadians(0.0)    )));
-        leftSideMap.put( 19, new Pose2d( new Translation2d(3.9381227, 4.9124092 )  , new Rotation2d(Math.toRadians(-60.0)  )));
-        leftSideMap.put( 20, new Pose2d( new Translation2d(5.0405233, 4.9124092 )  , new Rotation2d(Math.toRadians(-120.0) )));
-        leftSideMap.put( 21, new Pose2d( new Translation2d(5.447446, 4.1859 )      , new Rotation2d(Math.toRadians(180.0)  )));
-        leftSideMap.put( 22, new Pose2d( new Translation2d(5.06044, 3.1693908 )    , new Rotation2d(Math.toRadians(120.0)  )));
+    //     //Blue Left
+    //     leftSideMap.put( 17, new Pose2d( new Translation2d(3.888206, 3.1693908 )   , new Rotation2d(Math.toRadians(60.0)   )));
+    //     leftSideMap.put( 18, new Pose2d( new Translation2d(3.5312, 4.1859 )        , new Rotation2d(Math.toRadians(0.0)    )));
+    //     leftSideMap.put( 19, new Pose2d( new Translation2d(3.9381227, 4.9124092 )  , new Rotation2d(Math.toRadians(-60.0)  )));
+    //     leftSideMap.put( 20, new Pose2d( new Translation2d(5.0405233, 4.9124092 )  , new Rotation2d(Math.toRadians(-120.0) )));
+    //     leftSideMap.put( 21, new Pose2d( new Translation2d(5.447446, 4.1859 )      , new Rotation2d(Math.toRadians(180.0)  )));
+    //     leftSideMap.put( 22, new Pose2d( new Translation2d(5.06044, 3.1693908 )    , new Rotation2d(Math.toRadians(120.0)  )));
 
-        //Red Right
-        rightSideMap.put(6,  new Pose2d( new Translation2d(13.660146, 3.139308)    , new Rotation2d(Math.toRadians(120.0) )));
-        rightSideMap.put(7,  new Pose2d( new Translation2d(14.016898, 4.1859 )     , new Rotation2d(Math.toRadians(180.0) )));
-        rightSideMap.put(8,  new Pose2d( new Translation2d(13.6102293, 4.9124092 ) , new Rotation2d(Math.toRadians(-120.0))));
-        rightSideMap.put(9,  new Pose2d( new Translation2d(12.5075747, 4.9124092 ) , new Rotation2d(Math.toRadians(-60.0) )));
-        rightSideMap.put(10, new Pose2d( new Translation2d(12.100906, 4.1859 )     , new Rotation2d(Math.toRadians(0.0)   )));
-        rightSideMap.put(11, new Pose2d( new Translation2d(12.457658, 3.1693908 )  , new Rotation2d(Math.toRadians(60.0)  )));
+    //     //Red Right
+    //     rightSideMap.put(6,  new Pose2d( new Translation2d(13.660146, 3.139308)    , new Rotation2d(Math.toRadians(120.0) )));
+    //     rightSideMap.put(7,  new Pose2d( new Translation2d(14.016898, 4.1859 )     , new Rotation2d(Math.toRadians(180.0) )));
+    //     rightSideMap.put(8,  new Pose2d( new Translation2d(13.6102293, 4.9124092 ) , new Rotation2d(Math.toRadians(-120.0))));
+    //     rightSideMap.put(9,  new Pose2d( new Translation2d(12.5075747, 4.9124092 ) , new Rotation2d(Math.toRadians(-60.0) )));
+    //     rightSideMap.put(10, new Pose2d( new Translation2d(12.100906, 4.1859 )     , new Rotation2d(Math.toRadians(0.0)   )));
+    //     rightSideMap.put(11, new Pose2d( new Translation2d(12.457658, 3.1693908 )  , new Rotation2d(Math.toRadians(60.0)  )));
 
-        //Blue Right
-        rightSideMap.put(17, new Pose2d( new Translation2d(3.9381227, 3.1393908)   , new Rotation2d(Math.toRadians(60.0)  )));
-        rightSideMap.put(18, new Pose2d( new Translation2d(3.5312, 3.8659 )        , new Rotation2d(Math.toRadians(0.0)   )));
-        rightSideMap.put(19, new Pose2d( new Translation2d(3.888206, 4.8824092 )   , new Rotation2d(Math.toRadians(-60.0) )));
-        rightSideMap.put(20, new Pose2d( new Translation2d(5.09044, 4.8824092 )    , new Rotation2d(Math.toRadians(-120.0))));
-        rightSideMap.put(21, new Pose2d( new Translation2d(5.447446, 3.8659 )      , new Rotation2d(Math.toRadians(0.0)   )));
-        rightSideMap.put(22, new Pose2d( new Translation2d(5.0405233, 3.1393908 ) , new Rotation2d(Math.toRadians(60.0)  )));
-    }
+    //     //Blue Right
+    //     rightSideMap.put(17, new Pose2d( new Translation2d(3.9381227, 3.1393908)   , new Rotation2d(Math.toRadians(60.0)  )));
+    //     rightSideMap.put(18, new Pose2d( new Translation2d(3.5312, 3.8659 )        , new Rotation2d(Math.toRadians(0.0)   )));
+    //     rightSideMap.put(19, new Pose2d( new Translation2d(3.888206, 4.8824092 )   , new Rotation2d(Math.toRadians(-60.0) )));
+    //     rightSideMap.put(20, new Pose2d( new Translation2d(5.09044, 4.8824092 )    , new Rotation2d(Math.toRadians(-120.0))));
+    //     rightSideMap.put(21, new Pose2d( new Translation2d(5.447446, 3.8659 )      , new Rotation2d(Math.toRadians(0.0)   )));
+    //     rightSideMap.put(22, new Pose2d( new Translation2d(5.0405233, 3.1393908 ) , new Rotation2d(Math.toRadians(60.0)  )));
+    // }
 
 
+    /**
+     * returns estimated pose if poseEstimator is not null
+     */
     public Pose2d getEstimatedPose()
     {
         if(poseEstimator != null)
@@ -238,6 +251,12 @@ public class PoseEstimatorLance extends SubsystemLance
 
     }
 
+    /**
+     * @param ID
+     * ID of the april tag
+     * @return
+     * the pose of the april tag if ID is valid
+     */
     public Pose2d getAprilTagPose(int ID)
     {
         if(aprilTagFieldLayout.getTagPose(ID).isEmpty())
@@ -250,9 +269,16 @@ public class PoseEstimatorLance extends SubsystemLance
         }
     }
 
-    public BooleanSupplier isReefTagSupplier(double tagID)
+    /**
+     * @param ID
+     * ID of the april tag
+     * @return
+     * true - if tag ID is on the reef
+     * false - if not
+     */
+    public BooleanSupplier isReefTagSupplier(double ID)
     {
-        if((tagID >= 6 && tagID <= 11) || (tagID >= 17 && tagID <= 22))
+        if((ID >= 6 && ID <= 11) || (ID >= 17 && ID <= 22))
         {
             return () -> true;
         }
@@ -262,42 +288,42 @@ public class PoseEstimatorLance extends SubsystemLance
         }
     }
 
-    public Pose2d closestBranchLocation(int aprilTagID, boolean isRight)
-    {
-        if(isRight)
-        {
-            return rightSideMap.get(aprilTagID);
-        }
-        else
-        {
-            return leftSideMap.get(aprilTagID);
-        }
-    }
+    // public Pose2d closestBranchLocation(int aprilTagID, boolean isRight)
+    // {
+    //     if(isRight)
+    //     {
+    //         return rightSideMap.get(aprilTagID);
+    //     }
+    //     else
+    //     {
+    //         return leftSideMap.get(aprilTagID);
+    //     }
+    // }
 
-    public boolean getIsRight()
-    {
-        return isRight;
-    }
+    // public boolean getIsRight()
+    // {
+    //     return isRight;
+    // }
 
-    public void setPlacingSideLeft()
-    {
-        isRight = false;
-    }
+    // public void setPlacingSideLeft()
+    // {
+    //     isRight = false;
+    // }
 
-    public void setPlacingSideRight()
-    {
-        isRight = true;
-    }
+    // public void setPlacingSideRight()
+    // {
+    //     isRight = true;
+    // }
 
-    public Command setPlacingSideLeftCommand()
-    {
-        return run(() -> setPlacingSideLeft());
-    }
+    // public Command setPlacingSideLeftCommand()
+    // {
+    //     return run(() -> setPlacingSideLeft());
+    // }
 
-    public Command setPlacingSideRightCommand()
-    {
-        return run(() -> setPlacingSideRight());
-    }
+    // public Command setPlacingSideRightCommand()
+    // {
+    //     return run(() -> setPlacingSideRight());
+    // }
 
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here
@@ -314,6 +340,8 @@ public class PoseEstimatorLance extends SubsystemLance
             drivetrain.getLeftLeaderDistance(),
             drivetrain.getRightLeaderDistance()
         );
+
+        periodicCameraUpdate();
 
         publisher.set(poseA);
         arrayPublisher.set(new Pose2d[] {poseA, poseB} );
