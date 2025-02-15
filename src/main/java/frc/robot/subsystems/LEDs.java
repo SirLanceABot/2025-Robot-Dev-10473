@@ -20,9 +20,12 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 // import frc.robot.Constants;
 // import frc.robot.motors.TalonFXLance;
+import frc.robot.Constants;
 
 /**
- * This is an example of what a subsystem should look like.
+ * This is the LED class which is super cool
+ * @author Greta
+ * @author Niyati
  */
 public class LEDs extends SubsystemLance
 {
@@ -72,7 +75,7 @@ public class LEDs extends SubsystemLance
     // private final AddressableLEDBuffer setBuffer;
     // private final Timer timer = new Timer();
     private LEDPattern gradient;
-    private AddressableLED led = new AddressableLED(1);
+    private AddressableLED led = new AddressableLED(Constants.LEDs.LED_PORT);
     private AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(49);
 
     private LEDPattern off = LEDPattern.solid(Color.kBlack);
@@ -101,7 +104,7 @@ public class LEDs extends SubsystemLance
     // Put all class constructors here
   
     /** 
-     * Creates a new ExampleSubsystem. 
+     * Creates LEDs 
      */
     public LEDs()
     {

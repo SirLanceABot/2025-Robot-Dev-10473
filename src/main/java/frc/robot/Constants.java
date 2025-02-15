@@ -67,6 +67,12 @@ public final class Constants
         public static final String MOTOR_CAN_BUS                        = ROBORIO;
     }
 
+    public static class LEDs
+    {
+        public static final int LED_PORT                                = 1;
+        public static final int LED_LENGTH                              = 0;                               
+    }
+
     public static class Pivot
     {
         public static final int MOTOR_PORT                              = 3;
