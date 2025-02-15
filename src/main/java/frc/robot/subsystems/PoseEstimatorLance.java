@@ -156,12 +156,12 @@ public class PoseEstimatorLance extends SubsystemLance
 
     public double getAngleParallelToAprilTag()
     {
-        return MathUtil.inputModulus(getAngleOfNearestAprilTag() - 90, 0, 360);
+        return MathUtil.inputModulus(getAngleOfNearestAprilTag() - 90.0, 0.0, 360.0);
     }
 
     public double getAnglePerpendicularToAprilTag()
     {
-        return MathUtil.inputModulus(getAngleOfNearestAprilTag() + 180, 0, 360);
+        return MathUtil.inputModulus(getAngleOfNearestAprilTag() + 180.0, 0.0, 360.0);
     }
 
     public void resetPoseEstimator(Pose2d pose)
