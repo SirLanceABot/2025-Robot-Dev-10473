@@ -141,7 +141,7 @@ public class PoseEstimatorLance extends SubsystemLance
     public AprilTag getNearestTag()
     {
         AprilTag nearestTag = null;
-        AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+        AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
         List<AprilTag> aprilTagList = aprilTagFieldLayout.getTags();
         double min = 100.0;
         double dist;
