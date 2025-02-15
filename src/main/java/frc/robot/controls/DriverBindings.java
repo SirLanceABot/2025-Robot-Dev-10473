@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shifter;
 
 public final class DriverBindings
 {
@@ -106,10 +107,12 @@ public final class DriverBindings
     //     Trigger yButtonTrigger = controller.y();
     // }
 
-    // private static void configLeftBumper()
-    // {
-    //     Trigger leftBumperTrigger = controller.leftBumper();
-    // }
+    private static void configLeftBumper()
+    {
+        Trigger leftBumperTrigger = controller.leftBumper();
+        leftBumperTrigger
+            .onTrue(robotContainer.getShifter().shiftToggleCommand());
+    }
 
     // private static void configRightBumper()
     // {
