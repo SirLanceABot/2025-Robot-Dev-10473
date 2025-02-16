@@ -30,19 +30,21 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
  * 
  <pre>
 
-    // construct the LL1 object once
+    // construct the limelight object once
     CameraLL LL1;
     boolean useLL1 = true;
 
-    LL1 = useLL1 ? CameraLL.makeCameraLL("limelight") : null; // make a limelight - null if it doesn't exist or not requested
+    LL1 = useLL1 ? CameraLL.makeCamera("limelight") : null; // make a limelight - null if it doesn't exist or not requested
 
     // set the camera stream mode as often as necessary
     if (LL1 != null)
     {
       // example of two ways to specify the view of the external camera (method overloads)
+      LL1.setStreamMode_Standard();
+      LL1.setStreamMode_PiPMain();
       LL1.setStreamMode_PiPSecondary();
-      // or
-      LL1.setStreamMode(CameraLL.StreamMode.External);
+      // OR
+      LL1.setStreamMode(streamMode);
     }
 
     // periodically set and get data
@@ -80,12 +82,6 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
           System.out.println(LL1); // prints same data as above plus more statistics
       }
 
-      LL1.setStreamMode_Standard();
-      LL1.setStreamMode_PiPMain();
-      LL1.setStreamMode_PiPSecondary();
-      // OR
-      LL1.setStreamMode(streamMode);
-
       // simplistic data usage example for pose estimation
       // m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
       // m_poseEstimator.addVisionMeasurement(LL1.getPose2d(), LL1.getTimestampSeconds());
@@ -120,7 +116,7 @@ public class CameraLL extends CameraLance {
     private double tagSpan;
     private double avgTagDist;
     private double avgTagArea;
-    private Pose3d pose3d = new Pose3d(); // initialize in case it's used before being set (not supposed to happen)
+    private Pose3d pose3d;
   
     private CameraLL(String name) {
         super(name);
@@ -172,28 +168,6 @@ public class CameraLL extends CameraLance {
         botpose_orb_wpiblue = table.getDoubleArrayTopic("botpose_orb_wpiblue").subscribe(new double[]{}); // default is no data (array length = 0)
 
         /*
-        stddevs
-            doubleArray MegaTag Standard Deviations
-                MT1x,
-                MT1y,
-                MT1z,
-                MT1roll,
-                MT1pitch,
-                MT1Yaw,
-                MT2x,
-                MT2y,
-                MT2z,
-                MT2roll,
-                MT2pitch,
-                MT2yaw
-         */
-        // stddevs = table.getDoubleArrayTopic("stddevs").subscribe(
-        //     new double[]{ // default stddevs huge number so as not to be used but validation should have prevented that anyway
-        //         9999., 9999., 9999., 9999., 9999., 9999.,
-        //         9999., 9999., 9999., 9999., 9999., 9999.
-        //     });
-
-        /*
         robot_orientation_set
         	doubleArray
                 SET Robot Orientation and angular velocities in degrees and degrees per second[yaw, yawrate, pitch, pitchrate, roll, rollrate]
@@ -211,11 +185,11 @@ public class CameraLL extends CameraLance {
     }
 
     /**
-     * Essentially the constructor for a limelight cameraserver.java
+     * Essentially the constructor for a limelight object
      * @param name set in the limelight
      * @return a limelight object or null if it doesn't exist
      */
-    public static CameraLL makeCameraLL(String name)
+    public static CameraLL makeCamera(String name)
     {
         if (!isAvailable(name))
         {
@@ -485,12 +459,22 @@ public class CameraLL extends CameraLance {
             else
             {
                 isFresh = false;
+
                 tx = Double.MAX_VALUE;
                 ty = Double.MAX_VALUE;
                 txnc = Double.MAX_VALUE;
                 tync = Double.MAX_VALUE;
                 ta = Double.MAX_VALUE;
                 tid = Integer.MAX_VALUE;
+
+                pose3d = new Pose3d(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE, new Rotation3d(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE));
+                pose2d = new Pose2d(Double.MAX_VALUE, Double.MAX_VALUE, new Rotation2d(Double.MAX_VALUE));
+                latency = Double.MAX_VALUE;
+                timestampSeconds = Double.MAX_VALUE;
+                tagCount = Integer.MAX_VALUE;
+                tagSpan = Double.MAX_VALUE;
+                avgTagDist = Double.MAX_VALUE;
+                avgTagArea = Double.MAX_VALUE;
             }
         }
         else
@@ -585,6 +569,27 @@ public class CameraLL extends CameraLance {
   }
 }
 
+/*
+stddevs
+    doubleArray MegaTag Standard Deviations
+        MT1x,
+        MT1y,
+        MT1z,
+        MT1roll,
+        MT1pitch,
+        MT1Yaw,
+        MT2x,
+        MT2y,
+        MT2z,
+        MT2roll,
+        MT2pitch,
+        MT2yaw
+    */
+// stddevs = table.getDoubleArrayTopic("stddevs").subscribe(
+//     new double[]{ // default stddevs huge number so as not to be used but validation should have prevented that anyway
+//         9999., 9999., 9999., 9999., 9999., 9999.,
+//         9999., 9999., 9999., 9999., 9999., 9999.
+//     });
 // private final DoubleArraySubscriber stddevs;
 // var sd = stddevs.get();
 // System.out.println("standard deviations - x, y, z, roll, pitch, yaw");
