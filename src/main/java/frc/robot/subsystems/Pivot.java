@@ -39,7 +39,7 @@ public class Pivot extends SubsystemLance
     public enum TargetPosition
     {
         kStartingPosition(0.0),
-        kGrabAlgaePosition(6.0),
+        kGrabAlgaePosition(7.75),
         kOverride(-4237);
 
         public final double pivot;
@@ -91,10 +91,10 @@ public class Pivot extends SubsystemLance
         // pivotMotor.setupForwardHardLimitSwitch(false, false);
         // pivotMotor.setupReverseHardLimitSwitch(false, false);
 
-        motor.setupForwardSoftLimit(7.0, true);
-        motor.setupReverseSoftLimit(0.0, true);
+        motor.setupForwardSoftLimit(8.75, true);
+        // motor.setupReverseSoftLimit(0.0, true);
 
-        motor.setupPIDController(0, 0.05, 0, 0);
+        motor.setupPIDController(0, 0.035, 0, 0);
 
         motor.setPosition(0.0);
     }
