@@ -94,7 +94,7 @@ public class Pivot extends SubsystemLance
         motor.setupForwardSoftLimit(7.0, true);
         motor.setupReverseSoftLimit(0.0, true);
 
-        motor.setupPIDController(0, 0.5, 0, 0);
+        motor.setupPIDController(0, 0.05, 0, 0);
 
         motor.setPosition(0.0);
     }

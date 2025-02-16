@@ -68,7 +68,7 @@ public final class GeneralCommands
                 .andThen(
                     Commands.parallel(
                         roller.stopCommand(),
-                        operatorRumble(),
+                        // operatorRumble(),
                         setLEDOff()
                     )
                 );    
@@ -128,8 +128,7 @@ public final class GeneralCommands
         {
             return
             Commands.parallel(
-                setLEDBlink(Color.kRed)
-                    .withTimeout(2.0),
+                setLEDSolid(Color.kRed),
                 roller.ejectCoralCommand()
             )
             .andThen(Commands.waitSeconds(2.0))
@@ -201,6 +200,13 @@ public final class GeneralCommands
     //         return Commands.none();
     //     }
     // }
+
+    private static Command intakeRumbleCommand()
+    {
+        return 
+        Commands.runOnce( () -> intakeAlgaeTriggersRumble.setPressed(true) )
+        .andThen(Commands.runOnce( () -> intakeAlgaeTriggersRumble.setPressed(false)));
+    }
 
     /**
      * Command to activate rumble on operator controller
