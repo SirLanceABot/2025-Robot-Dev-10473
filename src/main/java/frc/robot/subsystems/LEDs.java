@@ -116,7 +116,7 @@ public class LEDs extends SubsystemLance
         // m_led = new AddressableLED(5);
         // m_ledBuffer = new AddressableLEDBuffer(5);
 
-        led.setLength(49);
+        led.setLength(Constants.LEDs.LED_LENGTH);
         // blankBuffer = new AddressableLEDBuffer(5);
         // setBuffer = new AddressableLEDBuffer(5);
 
