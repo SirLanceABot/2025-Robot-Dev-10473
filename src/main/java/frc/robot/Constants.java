@@ -107,7 +107,7 @@ public final class Constants
 
     public static class Shifter
     {
-        public static final int FORWARD_CHANNEL_PORT                    = 0;
-        public static final int REVERSE_CHANNEL_PORT                    = 1;        
+        public static final int FORWARD_CHANNEL_PORT                    = 14;
+        public static final int REVERSE_CHANNEL_PORT                    = 15;        
     }
 }

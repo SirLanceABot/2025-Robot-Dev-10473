@@ -79,11 +79,11 @@ public class RobotContainer
         gyro                = (useFullRobot || useDrivetrain)           ? new GyroLance()                                                                                              : null;
         drivetrain          = (useFullRobot || useDrivetrain)           ? new Drivetrain(gyro)                                                                                         : null;
         roller              = (useFullRobot || useRoller)               ? new Roller()                                                                                                 : null;
+        pneumatics          = (useFullRobot || usePneumatics)           ? new Pneumatics()                                                                                             : null;
         shifter             = (useFullRobot || useShifter)              ? new Shifter()                                                                                                : null;
         leds                = (useFullRobot || useLEDs)                 ? new LEDs()                                                                                                   : null;
         climb               = (useFullRobot || useClimb)                ? new Climb()                                                                                                  : null;
-        pneumatics          = (useFullRobot || usePneumatics)           ? new Pneumatics()                                                                                             : null;
-        camera              = (useFullRobot || useCamera)               ? CameraLL.makeCamera(Constants.Camera.CAMERA)                                                               : null;
+        camera              = (useFullRobot || useCamera)               ? CameraLL.makeCamera(Constants.Camera.CAMERA)                                                                 : null;
         // FIXME camera maybe null
         poseEstimator       = (useFullRobot || usePoseEstimator)        ? new PoseEstimatorLance(gyro, drivetrain, camera)                                                             : null;
         driverController    = (useFullRobot || useDriverController)     ? new CommandXboxController(Constants.Controllers.DRIVER_CONTROLLER_PORT)                                      : null;

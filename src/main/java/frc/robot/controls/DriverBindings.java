@@ -31,6 +31,7 @@ public final class DriverBindings
     private static CommandXboxController controller;
     private static RobotContainer robotContainer;
     private static Drivetrain drivetrain;
+    private static Shifter shifter;
 
     private static DoubleSupplier yAxisSupplier;
     private static DoubleSupplier xAxisSupplier;
@@ -55,6 +56,8 @@ public final class DriverBindings
     {
         System.out.println("Creating Driver Bindings:" + fullClassName);
         
+        DriverBindings.robotContainer = robotContainer;
+        shifter = robotContainer.getShifter();
         controller = robotContainer.getDriverController();
         drivetrain = robotContainer.getDrivetrain();
 
@@ -89,16 +92,22 @@ public final class DriverBindings
 
     private static void configAButton()
     {
-        Trigger aButtonTrigger = controller.a();
-        aButtonTrigger
-            .onTrue(robotContainer.getShifter().shiftHighCommand());
+        if(shifter != null)
+        {
+            Trigger aButtonTrigger = controller.a();
+            aButtonTrigger
+                .onTrue(shifter.shiftHighCommand());
+        }
     }
 
     private static void configBButton()
     {
-        Trigger bButtonTrigger = controller.b();
-        bButtonTrigger
-            .onTrue(robotContainer.getShifter().shiftLowCommand());    
+        if(shifter != null)
+        {
+            Trigger bButtonTrigger = controller.b();
+            bButtonTrigger
+                .onTrue(shifter.shiftLowCommand());
+        }    
     }
 
     // private static void configXButton()
@@ -113,9 +122,12 @@ public final class DriverBindings
 
     private static void configLeftBumper()
     {
-        Trigger leftBumperTrigger = controller.leftBumper();
-        leftBumperTrigger
-            .onTrue(robotContainer.getShifter().shiftToggleCommand());
+        if(shifter != null)
+        {
+            Trigger leftBumperTrigger = controller.leftBumper();
+            leftBumperTrigger
+                .onTrue(shifter.shiftToggleCommand());
+        }
     }
 
     // private static void configRightBumper()
@@ -157,7 +169,10 @@ public final class DriverBindings
 
     private static void configDefaultDrivetrain()
     {
-        drivetrain.setDefaultCommand(drivetrain.arcadeDriveCommand(yAxisSupplier, xAxisSupplier, true) );
+        if(drivetrain != null)
+        {
+            drivetrain.setDefaultCommand(drivetrain.arcadeDriveCommand(yAxisSupplier, xAxisSupplier, true) );
+        }
     }
 
     /**
