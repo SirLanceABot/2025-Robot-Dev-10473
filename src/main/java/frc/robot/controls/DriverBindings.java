@@ -61,11 +61,11 @@ public final class DriverBindings
         if(controller != null)   
         {  
             configSuppliers();
-            // configAButton();
-            // configBButton();
+            configAButton();
+            configBButton();
             // configXButton();
             // configYButton();
-            // configLeftBumper();
+            configLeftBumper();
             // configRightBumper();
             // configBackButton();
             // configStartButton();
@@ -87,15 +87,19 @@ public final class DriverBindings
         yAxisSupplier = () -> -controller.getRawAxis(1);
     }
 
-    // private static void configAButton()
-    // {
-    //     Trigger aButtonTrigger = controller.a();
-    // }
+    private static void configAButton()
+    {
+        Trigger aButtonTrigger = controller.a();
+        aButtonTrigger
+            .onTrue(robotContainer.getShifter().shiftHighCommand());
+    }
 
-    // private static void configBButton()
-    // {
-    //     Trigger bButtonTrigger = controller.b();
-    // }
+    private static void configBButton()
+    {
+        Trigger bButtonTrigger = controller.b();
+        bButtonTrigger
+            .onTrue(robotContainer.getShifter().shiftLowCommand());    
+    }
 
     // private static void configXButton()
     // {
