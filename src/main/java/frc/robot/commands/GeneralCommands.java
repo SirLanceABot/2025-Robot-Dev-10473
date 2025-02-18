@@ -154,11 +154,11 @@ public final class GeneralCommands
      */
     public static Command scoreAlgaeCommand()
     {
-        if(roller != null)
+        if(roller != null) 
         {
             return
             Commands.parallel(
-                setLEDBlink(Color.kBlue)
+                setLEDSolid(Color.kBlue)
                     .withTimeout(2.0),
                 roller.ejectAlgaeCommand()
             )

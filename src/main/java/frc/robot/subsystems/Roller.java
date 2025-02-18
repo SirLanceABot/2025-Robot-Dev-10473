@@ -67,6 +67,7 @@ public class Roller extends SubsystemLance
     private void configMotors()
     {
         motor.setupFactoryDefaults();
+        motor.setupCoastMode();
         // motor.setupVelocityConversionFactor(RPM_TO_FPS);
 
         motor.setSafetyEnabled(false);
@@ -111,7 +112,7 @@ public class Roller extends SubsystemLance
      */
     public Command ejectCoralCommand()
     {
-        return runOnce( () -> set(0.5) )
+        return runOnce( () -> set(0.15) )
         .withName("Eject Roller");
     }
 

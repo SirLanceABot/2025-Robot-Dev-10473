@@ -9,6 +9,7 @@ import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -40,18 +41,18 @@ public class RobotContainer
         System.out.println("Loading: " + fullClassName);
     }
 
-    private boolean useFullRobot            = false;
+    private boolean useFullRobot            = true;
     private boolean usePivot                = false;
-    private boolean useDrivetrain           = false;
+    private boolean useDrivetrain           = true;
     private boolean useRoller               = false;
-    private boolean useShifter              = false;
-    private boolean usePneumatics           = false;
+    private boolean useShifter              = true;
+    private boolean usePneumatics           = true;
     private boolean useClimb                = false;
     private boolean useLEDs                 = false;
     private boolean usePoseEstimator        = false;
     private boolean useCamera               = false;
 
-    private boolean useDriverController     = false;
+    private boolean useDriverController     = true;
     private boolean useOperatorController   = false;
 
     public final boolean fullRobot;
@@ -186,5 +187,7 @@ public class RobotContainer
     public Command getAutonomousCommand() 
     {
         return autoChooser.getSelected();
+
+        // return new PathPlannerAuto("TEST AUTO - MOVE FORWARD 2M");
     }
 }
