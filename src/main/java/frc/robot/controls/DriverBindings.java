@@ -36,6 +36,8 @@ public final class DriverBindings
     private static DoubleSupplier yAxisSupplier;
     private static DoubleSupplier xAxisSupplier;
 
+    public static final double axisDeadZone = 0.1;
+
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
 
@@ -88,7 +90,13 @@ public final class DriverBindings
     {
         xAxisSupplier = () -> -controller.getRawAxis(0);
         yAxisSupplier = () -> -controller.getRawAxis(1);
-    }
+        
+        // double xAxis = Math.abs(-controller.getRawAxis(0)) >= axisDeadZone ? -controller.getRawAxis(0) : 0.0;
+        // double yAxis = Math.abs(-controller.getRawAxis(4)) >= axisDeadZone ? -controller.getRawAxis(4) : 0.0;
+
+        // xAxisSupplier = () -> xAxis;
+        // yAxisSupplier = () -> yAxis;
+    }  
 
     private static void configAButton()
     {

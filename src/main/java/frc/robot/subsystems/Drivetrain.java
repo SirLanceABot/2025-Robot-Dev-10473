@@ -339,21 +339,15 @@ public class Drivetrain extends SubsystemLance
         rightLeader.setupBrakeMode();
     }
 
-    // public boolean optimizeSpeed(double targetRotation, double tagRotation)
-    // {
-    //     double positiveRotation = tagRotation + 90.0;
-    //     double negativeRotation = tagRotation - 90.0;
-    //     double difference = Math.abs(positiveRotation - currentRotation);
+    /*
+     * determines if speed needs to be inverted in order to turn on the most optimal path
+     */
+    public boolean isRotationSpeedInverted(double currentRotation, double targetRotation)
+    {
+        double difference = targetRotation - currentRotation;
 
-    //     if(difference < 90.0)
-    //     {
-    //         return true;
-    //     }
-    //     else
-    //     {
-    //         return false;
-    //     }
-    // }
+        return (difference > 0.0 ? true : false);
+    }
 
     public double optimizeRotation(double currentRotation, double tagRotation)
     {
@@ -361,14 +355,16 @@ public class Drivetrain extends SubsystemLance
         double negativeRotation = tagRotation - 90.0;
         double difference = Math.abs(positiveRotation - currentRotation);
 
-        if(difference < 90.0)
-        {
-            return positiveRotation;
-        }
-        else
-        {
-            return negativeRotation;
-        }
+        return (difference < 90.0 ? positiveRotation : negativeRotation);
+
+        // if(difference < 90.0)
+        // {
+        //     return positiveRotation;
+        // }
+        // else
+        // {
+        //     return negativeRotation;
+        // }
     }
 
     /**
@@ -379,11 +375,12 @@ public class Drivetrain extends SubsystemLance
         differentialDrive.stopMotor();
     }
 
+    /*
+     * returns if the robot's rotation is with the tolerance
+     */
     public BooleanSupplier isAtRotationSupplier(double targetRotation, double tolerance)
     {
         return () -> (Math.abs(gyro.getYaw() - targetRotation) < tolerance);
-
-        //
     }
 
     /**
@@ -498,22 +495,24 @@ public class Drivetrain extends SubsystemLance
         return arcadeDriveCommand(() -> driveSpeed, () -> rotationSpeed, false).withName("Turn And Drive Command");
     }
 
-    public Command snapToParallelNearestReefSideCommand(double turnSpeed, double targetRotation)
+    public Command snapParallelNearestReefSideCommand(double turnSpeed, double targetRotation)
     {
         // double targetRotation = optimizeRotation(gyro.getYaw(), );
+        double speed = isRotationSpeedInverted( gyro.getYaw(), targetRotation) ? -turnSpeed : turnSpeed;
 
-        return run(() -> driveTurnCommand(turnSpeed))
+        return run(() -> driveTurnCommand(speed) )
                         .until(isAtRotationSupplier(targetRotation, 2.0)) // tolerance is in degrees
-                        .withName("Snap To Heading (parallel): " + targetRotation);
+                        .withName("Snap To Heading (parallel to reef): " + targetRotation);
     }
 
-    public Command snapToPerpendicularNearestReefSideCommand(double turnSpeed, double targetRotation)
+    public Command snapPerpendicularNearestReefSideCommand(double turnSpeed, double targetRotation)
     {
         // double targetRotation = optimizeRotation(gyro.getYaw(), );
+        double speed = isRotationSpeedInverted( gyro.getYaw(), targetRotation) ? -turnSpeed : turnSpeed;
 
-        return run(() -> driveTurnCommand(turnSpeed))
+        return run(() -> driveTurnCommand(speed) )
                         .until(isAtRotationSupplier(targetRotation, 2.0)) // tolerance is in degrees
-                        .withName("Snap To Heading (perpendicular): " + targetRotation);
+                        .withName("Snap To Heading (perpendicular to reef): " + targetRotation);
     }
 
     // *** OVERRIDEN METHODS ***
