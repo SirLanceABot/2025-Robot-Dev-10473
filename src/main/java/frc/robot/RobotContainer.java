@@ -10,8 +10,10 @@ import java.util.function.BooleanSupplier;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -81,6 +83,7 @@ public class RobotContainer
         drivetrain          = (useFullRobot || useDrivetrain)           ? new Drivetrain(gyro)                                                                                         : null;
         roller              = (useFullRobot || useRoller)               ? new Roller()                                                                                                 : null;
         pneumatics          = (useFullRobot || usePneumatics)           ? new Pneumatics()                                                                                             : null;
+        //FIXME shifter requires pneumatics doesn't it?
         shifter             = (useFullRobot || useShifter)              ? new Shifter()                                                                                                : null;
         leds                = (useFullRobot || useLEDs)                 ? new LEDs()                                                                                                   : null;
         climb               = (useFullRobot || useClimb)                ? new Climb()                                                                                                  : null;
@@ -103,6 +106,8 @@ public class RobotContainer
         {
             autoChooser = null;
         }
+
+        configurePathPlannerLogging();
     }
     
     public Drivetrain getDrivetrain()
@@ -189,5 +194,34 @@ public class RobotContainer
         return autoChooser.getSelected();
 
         // return new PathPlannerAuto("TEST AUTO - MOVE FORWARD 2M");
+    }
+
+    private Field2d field; // object to put on dashboards
+    /**
+     * Turn on all PathPlanner logging to a Field2d object for NT table "SmartDashboard".
+     * <p>PP example from its documentation.
+     */
+    private void configurePathPlannerLogging()
+    {
+        field = new Field2d();
+        SmartDashboard.putData("Field", field);
+
+        // Logging callback for current robot pose
+        PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+            // Do whatever you want with the pose here
+            field.setRobotPose(pose);
+        });
+
+        // Logging callback for target robot pose
+        PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+            // Do whatever you want with the pose here
+            field.getObject("target pose").setPose(pose);
+        });
+
+        // Logging callback for the active path, this is sent as a list of poses
+        PathPlannerLogging.setLogActivePathCallback((poses) -> {
+            // Do whatever you want with the poses here
+            field.getObject("path").setPoses(poses);
+        });
     }
 }
