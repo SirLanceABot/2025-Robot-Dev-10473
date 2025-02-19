@@ -116,25 +116,25 @@ public class Drivetrain extends SubsystemLance
             new Pose2d()
         );
 
-        try
-        {
-            RobotConfig config = RobotConfig.fromGUISettings();
+        // try
+        // {
+        //     RobotConfig config = RobotConfig.fromGUISettings();
 
-            AutoBuilder.configure(
-                this::getPose,
-                this::resetOdometry,
-                this::getRobotRelativeSpeeds,
-                (speeds, feedforwards) -> driveRobotRelative(speeds),
-                new PPLTVController(0.02),
-                config,
-                shouldFlipPath(),
-                this
-            );
-        } 
-        catch (Exception e) 
-        {
-            e.printStackTrace();
-        }
+        //     AutoBuilder.configure(
+        //         this::getPose,
+        //         this::resetOdometry,
+        //         this::getRobotRelativeSpeeds,
+        //         (speeds, feedforwards) -> driveRobotRelative(speeds),
+        //         new PPLTVController(0.02),
+        //         config,
+        //         shouldFlipPath(),
+        //         this
+        //     );
+        // } 
+        // catch (Exception e) 
+        // {
+        //     e.printStackTrace();
+        // }
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -256,19 +256,19 @@ public class Drivetrain extends SubsystemLance
     /**
      * @return if we should flip out auto pahts based on our alliance
      */
-    public BooleanSupplier shouldFlipPath()
-    {
-        return 
-        () -> 
-        {
-            Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
-            if(alliance.isPresent()) 
-            {
-                return alliance.get() == DriverStation.Alliance.Red;
-            }
-            return false;
-        };
-    }
+    // public BooleanSupplier shouldFlipPath()
+    // {
+    //     return 
+    //     () -> 
+    //     {
+    //         Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+    //         if(alliance.isPresent()) 
+    //         {
+    //             return alliance.get() == DriverStation.Alliance.Red;
+    //         }
+    //         return false;
+    //     };
+    // }
 
     /**
      * @param speed

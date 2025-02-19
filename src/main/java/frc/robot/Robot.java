@@ -17,6 +17,7 @@ import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
 import frc.robot.loggers.DataLogFile;
 import frc.robot.motors.MotorControllerLance;
+import frc.robot.pathplanner.PathPlannerLance;
 import frc.robot.subsystems.Pneumatics;
 
 public class Robot extends TimedRobot 
@@ -53,13 +54,13 @@ public class Robot extends TimedRobot
         // (3) Create the commands
         GeneralCommands.createGeneralCommands(robotContainer);
 
-        // (4) Bind the commands to triggers
+        // (4) Configuring the pathplanner
+        PathPlannerLance.configPathPlanner(robotContainer);
+
+        // (5) Bind the commands to triggers
         DriverBindings.createBindings(robotContainer);
         OperatorBindings.createBindings(robotContainer);
 
-        // (5) Create PathPlanner warmup commands
-        // FollowPathCommand.warmupCommand().schedule();
-        // PathfindingCommand.warmupCommand().schedule();
     }
 
     /**
@@ -121,7 +122,7 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit() 
     {
-        autonomousCommand = robotContainer.getAutonomousCommand();
+        autonomousCommand = PathPlannerLance.getAutonomousCommand();
 
         if (autonomousCommand != null) 
         {

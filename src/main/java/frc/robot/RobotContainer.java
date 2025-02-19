@@ -72,7 +72,7 @@ public class RobotContainer
     private final CommandXboxController operatorController;
     private final CommandXboxController driverController;
 
-    private final SendableChooser<Command> autoChooser;
+    // private final SendableChooser<Command> autoChooser;
 
 
     RobotContainer() 
@@ -95,19 +95,19 @@ public class RobotContainer
 
         // Elastic = (useFullRobot || useElastic)   ? new Elastic(this) : null;
 
-        registerNamedCommands();
+        // registerNamedCommands();
 
-        if(drivetrain != null)
-        {
-            autoChooser = AutoBuilder.buildAutoChooser();
-            SmartDashboard.putData("Auto Chooser", autoChooser);
-        }
-        else
-        {
-            autoChooser = null;
-        }
+        // if(drivetrain != null)
+        // {
+        //     autoChooser = AutoBuilder.buildAutoChooser();
+        //     SmartDashboard.putData("Auto Chooser", autoChooser);
+        // }
+        // else
+        // {
+        //     autoChooser = null;
+        // }
 
-        configurePathPlannerLogging();
+        // configurePathPlannerLogging();
     }
     
     public Drivetrain getDrivetrain()
@@ -179,49 +179,49 @@ public class RobotContainer
         };
     }
 
-    public void registerNamedCommands()
-    {
-        NamedCommands.registerCommand("Intake Algae", GeneralCommands.intakeAlgaeCommand());
-        NamedCommands.registerCommand("Score Algae", GeneralCommands.scoreAlgaeCommand());
-        NamedCommands.registerCommand("Score Coral", GeneralCommands.scoreAlgaeCommand());
-        NamedCommands.registerCommand("LED Red", GeneralCommands.setLEDSolid(Color.kRed));
-        NamedCommands.registerCommand("LED BlUE", GeneralCommands.setLEDSolid(Color.kBlue));
-    }
+    // public void registerNamedCommands()
+    // {
+    //     NamedCommands.registerCommand("Intake Algae", GeneralCommands.intakeAlgaeCommand());
+    //     NamedCommands.registerCommand("Score Algae", GeneralCommands.scoreAlgaeCommand());
+    //     NamedCommands.registerCommand("Score Coral", GeneralCommands.scoreAlgaeCommand());
+    //     NamedCommands.registerCommand("LED Red", GeneralCommands.setLEDSolid(Color.kRed));
+    //     NamedCommands.registerCommand("LED BlUE", GeneralCommands.setLEDSolid(Color.kBlue));
+    // }
 
 
-    public Command getAutonomousCommand() 
-    {
-        return autoChooser.getSelected();
+    // public Command getAutonomousCommand() 
+    // {
+    //     return autoChooser.getSelected();
 
-        // return new PathPlannerAuto("TEST AUTO - MOVE FORWARD 2M");
-    }
+    //     // return new PathPlannerAuto("TEST AUTO - MOVE FORWARD 2M");
+    // }
 
-    private Field2d field; // object to put on dashboards
-    /**
-     * Turn on all PathPlanner logging to a Field2d object for NT table "SmartDashboard".
-     * <p>PP example from its documentation.
-     */
-    private void configurePathPlannerLogging()
-    {
-        field = new Field2d();
-        SmartDashboard.putData("Field", field);
+    // private Field2d field; // object to put on dashboards
+    // /**
+    //  * Turn on all PathPlanner logging to a Field2d object for NT table "SmartDashboard".
+    //  * <p>PP example from its documentation.
+    //  */
+    // private void configurePathPlannerLogging()
+    // {
+    //     field = new Field2d();
+    //     SmartDashboard.putData("Field", field);
 
-        // Logging callback for current robot pose
-        PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-            // Do whatever you want with the pose here
-            field.setRobotPose(pose);
-        });
+    //     // Logging callback for current robot pose
+    //     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+    //         // Do whatever you want with the pose here
+    //         field.setRobotPose(pose);
+    //     });
 
-        // Logging callback for target robot pose
-        PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
-            // Do whatever you want with the pose here
-            field.getObject("target pose").setPose(pose);
-        });
+    //     // Logging callback for target robot pose
+    //     PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+    //         // Do whatever you want with the pose here
+    //         field.getObject("target pose").setPose(pose);
+    //     });
 
-        // Logging callback for the active path, this is sent as a list of poses
-        PathPlannerLogging.setLogActivePathCallback((poses) -> {
-            // Do whatever you want with the poses here
-            field.getObject("path").setPoses(poses);
-        });
-    }
+    //     // Logging callback for the active path, this is sent as a list of poses
+    //     PathPlannerLogging.setLogActivePathCallback((poses) -> {
+    //         // Do whatever you want with the poses here
+    //         field.getObject("path").setPoses(poses);
+    //     });
+    // }
 }
