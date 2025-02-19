@@ -13,35 +13,31 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 /**
- * This class could be used this way:
- *
-//   // options for logging
-//   private boolean useConsole            = false;
-//   private boolean useDataLog            = true;
-//   private boolean useShuffleBoardLog    = false;
+ * Log the course of a command execution on Console, DataLog, or ShuffleBoard
+ * 
+ * <p>This class could be used this way:
+<pre>
+  // options for logging
+  private boolean useConsole            = false;
+  private boolean useDataLog            = true;
+  private boolean useShuffleBoardLog    = false;
+    configureCommandLogs(); // do early on otherwise log not ready for first commands
 
-//     /* There are thousands of ways to do logging.
-//      * Here are 3 ways with options within the method.
-//      /
-//     configureCommandLogs(); // do early on otherwise log not ready for first commands
-
-// /**
-//    * Configure Command logging to Console/Terminal, DataLog, or ShuffleBoard
-//    /
-//   @SuppressWarnings("resource")
-//   public void configureCommandLogs()
-//   {
-//       if (useConsole || useDataLog || useShuffleBoardLog) {
-//         schedulerLog = new CommandSchedulerLog(useConsole, useDataLog, useShuffleBoardLog);
-//         schedulerLog.logCommandInitialize();
-//         schedulerLog.logCommandInterrupt();
-//         schedulerLog.logCommandFinish();
-//         schedulerLog.logCommandExecute();  // Can (optionally) generate a lot of output        
-//       }
-//       else {
-//         new Alert("No logging", AlertType.kWarning).set(true);
-//       }
-//   }
+  @SuppressWarnings("resource")
+  public void configureCommandLogs()
+  {
+      if (useConsole || useDataLog || useShuffleBoardLog) {
+        schedulerLog = new CommandSchedulerLog(useConsole, useDataLog, useShuffleBoardLog);
+        schedulerLog.logCommandInitialize();
+        schedulerLog.logCommandInterrupt();
+        schedulerLog.logCommandFinish();
+        schedulerLog.logCommandExecute();  // Can (optionally) generate a lot of output        
+      }
+      else {
+        new Alert("No logging", AlertType.kWarning).set(true);
+      }
+  }
+</pre>
  */
 public final class CommandSchedulerLog 
 {
