@@ -1,25 +1,19 @@
 package frc.robot.subsystems;
 
 import java.lang.invoke.MethodHandles;
-import java.util.function.DoubleSupplier;
-
-import javax.lang.model.util.ElementScanner14;
-
-import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkLimitSwitch;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
+import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
+
 import frc.robot.Constants;
 import frc.robot.motors.SparkFlexLance;
-import frc.robot.motors.SparkMaxLance;
-import frc.robot.motors.TalonFXLance;
 
 /**
- * This is an example of what a subsystem should look like.
+ * This is the Pivot. It allows the robot to move it's arm.
+ * @author Greta
+ * @author Niyati
  */
 public class Pivot extends SubsystemLance
 {
@@ -39,8 +33,8 @@ public class Pivot extends SubsystemLance
     public enum TargetPosition
     {
         kStartingPosition(0.0),
-        kGrabAlgaePosition(7.75),
-        kOverride(-4237);
+        kGrabAlgaePosition(7.75);
+        // kOverride(-4237);
 
         public final double pivot;
 
@@ -58,6 +52,7 @@ public class Pivot extends SubsystemLance
 
     // private TargetPosition targetPosition = TargetPosition.kOverride;
     private final double threshold = 0.1;
+    private static boolean isWithinThreshold;
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -122,6 +117,11 @@ public class Pivot extends SubsystemLance
         // motor2.set(0.0);
     }
 
+    public static boolean isWithinThreshold()
+    {
+        return isWithinThreshold;
+    }
+
 
 
     // public Command onCommand()
@@ -139,6 +139,14 @@ public class Pivot extends SubsystemLance
         return motor.getPosition();
         // return 0.0;
     }
+
+    // public boolean within_threshold(TargetPosition targetPosition)
+    // {
+    //     if((getPosition() == targetPosition.pivot + threshold) || (getPosition() == targetPosition.pivot - threshold))
+    //         return true;
+    //     else
+    //         return false;
+    // }
 
     // public void startingPosition()
     // {
@@ -167,6 +175,11 @@ public class Pivot extends SubsystemLance
     //         hold();
     //     }
     // }    
+
+    public BooleanSupplier isWithinThresholdSupplier()
+    {
+        return () -> isWithinThreshold();
+    }
 
     public Command onCommand(double speed)
     {
