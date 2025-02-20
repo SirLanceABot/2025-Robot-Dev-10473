@@ -3,7 +3,6 @@ package frc.robot.sensors;
 import java.lang.invoke.MethodHandles;
 
 import frc.robot.Constants;
-import frc.robot.LimelightHelpers;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
