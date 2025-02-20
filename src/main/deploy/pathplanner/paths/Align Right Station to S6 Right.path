@@ -8,24 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.718851050900634,
-        "y": 1.1661264566657894
+        "x": 2.7192240068939073,
+        "y": 1.1659502009926388
       },
       "isLocked": false,
       "linkedName": "Align Right Station"
     },
     {
       "anchor": {
-        "x": 3.14850352112676,
-        "y": 3.6848591549295766
+        "x": 6.315277777777777,
+        "y": 2.837065972222222
       },
       "prevControl": {
-        "x": 2.0564003738758725,
-        "y": 3.6848591549295766
+        "x": 5.59215116534879,
+        "y": 1.6746684766839501
+      },
+      "nextControl": {
+        "x": 7.038404390206764,
+        "y": 3.999463467760492
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.462760416666666,
+        "y": 5.059201388888889
+      },
+      "prevControl": {
+        "x": 5.962760416666666,
+        "y": 5.925226792673327
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "S4 Right"
+      "linkedName": "S6 Right"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +58,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 150.46121774044192
   },
   "reversed": false,
   "folder": "Align Starts",

@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Wall to S3 Left"
+            "pathName": "Right Wall to S5 Right"
           }
         },
         {
@@ -19,13 +19,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S3 Left - Align Right Station"
+            "pathName": "S5 Right to Right Station"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right align to Right station"
+            "pathName": "Right Station to Align Right Station"
           }
         },
         {
@@ -37,13 +37,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Station to Align Right Station"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Align Right Station to S4 Right"
+            "pathName": "Align Right Station to S6 Right"
           }
         },
         {
