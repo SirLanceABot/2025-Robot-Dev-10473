@@ -43,18 +43,18 @@ public class RobotContainer
         System.out.println("Loading: " + fullClassName);
     }
 
-    private boolean useFullRobot            = true;
+    private boolean useFullRobot            = false;
     private boolean usePivot                = false;
-    private boolean useDrivetrain           = true;
+    private boolean useDrivetrain           = false;
     private boolean useRoller               = false;
-    private boolean useShifter              = true;
-    private boolean usePneumatics           = true;
+    private boolean useShifter              = false;
+    private boolean usePneumatics           = false;
     private boolean useClimb                = false;
     private boolean useLEDs                 = false;
     private boolean usePoseEstimator        = false;
     private boolean useCamera               = false;
 
-    private boolean useDriverController     = true;
+    private boolean useDriverController     = false;
     private boolean useOperatorController   = false;
 
     public final boolean fullRobot;
