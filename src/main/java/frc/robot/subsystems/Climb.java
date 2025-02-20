@@ -4,10 +4,8 @@ import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.motors.SparkFlexLance;
-import frc.robot.motors.TalonFXLance;
 
 /**
  * Creates a new climb subsystem with one Kraken motor

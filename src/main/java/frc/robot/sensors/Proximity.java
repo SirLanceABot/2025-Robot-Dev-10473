@@ -3,9 +3,7 @@ package frc.robot.sensors;
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Proximity extends SensorLance
 {

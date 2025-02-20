@@ -2,15 +2,13 @@ package frc.robot.sensors;
 
 import java.lang.invoke.MethodHandles;
 
-import frc.robot.Constants;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.Constants;
 
 /** Represents a Limelight to track AprilTags. */
 public class Camera extends SensorLance
