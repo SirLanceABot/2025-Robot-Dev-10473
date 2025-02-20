@@ -22,6 +22,9 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.Encoder;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
@@ -86,6 +89,10 @@ public class Drivetrain extends SubsystemLance
     private final DifferentialDriveKinematics kinematics;
 
     private final DifferentialDriveOdometry odometry;
+
+    private final NetworkTable networkTable = NetworkTableInstance.getDefault().getTable(Constants.ADVANTAGE_SCOPE_TABLE_NAME);
+    private final StructPublisher<Pose2d> odometryPublisher = networkTable
+            .getStructTopic("OdometryPose", Pose2d.struct).publish();
 
     // *** INNER ENUMS and INNER CLASSES ***
     // Put all inner enums and inner classes here
@@ -154,6 +161,8 @@ public class Drivetrain extends SubsystemLance
         leftFollower.setupBrakeMode();
         rightLeader.setupBrakeMode();
         rightFollower.setupBrakeMode();
+
+        leftLeader.setupPositionConversionFactor(ENCODERERESOLUTION);
 
         leftFollower.setSafetyEnabled(false);
         rightFollower.setSafetyEnabled(false);
@@ -226,6 +235,11 @@ public class Drivetrain extends SubsystemLance
     public DifferentialDriveOdometry getOdometry()
     {
         return odometry;
+    }
+
+    public void resetOdometryPose(Pose2d pose)
+    {
+        odometry.resetPose(pose);
     }
 
     /**
@@ -521,9 +535,10 @@ public class Drivetrain extends SubsystemLance
     @Override
     public void periodic()
     {
-        odometry.update(gyro.getRotation2d(), leftLeader.getPosition(), rightLeader.getPosition());
+        Pose2d pose = odometry.update(gyro.getRotation2d(), leftLeader.getPosition(), rightLeader.getPosition());
+        odometryPublisher.set(pose);
     }
-
+        
     @Override
     public String toString()
     {

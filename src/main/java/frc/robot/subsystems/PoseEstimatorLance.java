@@ -58,15 +58,19 @@ public class PoseEstimatorLance extends SubsystemLance
     // private boolean isRight;
 
     private Pose2d estimatedPose = new Pose2d();
+    private Pose2d estimatedOdometryPose = new Pose2d();
 
-    Pose2d poseA = new Pose2d();
-    Pose2d poseB = new Pose2d();
+    // Pose2d poseA = new Pose2d();
+    // Pose2d poseB = new Pose2d();
 
-    StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
-            .getStructTopic("MyPose", Pose2d.struct).publish();
+    // StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault()
+    //         .getStructTopic("MyPose", Pose2d.struct).publish();
+    private final NetworkTable networkTable = NetworkTableInstance.getDefault().getTable(Constants.ADVANTAGE_SCOPE_TABLE_NAME);
+    private final StructPublisher<Pose2d> estimatedPosePublisher = networkTable
+            .getStructTopic("EstimatedPose", Pose2d.struct).publish();
 
-    StructArrayPublisher<Pose2d> arrayPublisher = NetworkTableInstance.getDefault()
-            .getStructArrayTopic("MyPoseArray", Pose2d.struct).publish();
+    // StructArrayPublisher<Pose2d> arrayPublisher = NetworkTableInstance.getDefault()
+    //         .getStructArrayTopic("MyPoseArray", Pose2d.struct).publish();
 
     private final double[] defaultValues = {0.0, 0.0, 0.0};
     private final double MAX_TARGET_DISTANCE = 5.0; // meters
@@ -184,20 +188,7 @@ public class PoseEstimatorLance extends SubsystemLance
         );
     }
 
-    private void periodicCameraUpdate()
-    {
-        if(camera != null)
-        {
-            if(camera.isFresh() )//&& camera.getAverageTagDistance() < MAX_TARGET_DISTANCE)
-            {
-                poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999999));
-                poseEstimator.addVisionMeasurement(
-                    camera.getPose2d(),
-                    camera.getTimestampSeconds()
-                );
-            }
-        }
-    }
+
 
     // public void fillMaps()
     // {
@@ -325,9 +316,25 @@ public class PoseEstimatorLance extends SubsystemLance
     //     return run(() -> setPlacingSideRight());
     // }
 
+    private void periodicCameraUpdate()
+    {
+        if(camera != null)
+        {
+            if(camera.isFresh() )//&& camera.getAverageTagDistance() < MAX_TARGET_DISTANCE)
+            {
+                poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999999));
+                poseEstimator.addVisionMeasurement(
+                    camera.getPose2d(),
+                    camera.getTimestampSeconds()
+                );
+            }
+        }
+    }
+
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here
 
+    
     @Override
     public void periodic()
     {
@@ -335,7 +342,7 @@ public class PoseEstimatorLance extends SubsystemLance
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
 
-        estimatedPose = poseEstimator.update(
+        estimatedOdometryPose = poseEstimator.update(
             gyro.getRotation2d(),
             drivetrain.getLeftLeaderDistance(),
             drivetrain.getRightLeaderDistance()
@@ -343,8 +350,11 @@ public class PoseEstimatorLance extends SubsystemLance
 
         periodicCameraUpdate();
 
-        publisher.set(poseA);
-        arrayPublisher.set(new Pose2d[] {poseA, poseB} );
+        estimatedPose = poseEstimator.getEstimatedPosition();
+        estimatedPosePublisher.set(estimatedPose);
+
+        // publisher.set(poseA);
+        // arrayPublisher.set(new Pose2d[] {poseA, poseB} );
     }
 
     @Override

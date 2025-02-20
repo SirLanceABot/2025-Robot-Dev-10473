@@ -167,7 +167,7 @@ public class PathPlannerLance
         new EventTrigger("Score Algae").onTrue( GeneralCommands.scoreAlgaeCommand());
 
         // NamedCommands.registerCommand("Score Coral", GeneralCommands.scoreAlgaeCommand());
-        new EventTrigger("Score Coral").onTrue(GeneralCommands.scoreAlgaeCommand());
+        new EventTrigger("Score Coral").onTrue(GeneralCommands.scoreCoralCommand());
 
         // NamedCommands.registerCommand("LED Red", GeneralCommands.setLEDSolid(Color.kRed));
         new EventTrigger("LED Red").onTrue(GeneralCommands.setLEDSolid(Color.kRed));
