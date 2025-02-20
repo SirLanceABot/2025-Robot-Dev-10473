@@ -117,13 +117,6 @@ public class Pivot extends SubsystemLance
         // motor2.set(0.0);
     }
 
-    public static boolean isWithinThreshold()
-    {
-        return isWithinThreshold;
-    }
-
-
-
     // public Command onCommand()
     // {
     //     return run( () -> set(0.25) );
@@ -138,6 +131,20 @@ public class Pivot extends SubsystemLance
     {
         return motor.getPosition();
         // return 0.0;
+    }
+
+    /**
+     * Checks if the pivot is within the threshold of the targetPosition
+     * @param targetPosition
+     * @return isWithinThreshold
+     */
+    public boolean isWithinThreshold(TargetPosition targetPosition)
+    {
+        if((getPosition() == targetPosition.pivot + threshold) || (getPosition() == targetPosition.pivot - threshold))
+            isWithinThreshold = true;
+        else
+            isWithinThreshold = false;
+        return isWithinThreshold;
     }
 
     // public boolean within_threshold(TargetPosition targetPosition)
@@ -176,9 +183,9 @@ public class Pivot extends SubsystemLance
     //     }
     // }    
 
-    public BooleanSupplier isWithinThresholdSupplier()
+    public BooleanSupplier isWithinThresholdSupplier(TargetPosition targetPosition)
     {
-        return () -> isWithinThreshold();
+        return () -> isWithinThreshold(targetPosition);
     }
 
     public Command onCommand(double speed)
