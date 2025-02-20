@@ -6,7 +6,6 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -29,7 +28,6 @@ public final class DriverBindings
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
     private static CommandXboxController controller;
-    private static RobotContainer robotContainer;
     private static Drivetrain drivetrain;
     private static Shifter shifter;
 
@@ -58,7 +56,6 @@ public final class DriverBindings
     {
         System.out.println("Creating Driver Bindings:" + fullClassName);
         
-        DriverBindings.robotContainer = robotContainer;
         shifter = robotContainer.getShifter();
         controller = robotContainer.getDriverController();
         drivetrain = robotContainer.getDrivetrain();

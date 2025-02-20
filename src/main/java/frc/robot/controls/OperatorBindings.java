@@ -70,10 +70,10 @@ public final class OperatorBindings
         }    
     }
 
-    private static void configSuppliers()
-    {
+    // private static void configSuppliers()
+    // {
 
-    }
+    // }
 
     private static void configAButton()
     {

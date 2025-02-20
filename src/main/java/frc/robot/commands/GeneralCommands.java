@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import java.lang.invoke.MethodHandles;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,12 +9,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.InternalButton;
 import frc.robot.RobotContainer;
-import frc.robot.sensors.GyroLance;
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Pivot.TargetPosition;
-import frc.robot.subsystems.PoseEstimatorLance;
 import frc.robot.subsystems.Roller;
 
 
@@ -33,9 +29,9 @@ public final class GeneralCommands
 
     private static Pivot pivot;
     private static Roller roller;
-    private static Drivetrain drivetrain;
-    private static PoseEstimatorLance poseEstimator;
-    private static GyroLance gyro;
+    // private static Drivetrain drivetrain;
+    // private static PoseEstimatorLance poseEstimator;
+    // private static GyroLance gyro;
     private static CommandXboxController driverController;
     private static CommandXboxController operatorController;
     private static LEDs leds;
