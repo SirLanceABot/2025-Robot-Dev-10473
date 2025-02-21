@@ -40,7 +40,7 @@ public class PathPlannerLance
 
     private static Drivetrain drivetrain;
     private static SendableChooser<Command> autoChooser;
-    private static boolean isAutoBuilderConfigSuccessful;
+    // private static boolean isAutoBuilderConfigSuccessful;
     private static Field2d field; // object to put on dashboards
 
 
@@ -63,26 +63,34 @@ public class PathPlannerLance
 
     private static void configAutoBuilder()
     {
-        try
+        if(drivetrain != null)
         {
-            RobotConfig config = RobotConfig.fromGUISettings();
+            try
+            {
+                RobotConfig config = RobotConfig.fromGUISettings();
 
-            AutoBuilder.configure(
-                drivetrain::getPose,
-                drivetrain::resetOdometry,
-                drivetrain::getRobotRelativeSpeeds,
-                (speeds, feedforwards) -> drivetrain.driveRobotRelative(speeds),
-                new PPLTVController(0.02),
-                config,
-                shouldFlipPath(),
-                drivetrain
-            );
-            isAutoBuilderConfigSuccessful = true;
-        } 
-        catch (Exception e) 
+                AutoBuilder.configure(
+                    drivetrain::getPose,
+                    drivetrain::resetOdometry,
+                    drivetrain::getRobotRelativeSpeeds,
+                    (speeds, feedforwards) -> drivetrain.driveRobotRelative(speeds),
+                    new PPLTVController(0.02, 3.8),
+                    config,
+                    shouldFlipPath(),
+                    drivetrain
+                );
+                // isAutoBuilderConfigSuccessful = true;
+            } 
+            catch (Exception e) 
+            {
+                e.printStackTrace();
+                // isAutoBuilderConfigSuccessful = false;
+            }
+        }
+        else
         {
-            e.printStackTrace();
-            isAutoBuilderConfigSuccessful = false;
+            System.out.println("No Drivetrain");
+            // isAutoBuilderConfigSuccessful = false;
         }
     }
 
@@ -105,14 +113,10 @@ public class PathPlannerLance
 
     private static void configAutoChooser()
     {
-        if(isAutoBuilderConfigSuccessful)
+        autoChooser = AutoBuilder.buildAutoChooser();
+        if(autoChooser != null)
         {
-            autoChooser = AutoBuilder.buildAutoChooser();
             SmartDashboard.putData("Auto Chooser", autoChooser);
-        }
-        else
-        {
-            autoChooser = null;
         }
     }
 
