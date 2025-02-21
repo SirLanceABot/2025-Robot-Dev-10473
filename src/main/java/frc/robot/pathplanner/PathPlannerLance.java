@@ -40,7 +40,6 @@ public class PathPlannerLance
 
     private static Drivetrain drivetrain;
     private static SendableChooser<Command> autoChooser;
-    // private static boolean isAutoBuilderConfigSuccessful;
     private static Field2d field; // object to put on dashboards
 
 
@@ -57,8 +56,16 @@ public class PathPlannerLance
 
         createEventTriggers();
 
-        FollowPathCommand.warmupCommand().schedule();
-        PathfindingCommand.warmupCommand().schedule();
+        Commands.print("\n\nPLEASE WAIT ...")
+        .andThen(Commands.print("Warming up \"FollowPathCommand\" ..."))
+        .andThen(FollowPathCommand.warmupCommand())
+        .andThen(Commands.print("Warming up\"PathfindingCommand\" ..."))
+        .andThen(PathfindingCommand.warmupCommand())
+        .andThen(Commands.print("DONE warming up paths"))
+        .schedule();
+
+        // FollowPathCommand.warmupCommand().schedule();
+        // PathfindingCommand.warmupCommand().schedule();
     }
 
     private static void configAutoBuilder()
@@ -79,18 +86,15 @@ public class PathPlannerLance
                     shouldFlipPath(),
                     drivetrain
                 );
-                // isAutoBuilderConfigSuccessful = true;
             } 
             catch (Exception e) 
             {
                 e.printStackTrace();
-                // isAutoBuilderConfigSuccessful = false;
             }
         }
         else
         {
             System.out.println("No Drivetrain");
-            // isAutoBuilderConfigSuccessful = false;
         }
     }
 
@@ -113,10 +117,15 @@ public class PathPlannerLance
 
     private static void configAutoChooser()
     {
-        autoChooser = AutoBuilder.buildAutoChooser();
-        if(autoChooser != null)
+        if(AutoBuilder.isConfigured())
         {
+            autoChooser = AutoBuilder.buildAutoChooser();
             SmartDashboard.putData("Auto Chooser", autoChooser);
+        }
+        else
+        {
+            autoChooser = new SendableChooser<Command>();
+            autoChooser.setDefaultOption("None", Commands.none());
         }
     }
 
@@ -143,23 +152,28 @@ public class PathPlannerLance
         SmartDashboard.putData("Field", field);
 
         // Logging callback for current robot pose
-        PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-            // Do whatever you want with the pose here
-            field.setRobotPose(pose);
-        });
+        PathPlannerLogging.setLogCurrentPoseCallback(
+            (pose) -> {
+                // Do whatever you want with the pose here
+                field.setRobotPose(pose);
+            }
+        );
 
         // Logging callback for target robot pose
-        PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
-            // Do whatever you want with the pose here
-            field.getObject("target pose").setPose(pose);
-        });
+        PathPlannerLogging.setLogTargetPoseCallback(
+            (pose) -> {
+                // Do whatever you want with the pose here
+                field.getObject("target pose").setPose(pose);
+            }
+        );
 
         // Logging callback for the active path, this is sent as a list of poses
-        PathPlannerLogging.setLogActivePathCallback((poses) -> {
-            // Do whatever you want with the poses here
-            field.getObject("path").setPoses(poses);
-        });
-
+        PathPlannerLogging.setLogActivePathCallback(
+            (poses) -> {
+                // Do whatever you want with the poses here
+                field.getObject("path").setPoses(poses);
+            }
+        );
     }
 
     private static void createEventTriggers()
