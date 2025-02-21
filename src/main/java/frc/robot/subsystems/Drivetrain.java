@@ -13,6 +13,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -43,13 +44,12 @@ public class Drivetrain extends SubsystemLance
 
 
     private static final double WHEELRADIUS = 3.0;  // inches
-    private static final double TRACKWIDTH = 18.8495559215;  // inches
-    private static final int ENCODERERESOLUTION = 4237;
+    private static final double TRACKWIDTH = 20.625;  // inches
 
     private final double FIRSTSTAGEGEARRATIO = 12.0 / 60.0;
     private final double SECONDSTAGEGEARRATIO = 24.0 / 32.0;
-    private final double HIGHGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (22.0 / 44.0);    // 0.3
-    private final double LOWGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (34.0 / 32.0);     // 0.159375
+    private final double LOWGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (22.0 / 44.0);    // 0.075
+    private final double HIGHGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (32.0 / 34.0);     // 0.159375
     
     private final double MAXLOWGEARSPEED = 0.53125; // where the max high gear speed is 1.0
 
@@ -144,7 +144,8 @@ public class Drivetrain extends SubsystemLance
         rightLeader.setupBrakeMode();
         rightFollower.setupBrakeMode();
 
-        leftLeader.setupPositionConversionFactor(ENCODERERESOLUTION);
+        leftLeader.setupPositionConversionFactor(1 / (2.0 * Math.PI * Units.inchesToMeters(WHEELRADIUS) * LOWGEARRATIO));
+        rightLeader.setupPositionConversionFactor(1 / (2.0 * Math.PI * Units.inchesToMeters(WHEELRADIUS) * LOWGEARRATIO));
 
         leftFollower.setSafetyEnabled(false);
         rightFollower.setSafetyEnabled(false);
@@ -519,6 +520,7 @@ public class Drivetrain extends SubsystemLance
     {
         Pose2d pose = odometry.update(gyro.getRotation2d(), leftLeader.getPosition(), rightLeader.getPosition());
         odometryPublisher.set(pose);
+        System.out.println(this);
     }
         
     @Override
