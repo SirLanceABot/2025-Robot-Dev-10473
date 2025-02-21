@@ -2,6 +2,9 @@ package frc.robot.commands;
 
 import java.lang.invoke.MethodHandles;
 
+import javax.lang.model.util.ElementScanner14;
+
+import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -9,10 +12,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.InternalButton;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Pivot.TargetPosition;
 import frc.robot.subsystems.Roller;
+import frc.robot.subsystems.Shifter;
 
 
 public final class GeneralCommands 
@@ -29,7 +34,8 @@ public final class GeneralCommands
 
     private static Pivot pivot;
     private static Roller roller;
-    // private static Drivetrain drivetrain;
+    private static Drivetrain drivetrain;
+    private static Shifter shifter;
     // private static PoseEstimatorLance poseEstimator;
     // private static GyroLance gyro;
     private static CommandXboxController driverController;
@@ -301,6 +307,39 @@ public final class GeneralCommands
         {
             return leds.offCommand();
             
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    /**
+     * Toggles the shifter while the robot is moving
+     * @author Jackson D.
+     */
+
+    public static Command shiftWhileMovingCommand()
+    {
+        if(shifter != null && drivetrain != null)
+        {
+            if(Shifter.isHighGear() == true)
+            {
+                return drivetrain.prepareShiftToHighCommand()
+                    .andThen (shifter.shiftHighCommand()) 
+                    .andThen ( drivetrain.postShiftToHighCommand());
+                
+            }
+            else if(Shifter.isHighGear() == false)
+            {
+                return drivetrain.prepareShiftToLowCommand()
+                .andThen (shifter.shiftLowCommand()) 
+                .andThen ( drivetrain.postShiftToLowCommand());
+            }
+            else
+            {
+                return Commands.none();
+            }
         }
         else
         {
