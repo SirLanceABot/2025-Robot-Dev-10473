@@ -52,8 +52,8 @@ public class PathPlannerLance
         configAutoBuilder();
         configAutoChooser();
 
-        configPathPlannerLogging();
-
+        // configPathPlannerLogging();
+        
         createEventTriggers();
 
         Commands.print("\n\nPLEASE WAIT ...")
@@ -62,6 +62,7 @@ public class PathPlannerLance
         .andThen(Commands.print("Warming up\"PathfindingCommand\" ..."))
         .andThen(PathfindingCommand.warmupCommand())
         .andThen(Commands.print("DONE warming up paths"))
+        .andThen(Commands.runOnce( () -> configPathPlannerLogging() ))
         .schedule();
 
         // FollowPathCommand.warmupCommand().schedule();
