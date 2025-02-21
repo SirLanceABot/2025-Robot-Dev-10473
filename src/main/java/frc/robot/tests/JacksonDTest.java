@@ -2,7 +2,9 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
+import frc.robot.commands.GeneralCommands;
 
 @SuppressWarnings("unused")
 public class JacksonDTest implements Test
@@ -26,6 +28,7 @@ public class JacksonDTest implements Test
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
+    private final CommandXboxController controller = new CommandXboxController(0);
     
     // private final ExampleSubsystem exampleSubsystem;
 
@@ -66,7 +69,9 @@ public class JacksonDTest implements Test
      * This method runs periodically (every 20ms).
      */
     public void periodic()
-    {}
+    {
+       controller.x().onTrue(GeneralCommands.shiftWhileMovingCommand());
+    }
     
     /**
      * This method runs one time after the periodic() method.
