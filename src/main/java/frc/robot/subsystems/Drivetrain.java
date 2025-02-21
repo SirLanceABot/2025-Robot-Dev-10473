@@ -526,7 +526,7 @@ public class Drivetrain extends SubsystemLance
     @Override
     public String toString()
     {
-        // return "Left Leader Motor Velo = " + leftLeader.getVelocity() + " Right Leader Motor Velo = " + rightLeader.getVelocity();
-        return "Left = " + leftLeader.getPosition() + " Right = " + rightLeader.getPosition();
+        return "Left Leader Motor Velo = " + leftLeader.getVelocity() + " Right Leader Motor Velo = " + rightLeader.getVelocity();
+        // return "Left = " + leftLeader.getPosition() + " Right = " + rightLeader.getPosition();
     }
 }
