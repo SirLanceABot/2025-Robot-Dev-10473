@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
+import frc.robot.commands.GeneralCommands;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shifter;
 
@@ -65,7 +66,7 @@ public final class DriverBindings
             configSuppliers();
             configAButton();
             configBButton();
-            // configXButton();
+            configXButton();
             // configYButton();
             configLeftBumper();
             // configRightBumper();
@@ -115,10 +116,11 @@ public final class DriverBindings
         }    
     }
 
-    // private static void configXButton()
-    // {
-    //     Trigger xButtonTrigger = controller.x();
-    // }
+    private static void configXButton()
+    {
+        Trigger xButtonTrigger = controller.x();
+        xButtonTrigger.onTrue(GeneralCommands.shiftWhileMovingCommand());
+    }
 
     // private static void configYButton()
     // {
