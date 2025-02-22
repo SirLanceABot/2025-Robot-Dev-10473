@@ -10,7 +10,6 @@ import frc.robot.motors.SparkFlexLance;
 import frc.robot.sensors.Proximity;
 
 /**
- * This is an example of what a subsystem should look like.
  * @author Brady Woodard
  * @author Mason Bellinger
  */
@@ -25,23 +24,15 @@ public class Roller extends SubsystemLance
     {
         System.out.println("Loading: " + fullClassName);
     }
-    
 
     // *** INNER ENUMS and INNER CLASSES ***
     // Put all inner enums and inner classes here
-
 
     
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
     private final SparkFlexLance motor = new SparkFlexLance(Constants.Roller.MOTOR_PORT, Constants.Roller.MOTOR_CAN_BUS, "Roller Motor");
     private final Proximity sensor = new Proximity(Constants.Roller.PROXIMITY_SENSOR_PORT);
-
-    private final double GEAR_RATIO = 1.0 / 5.0; // Ask Build team 
-    private final double WHEEL_DIAMETER_FEET = 2.25 / 12.0; // Ask Build Team
-    private final double MINUTES_TO_SECONDS = 1.0 / 60.0;
-    private final double RPM_TO_FPS = GEAR_RATIO * MINUTES_TO_SECONDS * Math.PI * WHEEL_DIAMETER_FEET;
-
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -98,6 +89,8 @@ public class Roller extends SubsystemLance
     /**
      * Command to make the rollers intake
      * @return Returns intake command
+     * @author Brady Woodard
+     * @author Mason Bellinger
      */
     public Command intakeAlgaeCommand()
     {
@@ -108,6 +101,8 @@ public class Roller extends SubsystemLance
     /**
      * Command to eject coral
      * @return Returns eject coral command
+     * @author Brady Woodard
+     * @author Mason Bellinger
      */
     public Command ejectCoralCommand()
     {
@@ -118,6 +113,8 @@ public class Roller extends SubsystemLance
     /**
      * Command to eject algae
      * @return Returns eject algae command
+     * @author Brady Woodard
+     * @author Mason Bellinger
      */
     public Command ejectAlgaeCommand()
     {
@@ -128,10 +125,24 @@ public class Roller extends SubsystemLance
     /**
      * Command to make the rollers stop
      * @return Returns stop command
+     * @author Brady Woodard
+     * @author Mason Bellinger
      */
     public Command stopCommand()
     {
-        return runOnce( () -> stop() ).withName("Stop Roller");
+        return runOnce( () -> stop() )
+        .withName("Stop Roller");
+    }
+
+    /**
+     * Booleansupplier to return if the proximity sensor is detecting something
+     * @return Bolleansupplier for proximity sensor
+     * @author Brady Woodard
+     * @author Mason Bellinger
+     */
+    public BooleanSupplier isDetectedSupplier()
+    {
+        return sensor.isDetectedSupplier();
     }
 
     /**
@@ -146,11 +157,6 @@ public class Roller extends SubsystemLance
     //     .andThen(Commands.waitUntil(sensor.isDetectedSupplier()) )
     //     .andThen(stopCommand());
     // }
-
-    public BooleanSupplier isDetectedSupplier()
-    {
-        return sensor.isDetectedSupplier();
-    }
 
     // Use a method reference instead of this method
     // public Command stopCommand()
