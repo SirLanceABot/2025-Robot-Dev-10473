@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.pathplanner.lib.util.DriveFeedforwards;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -17,6 +18,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -150,7 +152,7 @@ public class Drivetrain extends SubsystemLance
         leftLeader.setPosition(0.0);
         rightLeader.setPosition(0.0);
 
-        
+        // BaseStatusSignal.setUpdateFrequencyForAll(200, BaseStatusSignal.  positionSignal, velocitySignal);
         
         // all motors should be running in the same direction
     }
