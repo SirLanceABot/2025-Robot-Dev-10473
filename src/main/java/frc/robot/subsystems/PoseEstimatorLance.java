@@ -72,7 +72,7 @@ public class PoseEstimatorLance extends SubsystemLance
     //         .getStructArrayTopic("MyPoseArray", Pose2d.struct).publish();
 
     private final double[] defaultValues = {0.0, 0.0, 0.0};
-    private final double MAX_TARGET_DISTANCE = 5.0; // meters
+    // private final double MAX_TARGET_DISTANCE = 5.0; // meters
 
     // private final HashMap<Integer, Pose2d> rightSideMap = new HashMap<Integer, Pose2d>();
     // private final HashMap<Integer, Pose2d> leftSideMap = new HashMap<Integer, Pose2d>();

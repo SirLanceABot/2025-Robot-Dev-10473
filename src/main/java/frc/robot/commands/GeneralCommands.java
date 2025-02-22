@@ -2,9 +2,6 @@ package frc.robot.commands;
 
 import java.lang.invoke.MethodHandles;
 
-import javax.lang.model.util.ElementScanner14;
-
-import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -203,12 +200,12 @@ public final class GeneralCommands
     //     }
     // }
 
-    private static Command intakeRumbleCommand()
-    {
-        return 
-        Commands.runOnce( () -> intakeAlgaeTriggersRumble.setPressed(true) )
-        .andThen(Commands.runOnce( () -> intakeAlgaeTriggersRumble.setPressed(false)));
-    }
+    // private static Command intakeRumbleCommand()
+    // {
+    //     return 
+    //     Commands.runOnce( () -> intakeAlgaeTriggersRumble.setPressed(true) )
+    //     .andThen(Commands.runOnce( () -> intakeAlgaeTriggersRumble.setPressed(false)));
+    // }
 
     /**
      * Command to activate rumble on operator controller
