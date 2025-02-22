@@ -81,8 +81,8 @@ public class PathPlannerLance
                     drivetrain::getPose,
                     drivetrain::resetOdometry,
                     drivetrain::getRobotRelativeSpeeds,
-                    (speeds, feedforwards) -> drivetrain.driveRobotRelative(speeds),
-                    new PPLTVController(0.02, 3.8),
+                    (speeds, feedforwards) -> drivetrain.driveRobotRelative(speeds, feedforwards),
+                    new PPLTVController(0.02 /*, 3.7*/),
                     config,
                     shouldFlipPath(),
                     drivetrain

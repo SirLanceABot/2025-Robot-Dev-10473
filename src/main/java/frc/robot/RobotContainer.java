@@ -72,8 +72,8 @@ public class RobotContainer
         drivetrain          = (useFullRobot || useDrivetrain)           ? new Drivetrain(gyro)                                                                                         : null;
         roller              = (useFullRobot || useRoller)               ? new Roller()                                                                                                 : null;
         pneumatics          = (useFullRobot || usePneumatics)           ? new Pneumatics()                                                                                             : null;
-        //FIXME shifter requires pneumatics doesn't it?
-        shifter             = (useFullRobot || useShifter)              ? new Shifter()                                                                                                : null;
+
+        shifter             = (useFullRobot || useShifter && usePneumatics)? new Shifter()                                                                                                : null;
         leds                = (useFullRobot || useLEDs)                 ? new LEDs()                                                                                                   : null;
         climb               = (useFullRobot || useClimb)                ? new Climb()                                                                                                  : null;
         camera              = (useFullRobot || useCamera)               ? CameraLL.makeCamera(Constants.Camera.CAMERA)                                                                 : null;

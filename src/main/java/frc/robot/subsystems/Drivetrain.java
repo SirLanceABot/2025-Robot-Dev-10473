@@ -4,23 +4,20 @@ import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import com.pathplanner.lib.util.DriveFeedforwards;
+
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.units.Unit;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.motors.TalonFXLance;
@@ -68,13 +65,10 @@ public class Drivetrain extends SubsystemLance
 
     private final DifferentialDrive differentialDrive;
 
-    private final Encoder leftEncoder = new Encoder(3, 4);
-    private final Encoder rightEncoder = new Encoder(1, 2);
-
     private final PIDController leftPIDController = new PIDController(1, 0, 0);
     private final PIDController rightPIDController = new PIDController(1, 0, 0);
 
-    private final SimpleMotorFeedforward motorFeedforward = new SimpleMotorFeedforward(1, 3);
+    private final SimpleMotorFeedforward motorFeedforward = new SimpleMotorFeedforward(0.12, 12.0 / 3.7);
 
     private final DifferentialDriveKinematics kinematics;
 
@@ -216,11 +210,14 @@ public class Drivetrain extends SubsystemLance
      * @param chassisSpeeds
      * the robot's chassis speed
      */
-    public void driveRobotRelative(ChassisSpeeds chassisSpeeds)
+    public void driveRobotRelative(ChassisSpeeds chassisSpeeds, DriveFeedforwards feedforwards)
     {
         DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
+        
+        double leftWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.leftMetersPerSecond);
+        double rigthWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.rightMetersPerSecond);
 
-        differentialDrive.tankDrive(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond);
+        differentialDrive.tankDrive(leftWheelSpeedInVolts / 12.0, rigthWheelSpeedInVolts / 12.0);
     }
     
     /**
