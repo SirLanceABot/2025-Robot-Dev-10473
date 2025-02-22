@@ -1,5 +1,7 @@
 package frc.robot.motors;
 
+import static edu.wpi.first.units.Units.RPM;
+
 import java.lang.invoke.MethodHandles;
 
 import com.ctre.phoenix6.StatusCode;
@@ -592,6 +594,8 @@ public class TalonFXLance extends MotorControllerLance
      */    
     public double getVelocity()
     {
+        var temp = motor.getVelocity().getValue();
+        System.out.println("velocity base unit " + temp.baseUnitMagnitude() + ", RPM " + temp.in(RPM));
         return motor.getVelocity().getValueAsDouble();
     }
 
