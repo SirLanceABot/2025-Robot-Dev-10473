@@ -203,14 +203,16 @@ public class Drivetrain extends SubsystemLance
         DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
         
         double leftWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.leftMetersPerSecond);
-        double rigthWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.rightMetersPerSecond);
+        double rightWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.rightMetersPerSecond);
 
         // System.out.println("-------------------LV = " + leftWheelSpeedInVolts + ", RV = " + rigthWheelSpeedInVolts + ", RV = " + rightLeader.getVelocity() + ", LV = " + leftLeader.getVelocity() + ", CS = " + chassisSpeeds);
         SmartDashboard.putString("Chassis Speeds", chassisSpeeds.toString());
-        SmartDashboard.putNumber("Right Volts", rigthWheelSpeedInVolts);
+        SmartDashboard.putNumber("Right Volts", rightWheelSpeedInVolts);
         SmartDashboard.putNumber("Left Volts", leftWheelSpeedInVolts);
+        SmartDashboard.putNumber("Right velocity", rightLeader.getVelocity());
+        SmartDashboard.putNumber("Left velocity", leftLeader.getVelocity());
 
-        differentialDrive.tankDrive(leftWheelSpeedInVolts / 12.0, rigthWheelSpeedInVolts / 12.0);
+        differentialDrive.tankDrive(leftWheelSpeedInVolts / 12.0, rightWheelSpeedInVolts / 12.0);
     }
     
     /**
@@ -524,6 +526,7 @@ public class Drivetrain extends SubsystemLance
         odometryPublisher.set(pose);
         // System.out.println("LL = " + leftLeader.getMotorVoltage() + " LF = " + leftFollower.getMotorVoltage() + " RL = " + rightLeader.getMotorVoltage() + " RF = " + rightFollower.getMotorVoltage());
         // System.out.println("LL = " + leftLeader.getMotorSupplyVoltage() + " LF = " + leftFollower.getMotorSupplyVoltage() + " RL = " + rightLeader.getMotorSupplyVoltage() + " RF = " + rightFollower.getMotorSupplyVoltage());
+        System.out.println(this);
     }
         
     @Override

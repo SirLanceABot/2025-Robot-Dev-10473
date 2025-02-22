@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.lang.invoke.MethodHandles;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -215,7 +216,7 @@ public final class GeneralCommands
      */
     public static Command operatorRumble()
     {
-        if(operatorController != null)
+        if(operatorController != null && DriverStation.isTeleopEnabled())
         {
             return
             Commands.runEnd(

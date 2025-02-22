@@ -62,7 +62,7 @@ public class PathPlannerLance
         .andThen(Commands.print("Warming up\"PathfindingCommand\" ..."))
         .andThen(PathfindingCommand.warmupCommand())
         .andThen(Commands.print("DONE warming up paths"))
-        .andThen(Commands.runOnce( () -> configPathPlannerLogging() ))
+        .andThen(Commands.runOnce( () -> configPathPlannerLogging() ).ignoringDisable(true))
         .schedule();
 
         // FollowPathCommand.warmupCommand().schedule();

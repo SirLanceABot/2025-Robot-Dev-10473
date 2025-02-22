@@ -9,12 +9,6 @@
           "data": {
             "pathName": "TEST - Move Forward 2M"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Score Coral"
-          }
         }
       ]
     }
