@@ -17,8 +17,8 @@
   "autoFolders": [
     "Left Wall Starts",
     "Middle Starts",
-    "Test Autos",
-    "Right Starts"
+    "Right Starts",
+    "Test Autos"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
