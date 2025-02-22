@@ -4,17 +4,23 @@ import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.units.Unit;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.motors.TalonFXLance;
@@ -44,19 +50,13 @@ public class Drivetrain extends SubsystemLance
 
 
     private static final double WHEELRADIUS = 3.0;  // inches
-    private static final double TRACKWIDTH = 20.625;  // inches
+    private static final double TRACKWIDTH = 21.5;  // inches // originally 20.625
+    // a larger value may be needed to account for wheel slip
 
     private final double FIRSTSTAGEGEARRATIO = 12.0 / 60.0;
     private final double SECONDSTAGEGEARRATIO = 24.0 / 32.0;
     private final double LOWGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (22.0 / 44.0);    // 0.075
     private final double HIGHGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (32.0 / 34.0);     // 0.159375
-    
-    private final double MAXLOWGEARSPEED = 0.53125; // where the max high gear speed is 1.0
-
-    // divisor is the number to divide the high gear speed ouputs by to match the max low gear speed
-    // to allow smooth shifting
-    private double divisor = 1.0;
-
 
     private final GyroLance gyro;
     // private final PoseEstimatorLance poseEstimator;
@@ -68,6 +68,14 @@ public class Drivetrain extends SubsystemLance
 
     private final DifferentialDrive differentialDrive;
 
+    private final Encoder leftEncoder = new Encoder(3, 4);
+    private final Encoder rightEncoder = new Encoder(1, 2);
+
+    private final PIDController leftPIDController = new PIDController(1, 0, 0);
+    private final PIDController rightPIDController = new PIDController(1, 0, 0);
+
+    private final SimpleMotorFeedforward motorFeedforward = new SimpleMotorFeedforward(1, 3);
+
     private final DifferentialDriveKinematics kinematics;
 
     private final DifferentialDriveOdometry odometry;
@@ -76,6 +84,10 @@ public class Drivetrain extends SubsystemLance
     private final StructPublisher<Pose2d> odometryPublisher = networkTable
             .getStructTopic("OdometryPose", Pose2d.struct).publish();
 
+    private double divisor = 1.0;
+    // divisor is the number to divide the high gear speed ouputs by to match the max low gear speed
+    // to allow smooth shifting
+    
     // *** INNER ENUMS and INNER CLASSES ***
     // Put all inner enums and inner classes here
 
@@ -104,7 +116,7 @@ public class Drivetrain extends SubsystemLance
             rightLeader.getPosition(),      // set the gear ratio up
             new Pose2d()
         );
-
+        
         // try
         // {
         //     RobotConfig config = RobotConfig.fromGUISettings();
@@ -520,7 +532,7 @@ public class Drivetrain extends SubsystemLance
     {
         Pose2d pose = odometry.update(gyro.getRotation2d(), leftLeader.getPosition(), rightLeader.getPosition());
         odometryPublisher.set(pose);
-        System.out.println(this);
+        System.out.println("LL = " + leftLeader.getMotorVoltage() + " LF = " + leftFollower.getMotorVoltage() + " RL = " + rightLeader.getMotorVoltage() + " RF = " + rightFollower.getMotorVoltage());
     }
         
     @Override
