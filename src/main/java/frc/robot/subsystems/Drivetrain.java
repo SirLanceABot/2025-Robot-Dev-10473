@@ -18,6 +18,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.motors.TalonFXLance;
@@ -45,15 +46,16 @@ public class Drivetrain extends SubsystemLance
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
 
-
-    private static final double WHEELRADIUS = 3.0;  // inches
-    private static final double TRACKWIDTH = 21.5;  // inches // originally 20.625
-    // a larger value may be needed to account for wheel slip
-
     private final double FIRSTSTAGEGEARRATIO = 12.0 / 60.0;
     private final double SECONDSTAGEGEARRATIO = 24.0 / 32.0;
     private final double LOWGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (22.0 / 44.0);    // 0.075
     private final double HIGHGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (32.0 / 34.0);     // 0.159375
+
+    private final double WHEELRADIUSINCHES = 3.0;
+    private final double TRACKWIDTHINCHES = 21.5; //originally 20.625 // a larger value may be needed to account for wheel slip
+    private final double WHEELCIRCUMFERENCEMETERS = 2.0 * Math.PI * Units.inchesToMeters(WHEELRADIUSINCHES);
+    private final double MOTORREVOLUTIONSTOWHEELMETERS = 1.0 / (WHEELCIRCUMFERENCEMETERS * LOWGEARRATIO);
+    
 
     private final GyroLance gyro;
     // private final PoseEstimatorLance poseEstimator;
@@ -102,7 +104,7 @@ public class Drivetrain extends SubsystemLance
 
         differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
 
-        kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(TRACKWIDTH)); // find track width
+        kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(TRACKWIDTHINCHES)); // find track width
         
         odometry = new DifferentialDriveOdometry(
             gyro.getRotation2d(),
@@ -110,26 +112,6 @@ public class Drivetrain extends SubsystemLance
             rightLeader.getPosition(),      // set the gear ratio up
             new Pose2d()
         );
-        
-        // try
-        // {
-        //     RobotConfig config = RobotConfig.fromGUISettings();
-
-        //     AutoBuilder.configure(
-        //         this::getPose,
-        //         this::resetOdometry,
-        //         this::getRobotRelativeSpeeds,
-        //         (speeds, feedforwards) -> driveRobotRelative(speeds),
-        //         new PPLTVController(0.02),
-        //         config,
-        //         shouldFlipPath(),
-        //         this
-        //     );
-        // } 
-        // catch (Exception e) 
-        // {
-        //     e.printStackTrace();
-        // }
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -150,8 +132,11 @@ public class Drivetrain extends SubsystemLance
         rightLeader.setupBrakeMode();
         rightFollower.setupBrakeMode();
 
-        leftLeader.setupPositionConversionFactor(1 / (2.0 * Math.PI * Units.inchesToMeters(WHEELRADIUS) * LOWGEARRATIO));
-        rightLeader.setupPositionConversionFactor(1 / (2.0 * Math.PI * Units.inchesToMeters(WHEELRADIUS) * LOWGEARRATIO));
+        leftLeader.setupPositionConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
+        rightLeader.setupPositionConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
+
+        leftLeader.setupVelocityConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
+        rightLeader.setupVelocityConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
 
         leftFollower.setSafetyEnabled(false);
         rightFollower.setSafetyEnabled(false);
@@ -176,6 +161,9 @@ public class Drivetrain extends SubsystemLance
      */
     public Pose2d getPose()
     {
+        System.out.println("Odometry = " + odometry.getPoseMeters());
+        SmartDashboard.putString("Odometry", odometry.getPoseMeters().toString());
+        
         return odometry.getPoseMeters();
     }
 
@@ -216,6 +204,11 @@ public class Drivetrain extends SubsystemLance
         
         double leftWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.leftMetersPerSecond);
         double rigthWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.rightMetersPerSecond);
+
+        // System.out.println("-------------------LV = " + leftWheelSpeedInVolts + ", RV = " + rigthWheelSpeedInVolts + ", RV = " + rightLeader.getVelocity() + ", LV = " + leftLeader.getVelocity() + ", CS = " + chassisSpeeds);
+        SmartDashboard.putString("Chassis Speeds", chassisSpeeds.toString());
+        SmartDashboard.putNumber("Right Volts", rigthWheelSpeedInVolts);
+        SmartDashboard.putNumber("Left Volts", leftWheelSpeedInVolts);
 
         differentialDrive.tankDrive(leftWheelSpeedInVolts / 12.0, rigthWheelSpeedInVolts / 12.0);
     }
@@ -529,7 +522,8 @@ public class Drivetrain extends SubsystemLance
     {
         Pose2d pose = odometry.update(gyro.getRotation2d(), leftLeader.getPosition(), rightLeader.getPosition());
         odometryPublisher.set(pose);
-        System.out.println("LL = " + leftLeader.getMotorVoltage() + " LF = " + leftFollower.getMotorVoltage() + " RL = " + rightLeader.getMotorVoltage() + " RF = " + rightFollower.getMotorVoltage());
+        // System.out.println("LL = " + leftLeader.getMotorVoltage() + " LF = " + leftFollower.getMotorVoltage() + " RL = " + rightLeader.getMotorVoltage() + " RF = " + rightFollower.getMotorVoltage());
+        // System.out.println("LL = " + leftLeader.getMotorSupplyVoltage() + " LF = " + leftFollower.getMotorSupplyVoltage() + " RL = " + rightLeader.getMotorSupplyVoltage() + " RF = " + rightFollower.getMotorSupplyVoltage());
     }
         
     @Override
