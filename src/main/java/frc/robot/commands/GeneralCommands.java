@@ -103,8 +103,8 @@ public final class GeneralCommands
                     roller.stopCommand(),
                     Commands.runOnce( () -> intakeAlgaeTriggersRumble.setPressed(true) ),
                     setLEDSolid(Color.kBlue),
-                    pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
-                        .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1)
+                    pivot.moveToSetPositionCommand(TargetPosition.kHoldAlgaePosition)
+                        .until( () -> Math.abs(TargetPosition.kHoldAlgaePosition.pivot - pivot.getPosition()) < 0.1)
                         .withTimeout(2.0)
                 )
             )

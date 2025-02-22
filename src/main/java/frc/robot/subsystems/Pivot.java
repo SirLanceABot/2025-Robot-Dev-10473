@@ -33,6 +33,7 @@ public class Pivot extends SubsystemLance
     public enum TargetPosition
     {
         kStartingPosition(0.0),
+        kHoldAlgaePosition(2.5),
         kGrabAlgaePosition(7.75);
         // kOverride(-4237);
 

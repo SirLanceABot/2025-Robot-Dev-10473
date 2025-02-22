@@ -110,8 +110,8 @@ public class Drivetrain extends SubsystemLance
         
         odometry = new DifferentialDriveOdometry(
             gyro.getRotation2d(),
-            leftLeader.getPosition(),
-            rightLeader.getPosition(),      // set the gear ratio up
+            leftLeaderPosition,
+            rightLeaderPosition,      // set the gear ratio up
             new Pose2d()
         );
 
@@ -176,8 +176,8 @@ public class Drivetrain extends SubsystemLance
     {
         odometry.resetPosition(
             gyro.getRotation2d(),
-            leftLeader.getPosition(),
-            rightLeader.getPosition(),
+            leftLeaderPosition,
+            rightLeaderPosition,
             pose
         );
     }
@@ -189,8 +189,8 @@ public class Drivetrain extends SubsystemLance
     public ChassisSpeeds getRobotRelativeSpeeds()
     {
         DifferentialDriveWheelSpeeds wheelSpeeds = new DifferentialDriveWheelSpeeds(
-            leftLeader.getVelocity(),
-            rightLeader.getVelocity()
+            leftLeaderVelocity,
+            rightLeaderVelocity
         );
 
         return kinematics.toChassisSpeeds(wheelSpeeds);
@@ -207,12 +207,12 @@ public class Drivetrain extends SubsystemLance
         double leftWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.leftMetersPerSecond);
         double rightWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.rightMetersPerSecond);
 
-        // System.out.println("-------------------LV = " + leftWheelSpeedInVolts + ", RV = " + rigthWheelSpeedInVolts + ", RV = " + rightLeader.getVelocity() + ", LV = " + leftLeader.getVelocity() + ", CS = " + chassisSpeeds);
+        // System.out.println("-------------------LV = " + leftWheelSpeedInVolts + ", RV = " + rigthWheelSpeedInVolts + ", RV = " + rightLeaderVelocity + ", LV = " + leftLeaderVelocity + ", CS = " + chassisSpeeds);
         SmartDashboard.putString("Chassis Speeds", chassisSpeeds.toString());
         SmartDashboard.putNumber("Right Volts", rightWheelSpeedInVolts);
         SmartDashboard.putNumber("Left Volts", leftWheelSpeedInVolts);
-        SmartDashboard.putNumber("Right velocity", rightLeader.getVelocity());
-        SmartDashboard.putNumber("Left velocity", leftLeader.getVelocity());
+        SmartDashboard.putNumber("Right velocity", rightLeaderVelocity);
+        SmartDashboard.putNumber("Left velocity", leftLeaderVelocity);
 
         differentialDrive.tankDrive(leftWheelSpeedInVolts / 12.0, rightWheelSpeedInVolts / 12.0);
     }
@@ -245,7 +245,7 @@ public class Drivetrain extends SubsystemLance
      */
     public double getLeftLeaderDistance()
     {
-        return leftLeader.getPosition();
+        return leftLeaderPosition;
     }
 
     /**
@@ -253,7 +253,7 @@ public class Drivetrain extends SubsystemLance
      */
     public double getRightLeaderDistance()
     {
-        return rightLeader.getPosition();
+        return rightLeaderPosition;
     }
 
     /**
@@ -521,10 +521,23 @@ public class Drivetrain extends SubsystemLance
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here
 
+    double leftLeaderPosition;
+    double leftLeaderVelocity;
+    double rightLeaderPosition;
+    double rightLeaderVelocity;
+
     @Override
     public void periodic()
     {
-        Pose2d pose = odometry.update(gyro.getRotation2d(), leftLeader.getPosition(), rightLeader.getPosition());
+        leftLeaderVelocity = leftLeader.getVelocity();
+        leftLeaderPosition = leftLeader.getPosition();
+        rightLeaderVelocity = rightLeader.getVelocity();
+        rightLeaderPosition = rightLeader.getPosition();
+        SmartDashboard.putNumber("LLV", leftLeaderVelocity);
+        SmartDashboard.putNumber("LLP", leftLeaderPosition);
+        SmartDashboard.putNumber("RLV", rightLeaderVelocity);
+        SmartDashboard.putNumber("RLP", rightLeaderPosition);
+        Pose2d pose = odometry.update(gyro.getRotation2d(), leftLeaderPosition, rightLeaderPosition);
         odometryPublisher.set(pose);
         // System.out.println("LL = " + leftLeader.getMotorVoltage() + " LF = " + leftFollower.getMotorVoltage() + " RL = " + rightLeader.getMotorVoltage() + " RF = " + rightFollower.getMotorVoltage());
         // System.out.println("LL = " + leftLeader.getMotorSupplyVoltage() + " LF = " + leftFollower.getMotorSupplyVoltage() + " RL = " + rightLeader.getMotorSupplyVoltage() + " RF = " + rightFollower.getMotorSupplyVoltage());
@@ -534,7 +547,7 @@ public class Drivetrain extends SubsystemLance
     @Override
     public String toString()
     {
-        return "Left Leader Motor Velo = " + leftLeader.getVelocity() + " Right Leader Motor Velo = " + rightLeader.getVelocity();
-        // return "Left = " + leftLeader.getPosition() + " Right = " + rightLeader.getPosition();
+        return "Left Leader Motor Velo = " + leftLeaderVelocity + " Right Leader Motor Velo = " + rightLeaderVelocity;
+        // return "Left = " + leftLeaderPosition + " Right = " + rightLeaderPosition;
     }
 }
