@@ -94,36 +94,49 @@ public class Pneumatics extends SubsystemLance
         pneumaticHub.enableCompressorAnalog(min, max); 
     }
 
+    /**
+     * Enables the compressor
+     */    
     public void enableCompressor()
     {
         compressor.enableAnalog(Constants.Pneumatics.MIN_PRESSURE, Constants.Pneumatics.MAX_PRESSURE);
     }
 
+    /**
+     * Disables the compressor
+     */
     public void disableCompressor()
     {
         compressor.disable();
     }
 
+    /**
+     * @return Current pressure of the compressor in PSI
+     */
     public double getPressure()
     {
         return pneumaticHub.getPressure(0);
     }
 
+    /**
+     * @return Current pressure of the compressor in PSI
+     */
     public DoubleSupplier getPressureSupplier()
     {
         return () -> getPressure();
     }
 
-    // Use a method reference instead of this method
-    // public Command stopCommand()
-    // {
-    //     return run( () -> stop() );
-    // }
+    /**
+     * Disables the compressor
+     */
     public Command disableCompressorCommand()
     {
         return runOnce(() -> disableCompressor()).withName("Disable compressor");
     }
 
+    /**
+     * Enables the compressor
+     */
     public Command enableCompressorCommand()
     {
         return runOnce(() -> enableCompressor()).withName("Enable compressor");
