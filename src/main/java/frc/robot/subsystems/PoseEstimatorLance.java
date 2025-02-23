@@ -179,12 +179,15 @@ public class PoseEstimatorLance extends SubsystemLance
      */
     public void resetPoseEstimator(Pose2d pose)
     {
-        poseEstimator.resetPosition(
-            gyro.getRotation2d(),
-            drivetrain.getLeftLeaderDistance(),
-            drivetrain.getRightLeaderDistance(),
-            pose
-        );
+        if(gyro != null && drivetrain != null)
+        {
+            poseEstimator.resetPosition(
+                gyro.getRotation2d(),
+                drivetrain.getLeftLeaderDistance(),
+                drivetrain.getRightLeaderDistance(),
+                pose
+            );
+        }
     }
 
 
@@ -341,11 +344,14 @@ public class PoseEstimatorLance extends SubsystemLance
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
 
-        estimatedOdometryPose = poseEstimator.update(
-            gyro.getRotation2d(),
-            drivetrain.getLeftLeaderDistance(),
-            drivetrain.getRightLeaderDistance()
-        );
+        if(gyro != null && drivetrain != null)
+        {
+            estimatedOdometryPose = poseEstimator.update(
+                gyro.getRotation2d(),
+                drivetrain.getLeftLeaderDistance(),
+                drivetrain.getRightLeaderDistance()
+            );
+        }
 
         periodicCameraUpdate();
 

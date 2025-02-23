@@ -32,7 +32,7 @@ public class RobotContainer
         System.out.println("Loading: " + fullClassName);
     }
 
-    private boolean useFullRobot            = true;
+    private boolean useFullRobot            = false;
     private boolean usePivot                = false;
     private boolean useDrivetrain           = false;
     private boolean useRoller               = false;
@@ -46,7 +46,6 @@ public class RobotContainer
     private boolean useDriverController     = false;
     private boolean useOperatorController   = false;
 
-    public final boolean fullRobot;
     private final Pivot pivot;
     private final Drivetrain drivetrain;
     private final Roller roller;
@@ -61,42 +60,58 @@ public class RobotContainer
     private final CommandXboxController operatorController;
     private final CommandXboxController driverController;
 
-    // private final SendableChooser<Command> autoChooser;
 
 
     RobotContainer() 
     {
-        fullRobot           = (useFullRobot);
-        pivot               = (useFullRobot || usePivot)                ? new Pivot()                                                                                                  : null;
-        gyro                = (useFullRobot || useDrivetrain)           ? new GyroLance()                                                                                              : null;
-        drivetrain          = (useFullRobot || useDrivetrain)           ? new Drivetrain(gyro)                                                                                         : null;
-        roller              = (useFullRobot || useRoller)               ? new Roller()                                                                                                 : null;
-        pneumatics          = (useFullRobot || usePneumatics)           ? new Pneumatics()                                                                                             : null;
-        //FIXME shifter requires pneumatics doesn't it?
-        shifter             = (useFullRobot || useShifter)              ? new Shifter()                                                                                                : null;
-        leds                = (useFullRobot || useLEDs)                 ? new LEDs()                                                                                                   : null;
-        climb               = (useFullRobot || useClimb)                ? new Climb()                                                                                                  : null;
-        camera              = (useFullRobot || useCamera)               ? CameraLL.makeCamera(Constants.Camera.CAMERA)                                                                 : null;
+        pivot = (useFullRobot || usePivot)
+            ? new Pivot()
+            : null;
+
+        gyro = (useFullRobot || useDrivetrain)
+            ? new GyroLance()
+            : null;
+
+        drivetrain = (useFullRobot || useDrivetrain)
+            ? new Drivetrain(gyro)
+            : null;
+
+        roller = (useFullRobot || useRoller)
+            ? new Roller()
+            : null;
+
+        pneumatics = (useFullRobot || usePneumatics || useShifter)
+            ? new Pneumatics()
+            : null;
+
+        shifter = (useFullRobot || useShifter)
+            ? new Shifter()
+            : null;
+
+        leds = (useFullRobot || useLEDs)
+            ? new LEDs()
+            : null;
+
+        climb = (useFullRobot || useClimb)
+            ? new Climb()
+            : null;
+
+        camera = (useFullRobot || useCamera)
+            ? CameraLL.makeCamera(Constants.Camera.CAMERA)
+            : null;
+
         // FIXME camera maybe null
-        poseEstimator       = (useFullRobot || usePoseEstimator)        ? new PoseEstimatorLance(gyro, drivetrain, camera)                                                             : null;
-        driverController    = (useFullRobot || useDriverController)     ? new CommandXboxController(Constants.Controllers.DRIVER_CONTROLLER_PORT)                                      : null;
-        operatorController  = (useFullRobot || useOperatorController)   ? new CommandXboxController(Constants.Controllers.OPERATOR_CONTROLLER_PORT)                                    : null;
+        poseEstimator = (useFullRobot || usePoseEstimator)
+            ? new PoseEstimatorLance(gyro, drivetrain, camera)
+            : null;
 
-        // Elastic = (useFullRobot || useElastic)   ? new Elastic(this) : null;
+        driverController = (useFullRobot || useDriverController)
+            ? new CommandXboxController(Constants.Controllers.DRIVER_CONTROLLER_PORT)
+            : null;
 
-        // registerNamedCommands();
-
-        // if(drivetrain != null)
-        // {
-        //     autoChooser = AutoBuilder.buildAutoChooser();
-        //     SmartDashboard.putData("Auto Chooser", autoChooser);
-        // }
-        // else
-        // {
-        //     autoChooser = null;
-        // }
-
-        // configurePathPlannerLogging();
+        operatorController = (useFullRobot || useOperatorController)
+            ? new CommandXboxController(Constants.Controllers.OPERATOR_CONTROLLER_PORT)
+            : null;
     }
     
     public Drivetrain getDrivetrain()
@@ -154,63 +169,17 @@ public class RobotContainer
         return driverController;
     }
 
-    public BooleanSupplier isRedAllianceSupplier()
-    {
-        return () ->
-        {
-            var alliance = DriverStation.getAlliance();
-            if (alliance.isPresent())
-            {
-            return alliance.get() == DriverStation.Alliance.Red;
-            }
-            DriverStation.reportError("No alliance is avaliable, assuming Blue", false);
-            return false;
-        };
-    }
-
-    // public void registerNamedCommands()
+    // public BooleanSupplier isRedAllianceSupplier()
     // {
-    //     NamedCommands.registerCommand("Intake Algae", GeneralCommands.intakeAlgaeCommand());
-    //     NamedCommands.registerCommand("Score Algae", GeneralCommands.scoreAlgaeCommand());
-    //     NamedCommands.registerCommand("Score Coral", GeneralCommands.scoreAlgaeCommand());
-    //     NamedCommands.registerCommand("LED Red", GeneralCommands.setLEDSolid(Color.kRed));
-    //     NamedCommands.registerCommand("LED BlUE", GeneralCommands.setLEDSolid(Color.kBlue));
-    // }
-
-
-    // public Command getAutonomousCommand() 
-    // {
-    //     return autoChooser.getSelected();
-
-    //     // return new PathPlannerAuto("TEST AUTO - MOVE FORWARD 2M");
-    // }
-
-    // private Field2d field; // object to put on dashboards
-    // /**
-    //  * Turn on all PathPlanner logging to a Field2d object for NT table "SmartDashboard".
-    //  * <p>PP example from its documentation.
-    //  */
-    // private void configurePathPlannerLogging()
-    // {
-    //     field = new Field2d();
-    //     SmartDashboard.putData("Field", field);
-
-    //     // Logging callback for current robot pose
-    //     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
-    //         // Do whatever you want with the pose here
-    //         field.setRobotPose(pose);
-    //     });
-
-    //     // Logging callback for target robot pose
-    //     PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
-    //         // Do whatever you want with the pose here
-    //         field.getObject("target pose").setPose(pose);
-    //     });
-
-    //     // Logging callback for the active path, this is sent as a list of poses
-    //     PathPlannerLogging.setLogActivePathCallback((poses) -> {
-    //         // Do whatever you want with the poses here
-    //         field.getObject("path").setPoses(poses);
-    //     });
+    //     return () ->
+    //     {
+    //         var alliance = DriverStation.getAlliance();
+    //         if (alliance.isPresent())
+    //         {
+    //         return alliance.get() == DriverStation.Alliance.Red;
+    //         }
+    //         DriverStation.reportError("No alliance is avaliable, assuming Blue", false);
+    //         return false;
+    //     };
     // }
 }
