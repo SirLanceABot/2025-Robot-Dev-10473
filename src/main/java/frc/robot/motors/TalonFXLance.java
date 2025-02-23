@@ -81,9 +81,6 @@ public class TalonFXLance extends MotorControllerLance
         setupFactoryDefaults();
         setupFeedbackSensor();
 
-        motor.getVelocity().setUpdateFrequency(100.);
-        motor.getPosition().setUpdateFrequency(100.);
-
         System.out.println("  Constructor Finished: " + fullClassName + " >> " + motorControllerName);
     }
 
@@ -161,6 +158,8 @@ public class TalonFXLance extends MotorControllerLance
     public void setupPeriodicFramePeriod(int frameNumber, int periodMs)
     {
         // FIXME
+        // motor.getVelocity().setUpdateFrequency(100.);
+        // motor.getPosition().setUpdateFrequency(100.);
     }
 
     /**
