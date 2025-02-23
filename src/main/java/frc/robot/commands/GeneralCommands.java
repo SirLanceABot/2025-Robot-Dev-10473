@@ -92,15 +92,15 @@ public final class GeneralCommands
             return
             Commands.parallel(
                 setLEDSolid(Color.kGreen),
-                roller.intakeAlgaeCommand(),
                 pivot.moveToSetPositionCommand(TargetPosition.kGrabAlgaePosition)
                     .until( () -> Math.abs(TargetPosition.kGrabAlgaePosition.pivot - pivot.getPosition()) < 0.1)
                     .withTimeout(2.0)
             )
+            .andThen(roller.intakeAlgaeCommand())
             .andThen(Commands.waitUntil(roller.isDetectedSupplier()))
             .andThen(
                 Commands.parallel(
-                    roller.stopCommand(),
+                    roller.slowRollerCommand(),
                     Commands.runOnce( () -> intakeAlgaeTriggersRumble.setPressed(true) ),
                     setLEDSolid(Color.kBlue),
                     pivot.moveToSetPositionCommand(TargetPosition.kHoldAlgaePosition)
@@ -108,6 +108,7 @@ public final class GeneralCommands
                         .withTimeout(2.0)
                 )
             )
+            .andThen(roller.stopCommand())
             .andThen( () -> intakeAlgaeTriggersRumble.setPressed(false) );
         }
         else
@@ -165,6 +166,8 @@ public final class GeneralCommands
             .andThen(Commands.waitSeconds(2.0))
             .andThen(
                 Commands.parallel(
+                    pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
+                    .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1),
                     operatorRumble(),
                     roller.stopCommand(),
                     setLEDOff()

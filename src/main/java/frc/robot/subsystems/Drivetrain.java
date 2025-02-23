@@ -159,18 +159,18 @@ public class Drivetrain extends SubsystemLance
 
     /**
      * @return
-     * the robot's estimated postion of on the field
+     * the robot's estimated position of on the field
      */
     public Pose2d getPose()
     {
-        System.out.println("Odometry = " + odometry.getPoseMeters());
-        SmartDashboard.putString("Odometry", odometry.getPoseMeters().toString());
+        // System.out.println("Odometry = " + odometry.getPoseMeters());
+        // SmartDashboard.putString("Odometry", odometry.getPoseMeters().toString());
         
         return odometry.getPoseMeters();
     }
 
     /**
-     * resets odometry by reseting the gryo, pose, and the left / right motors
+     * resets odometry by reseting the gyro, pose, and the left / right motors
      */
     public void resetOdometry(Pose2d pose)
     {
@@ -219,7 +219,7 @@ public class Drivetrain extends SubsystemLance
     
     /**
      * @return odometry
-     * the robot's esimated position based on the left / right encoders and the gyro
+     * the robot's estimated position based on the left / right encoders and the gyro
      */
     public DifferentialDriveOdometry getOdometry()
     {
@@ -233,7 +233,7 @@ public class Drivetrain extends SubsystemLance
 
     /**
      * @return kinematics
-     * converts the chassi speed to left and right wheel speeds
+     * converts the chassis speed to left and right wheel speeds
      */
     public DifferentialDriveKinematics getKinematics()
     {
@@ -257,7 +257,7 @@ public class Drivetrain extends SubsystemLance
     }
 
     /**
-     * @return if we should flip out auto pahts based on our alliance
+     * @return if we should flip out auto paths based on our alliance
      */
     // public BooleanSupplier shouldFlipPath()
     // {
@@ -301,7 +301,7 @@ public class Drivetrain extends SubsystemLance
 
     /**
      * limits velocity when in high gear to allow shifting to low gear while moving (divisor)
-     * temporaily sets motors to coast mode for smoother transition
+     * temporary sets motors to coast mode for smoother transition
      */
     public void prepareShiftToLow()
     {
@@ -325,7 +325,7 @@ public class Drivetrain extends SubsystemLance
     }
 
     /*
-     * temporaily sets motors to coast mode for smoother transition
+     * temporary sets motors to coast mode for smoother transition
      */
     public void prepareShiftToHigh()
     {
@@ -485,13 +485,13 @@ public class Drivetrain extends SubsystemLance
 
     /**
      * @param driveSpeed
-     * sewts the forward speed of the motors
+     * sets the forward speed of the motors
      * @param rotationSpeed
      * sets the rotation speed of the motors
      * @param driveTime
      * the amount of time for which the motors will run
      * @return
-     * the commmand
+     * the command
      */
     public Command turnAndDriveCommand(double driveSpeed, double rotationSpeed, double driveTime)
     {

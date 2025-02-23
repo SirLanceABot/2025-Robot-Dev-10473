@@ -593,8 +593,8 @@ public class TalonFXLance extends MotorControllerLance
      */    
     public double getVelocity()
     {
-        var temp = motor.getVelocity().getValue();
-        System.out.println("velocity base unit " + temp.baseUnitMagnitude() + ", RPM " + temp.in(RPM));
+        // var temp = motor.getVelocity().getValue();
+        // System.out.println("velocity base unit " + temp.baseUnitMagnitude() + ", RPM " + temp.in(RPM));
         return motor.getVelocity().getValueAsDouble();
     }
 

@@ -56,14 +56,14 @@ public class PathPlannerLance
         
         createEventTriggers();
 
-        Commands.print("\n\nPLEASE WAIT ...")
-        .andThen(Commands.print("Warming up \"FollowPathCommand\" ..."))
-        .andThen(FollowPathCommand.warmupCommand())
-        .andThen(Commands.print("Warming up\"PathfindingCommand\" ..."))
-        .andThen(PathfindingCommand.warmupCommand())
-        .andThen(Commands.print("DONE warming up paths"))
-        .andThen(Commands.runOnce( () -> configPathPlannerLogging() ).ignoringDisable(true))
-        .schedule();
+        // Commands.print("\n\nPLEASE WAIT ...")
+        // .andThen(Commands.print("Warming up \"FollowPathCommand\" ..."))
+        // .andThen(FollowPathCommand.warmupCommand())
+        // .andThen(Commands.print("Warming up\"PathfindingCommand\" ..."))
+        // .andThen(PathfindingCommand.warmupCommand())
+        // .andThen(Commands.print("DONE warming up paths"))
+        // .andThen(Commands.runOnce( () -> configPathPlannerLogging() ).ignoringDisable(true))
+        // .schedule();
 
         // FollowPathCommand.warmupCommand().schedule();
         // PathfindingCommand.warmupCommand().schedule();

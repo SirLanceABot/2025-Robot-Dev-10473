@@ -57,7 +57,7 @@ public class Roller extends SubsystemLance
     private void configMotors()
     {
         motor.setupFactoryDefaults();
-        motor.setupCoastMode();
+        motor.setupBrakeMode();
         // motor.setupVelocityConversionFactor(RPM_TO_FPS);
 
         motor.setSafetyEnabled(false);
@@ -94,8 +94,14 @@ public class Roller extends SubsystemLance
      */
     public Command intakeAlgaeCommand()
     {
-        return runOnce( () -> set(0.5) )
+        return runOnce( () -> set(0.35) )
         .withName("Intake Roller");
+    }
+
+    public Command slowRollerCommand()
+    {
+        return runOnce( () -> set(0.2) )
+        .withName("Slow Roller");
     }
 
     /**

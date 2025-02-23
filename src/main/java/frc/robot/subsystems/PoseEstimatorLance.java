@@ -109,7 +109,7 @@ public class PoseEstimatorLance extends SubsystemLance
                 drivetrain.getRightLeaderDistance(),
                 drivetrain.getPose(),
                 VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-                VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))
+                VecBuilder.fill(999.0, 999.0, Units.degreesToRadians(999.0))
             );
         }
         else
@@ -346,17 +346,16 @@ public class PoseEstimatorLance extends SubsystemLance
 
         if(gyro != null && drivetrain != null)
         {
-            estimatedOdometryPose = poseEstimator.update(
-                gyro.getRotation2d(),
-                drivetrain.getLeftLeaderDistance(),
-                drivetrain.getRightLeaderDistance()
-            );
-        }
+        estimatedOdometryPose = poseEstimator.update(
+            gyro.getRotation2d(),
+            drivetrain.getLeftLeaderDistance(),
+            drivetrain.getRightLeaderDistance()
+        );
 
         periodicCameraUpdate();
 
         estimatedPose = poseEstimator.getEstimatedPosition();
-        estimatedPosePublisher.set(estimatedPose);
+        estimatedPosePublisher.set(estimatedPose);}
 
         // publisher.set(poseA);
         // arrayPublisher.set(new Pose2d[] {poseA, poseB} );

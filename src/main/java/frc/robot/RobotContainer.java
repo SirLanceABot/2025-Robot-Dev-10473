@@ -5,9 +5,7 @@
 package frc.robot;
 
 import java.lang.invoke.MethodHandles;
-import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.sensors.CameraLL;
 import frc.robot.sensors.GyroLance;
