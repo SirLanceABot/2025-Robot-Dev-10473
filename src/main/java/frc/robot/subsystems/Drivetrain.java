@@ -1,10 +1,13 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import com.ctre.phoenix6.BaseStatusSignal;
 import com.pathplanner.lib.util.DriveFeedforwards;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -18,10 +21,14 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.units.measure.Velocity;
+import edu.wpi.first.units.measure.MutDistance;
+import edu.wpi.first.units.measure.MutLinearVelocity;
+import edu.wpi.first.units.measure.MutVoltage;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.motors.TalonFXLance;
 import frc.robot.sensors.GyroLance;
@@ -37,54 +44,102 @@ public class Drivetrain extends SubsystemLance
 {
     // This string gets the full name of the class, including the package name
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
-
-    // *** STATIC INITIALIZATION BLOCK ***
-    // This block of code is run first when the class is loaded
-    static
-    {
-        System.out.println("Loading: " + fullClassName);
-    }
-
-    // *** CLASS VARIABLES & INSTANCE VARIABLES ***
-    // Put all class variables and instance variables here
-
-    private final double FIRSTSTAGEGEARRATIO = 12.0 / 60.0;
-    private final double SECONDSTAGEGEARRATIO = 24.0 / 32.0;
-    private final double LOWGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (22.0 / 44.0);    // 0.075
-    private final double HIGHGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (32.0 / 34.0);     // 0.159375
-
-    private final double WHEELRADIUSINCHES = 3.0;
-    private final double TRACKWIDTHINCHES = 21.5; //originally 20.625 // a larger value may be needed to account for wheel slip
-    private final double WHEELCIRCUMFERENCEMETERS = 2.0 * Math.PI * Units.inchesToMeters(WHEELRADIUSINCHES);
-    private final double MOTORREVOLUTIONSTOWHEELMETERS = 1.0 / (WHEELCIRCUMFERENCEMETERS * LOWGEARRATIO);
     
+        // *** STATIC INITIALIZATION BLOCK ***
+        // This block of code is run first when the class is loaded
+        static
+        {
+            System.out.println("Loading: " + fullClassName);
+        }
+    
+        // *** CLASS VARIABLES & INSTANCE VARIABLES ***
+        // Put all class variables and instance variables here
+    
+        private final double FIRSTSTAGEGEARRATIO = 12.0 / 60.0;
+        private final double SECONDSTAGEGEARRATIO = 24.0 / 32.0;
+        private final double LOWGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (22.0 / 44.0);    // 0.075
+        private final double HIGHGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (32.0 / 34.0);     // 0.159375
+    
+        private final double WHEELRADIUSINCHES = 3.0;
+        private final double TRACKWIDTHINCHES = 21.5; //originally 20.625 // a larger value may be needed to account for wheel slip
+        private final double WHEELCIRCUMFERENCEMETERS = 2.0 * Math.PI * Units.inchesToMeters(WHEELRADIUSINCHES);
+        private final double MOTORREVOLUTIONSTOWHEELMETERS = 1.0 / (WHEELCIRCUMFERENCEMETERS * LOWGEARRATIO);
+        
+    
+        private final GyroLance gyro;
+        // private final PoseEstimatorLance poseEstimator;
+    
+        private final TalonFXLance leftLeader = new TalonFXLance(Constants.Drivetrain.LEFT_LEADER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Left Leader");
+        private final TalonFXLance leftFollower = new TalonFXLance(Constants.Drivetrain.LEFT_FOLLOWER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Left Follower");
+        private final TalonFXLance rightLeader = new TalonFXLance(Constants.Drivetrain.RIGHT_LEADER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Right Leader");
+        private final TalonFXLance rightFollower = new TalonFXLance(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Right Follower");
+    
+        private final DifferentialDrive differentialDrive;
+    
+        private final PIDController leftPIDController = new PIDController(1, 0, 0);
+        private final PIDController rightPIDController = new PIDController(1, 0, 0);
+    
+        private final SimpleMotorFeedforward motorFeedforward = new SimpleMotorFeedforward(0.12, 12.0 / 3.7);
+    
+        private final DifferentialDriveKinematics kinematics;
+    
+        private final DifferentialDriveOdometry odometry;
+    
+        private final NetworkTable networkTable = NetworkTableInstance.getDefault().getTable(Constants.ADVANTAGE_SCOPE_TABLE_NAME);
+        private final StructPublisher<Pose2d> odometryPublisher = networkTable
+                .getStructTopic("OdometryPose", Pose2d.struct).publish();
+    
+        private double divisor = 1.0;
+        // divisor is the number to divide the high gear speed ouputs by to match the max low gear speed
+        // to allow smooth shifting
+    
+        // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
+        private final MutVoltage m_appliedVoltage = Volts.mutable(0);
+        // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
+        private final MutDistance m_distance = Meters.mutable(0);
+        // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
+        private final MutLinearVelocity m_velocity = MetersPerSecond.mutable(0);
 
-    private final GyroLance gyro;
-    // private final PoseEstimatorLance poseEstimator;
+        // Create a new SysId routine for characterizing the drive.
+        private final SysIdRoutine sysIdRoutine =
+          new SysIdRoutine(
+              // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+              new SysIdRoutine.Config(),
+              new SysIdRoutine.Mechanism(
+                  // Tell SysId how to plumb the driving voltage to the motors.
+                  voltage -> {
+                    leftLeader.setVoltage(voltage.magnitude());
+                    rightLeader.setVoltage(voltage.magnitude());
+                  },
+                  // Tell SysId how to record a frame of data for each motor on the mechanism being
+                  // characterized.
+                  log -> {
 
-    private final TalonFXLance leftLeader = new TalonFXLance(Constants.Drivetrain.LEFT_LEADER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Left Leader");
-    private final TalonFXLance leftFollower = new TalonFXLance(Constants.Drivetrain.LEFT_FOLLOWER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Left Follower");
-    private final TalonFXLance rightLeader = new TalonFXLance(Constants.Drivetrain.RIGHT_LEADER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Right Leader");
-    private final TalonFXLance rightFollower = new TalonFXLance(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Right Follower");
+                    // Record a frame for the left motors.  Since these share an encoder, we consider
+                    // the entire group to be one motor.
+                    log.motor("drive-left")
+                        .voltage(
+                            m_appliedVoltage.mut_replace(
+                                leftLeader.get() * RobotController.getBatteryVoltage(), Volts))
+                        .linearPosition(m_distance.mut_replace(getLeftLeaderDistance(), Meters))
+                        .linearVelocity(
+                            m_velocity.mut_replace(getLeftLeaderVelocity(), MetersPerSecond));
 
-    private final DifferentialDrive differentialDrive;
+                    // Record a frame for the right motors.  Since these share an encoder, we consider
+                    // the entire group to be one motor.
+                    log.motor("drive-right")
+                        .voltage(
+                            m_appliedVoltage.mut_replace(
+                                rightLeader.get() * RobotController.getBatteryVoltage(), Volts))
+                        .linearPosition(m_distance.mut_replace(getRightLeaderDistance(), Meters))
+                        .linearVelocity(
+                            m_velocity.mut_replace(getRightLeaderVelocity(), MetersPerSecond));
 
-    private final PIDController leftPIDController = new PIDController(1, 0, 0);
-    private final PIDController rightPIDController = new PIDController(1, 0, 0);
+              },
+              // Tell SysId to make generated commands require this subsystem, suffix test state in
+              // WPILog with this subsystem's name ("drive")
+              this));
 
-    private final SimpleMotorFeedforward motorFeedforward = new SimpleMotorFeedforward(0.12, 12.0 / 3.7);
-
-    private final DifferentialDriveKinematics kinematics;
-
-    private final DifferentialDriveOdometry odometry;
-
-    private final NetworkTable networkTable = NetworkTableInstance.getDefault().getTable(Constants.ADVANTAGE_SCOPE_TABLE_NAME);
-    private final StructPublisher<Pose2d> odometryPublisher = networkTable
-            .getStructTopic("OdometryPose", Pose2d.struct).publish();
-
-    private double divisor = 1.0;
-    // divisor is the number to divide the high gear speed ouputs by to match the max low gear speed
-    // to allow smooth shifting
     
     // *** INNER ENUMS and INNER CLASSES ***
     // Put all inner enums and inner classes here
@@ -118,7 +173,15 @@ public class Drivetrain extends SubsystemLance
         System.out.println("  Constructor Finished: " + fullClassName);
     }
 
-
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysIdRoutine.quasistatic(direction);
+    }
+    
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysIdRoutine.dynamic(direction);
+    }
+    
+    
     // *** CLASS METHODS & INSTANCE METHODS ***
     // Put all class methods and instance methods here
 
@@ -184,7 +247,7 @@ public class Drivetrain extends SubsystemLance
 
     /**
      * @return
-     * the robot's estimated chassis spee based on the left and right velocities
+     * the robot's estimated chassis speed based on the left and right velocities
      */
     public ChassisSpeeds getRobotRelativeSpeeds()
     {
@@ -207,7 +270,7 @@ public class Drivetrain extends SubsystemLance
         double leftWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.leftMetersPerSecond);
         double rightWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.rightMetersPerSecond);
 
-        // System.out.println("-------------------LV = " + leftWheelSpeedInVolts + ", RV = " + rigthWheelSpeedInVolts + ", RV = " + rightLeaderVelocity + ", LV = " + leftLeaderVelocity + ", CS = " + chassisSpeeds);
+        // System.out.println("-------------------LV = " + leftWheelSpeedInVolts + ", RV = " + rightWheelSpeedInVolts + ", RV = " + rightLeaderVelocity + ", LV = " + leftLeaderVelocity + ", CS = " + chassisSpeeds);
         SmartDashboard.putString("Chassis Speeds", chassisSpeeds.toString());
         SmartDashboard.putNumber("Right Volts", rightWheelSpeedInVolts);
         SmartDashboard.putNumber("Left Volts", leftWheelSpeedInVolts);
@@ -241,7 +304,7 @@ public class Drivetrain extends SubsystemLance
     }
 
     /**
-     * @return the position of the left leader encoder
+     * @return the position of the left wheels [meters]
      */
     public double getLeftLeaderDistance()
     {
@@ -249,11 +312,27 @@ public class Drivetrain extends SubsystemLance
     }
 
     /**
-     * @return the position of the right reader encoder
+     * @return the position of the right wheels [meters]
      */
     public double getRightLeaderDistance()
     {
         return rightLeaderPosition;
+    }
+
+    /**
+     * @return the velocity of the left wheels [meters/second]
+     */
+    public double getLeftLeaderVelocity()
+    {
+        return leftLeaderVelocity;
+    }
+
+    /**
+     * @return the velocity of the right wheels [meters/second]
+     */
+    public double getRightLeaderVelocity()
+    {
+        return rightLeaderVelocity;
     }
 
     /**
@@ -518,13 +597,19 @@ public class Drivetrain extends SubsystemLance
                         .withName("Snap To Heading (perpendicular to reef): " + targetRotation);
     }
 
+
+
+
+
+
+
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here
 
-    double leftLeaderPosition;
-    double leftLeaderVelocity;
-    double rightLeaderPosition;
-    double rightLeaderVelocity;
+    private double leftLeaderPosition;
+    private double leftLeaderVelocity;
+    private double rightLeaderPosition;
+    private double rightLeaderVelocity;
 
     @Override
     public void periodic()

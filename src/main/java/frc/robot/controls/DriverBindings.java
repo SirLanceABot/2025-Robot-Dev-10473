@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.RobotContainer;
 import frc.robot.commands.GeneralCommands;
 import frc.robot.subsystems.Drivetrain;
@@ -81,6 +82,7 @@ public final class DriverBindings
             configRumble(10);
             configRumble(5);
             configDefaultDrivetrain();
+            configSysid();
         }
     }
 
@@ -136,6 +138,37 @@ public final class DriverBindings
                 .onTrue(shifter.shiftToggleCommand());
         }
     }
+
+    /**
+     * SysId driving runs with driver controller
+     * 
+     * <p>Press and hold the left bumper and one other button A, B, X, Y.
+     * <p>Release buttons to immediately halt the test drives.
+     * <p>left bumper + A drives slowly forward
+     * <p>left bumper + B drives slowly backward
+     * <p>left bumper + X drives fast forward
+     * <p>left bumper + Y drives fast backward
+     * <p>Suggested sequence:
+     * <p>slow forward and stop/pause
+     * <p>slow backward and stop/pause
+     * <p>fast forward and stop/pause
+     * <p>fast backward and stop
+     */
+    private static void configSysid()
+    {
+        Trigger aButtonTriggerSysid = controller.a().and(controller.leftBumper());
+        aButtonTriggerSysid.whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+
+        Trigger bButtonTriggerSysid = controller.b().and(controller.leftBumper());
+        bButtonTriggerSysid.whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+
+        Trigger xButtonTriggerSysid = controller.x().and(controller.leftBumper());
+        xButtonTriggerSysid.whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+
+        Trigger yButtonTriggerSysid = controller.y().and(controller.leftBumper());
+        yButtonTriggerSysid.whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    }
+
 
     // private static void configRightBumper()
     // {

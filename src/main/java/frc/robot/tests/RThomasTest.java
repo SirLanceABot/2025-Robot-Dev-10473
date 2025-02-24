@@ -75,19 +75,16 @@ static void setLogTargetPoseCallback(Consumer<Pose2d> logTargetPose) Set the log
 
     @Override
     public void init() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'init'");
     }
 
     @Override
     public void periodic() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'periodic'");
     }
 
     @Override
     public void exit() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'exit'");
     }
 }

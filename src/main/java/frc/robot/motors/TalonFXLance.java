@@ -1,7 +1,5 @@
 package frc.robot.motors;
 
-import static edu.wpi.first.units.Units.RPM;
-
 import java.lang.invoke.MethodHandles;
 
 import com.ctre.phoenix6.StatusCode;
