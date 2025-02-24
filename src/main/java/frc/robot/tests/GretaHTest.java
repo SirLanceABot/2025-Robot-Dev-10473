@@ -98,7 +98,7 @@ public class GretaHTest implements Test
         }
         else if(joystick.getRawButton(3))
         {
-            pivot.holdCommand().schedule();
+            pivot.stopCommand().schedule();
         }
         System.out.println(pivot.getPosition());
     

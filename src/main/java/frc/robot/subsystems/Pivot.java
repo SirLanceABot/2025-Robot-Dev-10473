@@ -33,7 +33,7 @@ public class Pivot extends SubsystemLance
     public enum TargetPosition
     {
         kStartingPosition(0.0),
-        kHoldAlgaePosition(1.0),
+        kHoldAlgaePosition(0.9),
         kGrabAlgaePosition(7.75);
         // kOverride(-4237);
 
@@ -104,14 +104,24 @@ public class Pivot extends SubsystemLance
      * This sets the speed of the motor.
      * @param speed The motor speed (-1.0 to 1.0)
      */
-    public void on(double speed)
+    // public void on(double speed)
+    // {
+    //     // targetPosition = Constants.TargetPosition.kOverride;
+    //     set(speed);
+    //     // motor2.set(speed);
+    // }
+
+    private void moveUp()
     {
-        // targetPosition = Constants.TargetPosition.kOverride;
-        set(speed);
-        // motor2.set(speed);
+        set(-0.05);
     }
 
-    private void hold()
+    private void moveDown()
+    {
+        set(0.05);
+    }
+
+    private void stop()
     {
         // targetPosition = Constants.TargetPosition.kOverride;
         set(0.0);
@@ -132,6 +142,11 @@ public class Pivot extends SubsystemLance
     {
         return motor.getPosition();
         // return 0.0;
+    }
+
+    public void resetEncoder()
+    {
+        motor.setPosition(0.0);
     }
 
     /**
@@ -194,15 +209,30 @@ public class Pivot extends SubsystemLance
         return run(() -> set(speed)).withName("Turn On Pivot");
     }
 
-    public Command holdCommand()
+    public Command stopCommand()
     {
-        return run(() -> hold()).withName("Hold Pivot");
+        return run(() -> stop()).withName("Stop Pivot");
     }
 
     public Command moveToSetPositionCommand(TargetPosition targetPosition)
     {
         return run(() -> motor.setControlPosition(targetPosition.pivot));
         // return Commands.run(() -> moveToSetPosition(targetPosition), this).withName("Move to Set Position Pivot"); 
+    }
+
+    public Command resetEncoderCommand()
+    {
+        return runOnce(() -> resetEncoder()).withName("Reset Encoder");
+    }
+
+    public Command moveUpCommand()
+    {
+        return runOnce(() -> moveUp()).withName("Move Up");
+    }
+
+    public Command moveDownCommand()
+    {
+        return runOnce(() -> moveDown()).withName("Move Down");
     }
 
     // Use a method reference instead of this method

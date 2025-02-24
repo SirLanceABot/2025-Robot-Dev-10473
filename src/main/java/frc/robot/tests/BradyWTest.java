@@ -80,18 +80,18 @@ public class BradyWTest implements Test
      */
     public void periodic()
     {
-        if(joystick.getRawButton(1))
-        {
-            pivot.on(0.1);
-        }
-        else if(joystick.getRawButton(2))
-        {
-            pivot.on(-0.1);
-        }
-        else
-        {
-            pivot.on(0.0);
-        }
+        // if(joystick.getRawButton(1))
+        // {
+        //     pivot.on(0.1);
+        // }
+        // else if(joystick.getRawButton(2))
+        // {
+        //     pivot.on(-0.1);
+        // }
+        // else
+        // {
+        //     pivot.on(0.0);
+        // }
 
         if(joystick.getRawButton(3))
         {

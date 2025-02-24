@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
 import frc.robot.commands.GeneralCommands;
+import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Roller;
 
 public final class OperatorBindings 
@@ -28,6 +29,7 @@ public final class OperatorBindings
     // Put all class variables and instance variables here
     private static CommandXboxController controller;
     private static Roller roller;
+    private static Pivot pivot;
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -53,6 +55,7 @@ public final class OperatorBindings
 
         controller = robotContainer.getOperatorController();
         roller = robotContainer.getRoller();
+        pivot = robotContainer.getPivot();
 
         if(controller != null)
         {
@@ -60,6 +63,8 @@ public final class OperatorBindings
             configBButton();
             configXButton();
             configYButton();
+            configBackButton();
+            configPOVButton();
 
             configRumble(5);
             configRumble(15);
@@ -100,6 +105,34 @@ public final class OperatorBindings
         Trigger yButtonTrigger = controller.y();
         yButtonTrigger
             .onTrue( GeneralCommands.scoreCoralCommand() );
+    }
+
+    private static void configBackButton()
+    {
+        if(pivot != null)
+        {
+            Trigger backButtonTrigger = controller.back();
+            backButtonTrigger
+                .onTrue( pivot.resetEncoderCommand() );
+        }
+        
+    }
+
+    private static void configPOVButton()
+    {
+        if(pivot != null)
+        {
+            Trigger povUpTrigger = controller.pov(0);
+            povUpTrigger
+                .onTrue( pivot.moveUpCommand());
+
+            Trigger povDownTrigger = controller.pov(180);
+            povDownTrigger
+                .onTrue( pivot.moveDownCommand());
+
+            povUpTrigger.negate().and(povDownTrigger.negate())
+                .onTrue( pivot.stopCommand());
+        }
     }
 
 
