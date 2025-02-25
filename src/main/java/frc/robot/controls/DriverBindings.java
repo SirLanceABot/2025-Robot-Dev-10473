@@ -94,14 +94,14 @@ public final class DriverBindings
 
     private static void configSuppliers()
     {
-        xSpeedSupplier = () -> -controller.getRawAxis(1);
-        rotationSupplier = () -> -controller.getRawAxis(4);
+        // xSpeedSupplier = () -> -controller.getRawAxis(1);
+        // rotationSupplier = () -> -controller.getRawAxis(4);
         
         // scale factor set up MIGHT BE IN WRONG PLACE
-        // scaleFactorDoubleSupplier = () -> scaleFactor;
+        scaleFactorDoubleSupplier = () -> scaleFactor;
         
-        // xSpeedSupplier = () -> -(controller.getRawAxis(1) * scaleFactorDoubleSupplier.getAsDouble());
-        // rotationSupplier = () -> -controller.getRawAxis(4)* scaleFactorDoubleSupplier.getAsDouble();
+        xSpeedSupplier = () -> -(controller.getRawAxis(1) * scaleFactorDoubleSupplier.getAsDouble());
+        rotationSupplier = () -> -controller.getRawAxis(4)* scaleFactorDoubleSupplier.getAsDouble();
 
         // double xAxis = Math.abs(-controller.getRawAxis(0)) >= axisDeadZone ? -controller.getRawAxis(0) : 0.0;
         // double yAxis = Math.abs(-controller.getRawAxis(4)) >= axisDeadZone ? -controller.getRawAxis(4) : 0.0;
