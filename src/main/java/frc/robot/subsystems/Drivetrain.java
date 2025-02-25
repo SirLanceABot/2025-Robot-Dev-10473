@@ -388,7 +388,18 @@ public class Drivetrain extends SubsystemLance
 
         differentialDrive.arcadeDrive(xSpeed, rotation.getAsDouble() / 2.0, squared);
         // differentialDrive.arcadeDrive(xSpeed / divisor, rotationSpeed / divisor, squared);
-    }   
+    }  
+
+    // public void fieldRelativeDrive(double xSpeed, double ySpeed)
+    // {
+    //     double targetRotation, targetSpeed;
+    //    
+    //     Determines goal angle by finding the arctan of (Y / X)
+    //     targetRotation =  Math.atan(ySpeed / xSpeed);
+    
+    //     Determines goal speed(THis has not shot of working)
+    //     targetSpeed = Math.sqrt(Math.pow(ySpeed, 2) + Math.pow(xSpeed, 2));
+    // }
     
     /**
      * @param driveSpeed
