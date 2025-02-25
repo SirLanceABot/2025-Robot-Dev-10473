@@ -81,7 +81,7 @@ public class Drivetrain extends SubsystemLance
         private final PIDController leftPIDController = new PIDController(1, 0, 0);
         private final PIDController rightPIDController = new PIDController(1, 0, 0);
 
-        private final AdaptiveSlewRateLimiter xSpeedLimiter = new AdaptiveSlewRateLimiter(2.0, 1.5);
+        private final AdaptiveSlewRateLimiter xSpeedLimiter = new AdaptiveSlewRateLimiter(Constants.AdaptiveSlewRateLimiter.ACCEL_RATE, Constants.AdaptiveSlewRateLimiter.DECEL_RATE);
         private final AdaptiveSlewRateLimiter rotationLimiter = new AdaptiveSlewRateLimiter(10.0, 10.0);
 
         private final SimpleMotorFeedforward motorFeedforward = new SimpleMotorFeedforward(0.12, 12.0 / 3.7);

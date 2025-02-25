@@ -105,4 +105,11 @@ public final class Constants
         public static final int FORWARD_CHANNEL_PORT                    = 14;
         public static final int REVERSE_CHANNEL_PORT                    = 15;        
     }
+
+    public static class AdaptiveSlewRateLimiter
+    {
+        public static final double DECEL_RATE                              = 2.0;
+        public static final double ACCEL_RATE                              = 1.5; 
+    }
+
 }
