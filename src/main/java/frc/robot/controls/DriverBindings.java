@@ -35,6 +35,11 @@ public final class DriverBindings
 
     private static DoubleSupplier rotationSupplier;
     private static DoubleSupplier xSpeedSupplier;
+    private static DoubleSupplier scaleFactorDoubleSupplier;
+
+    private static double scaleFactor = 1;
+    private final static double CRAWL_SPEED = 0.4;
+    private final static double DEFAULT_SPEED = 1.0;
 
     public static final double axisDeadZone = 0.1;
 
@@ -68,6 +73,7 @@ public final class DriverBindings
             configAButton();
             configBButton();
             configXButton();
+            configRightBumper();
             // configYButton();
             configLeftBumper();
             // configRightBumper();
@@ -91,6 +97,12 @@ public final class DriverBindings
         xSpeedSupplier = () -> -controller.getRawAxis(1);
         rotationSupplier = () -> -controller.getRawAxis(4);
         
+        // scale factor set up MIGHT BE IN WRONG PLACE
+        // scaleFactorDoubleSupplier = () -> scaleFactor;
+        
+        // xSpeedSupplier = () -> -(controller.getRawAxis(1) * scaleFactorDoubleSupplier.getAsDouble());
+        // rotationSupplier = () -> -controller.getRawAxis(4)* scaleFactorDoubleSupplier.getAsDouble();
+
         // double xAxis = Math.abs(-controller.getRawAxis(0)) >= axisDeadZone ? -controller.getRawAxis(0) : 0.0;
         // double yAxis = Math.abs(-controller.getRawAxis(4)) >= axisDeadZone ? -controller.getRawAxis(4) : 0.0;
 
@@ -136,6 +148,16 @@ public final class DriverBindings
             Trigger leftBumperTrigger = controller.leftBumper();
             leftBumperTrigger
                 .onTrue(shifter.shiftToggleCommand());
+        }
+    }
+
+    private static void configRightBumper()
+    {
+        if(drivetrain != null)
+        {
+            Trigger rightBumperTrigger = controller.rightBumper();
+            rightBumperTrigger
+                .onTrue(Commands.runOnce(() -> scaleFactor = (scaleFactor > CRAWL_SPEED) ? CRAWL_SPEED : DEFAULT_SPEED));
         }
     }
 
