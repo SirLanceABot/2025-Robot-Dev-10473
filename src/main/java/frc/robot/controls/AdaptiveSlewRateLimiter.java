@@ -5,7 +5,7 @@ import java.lang.invoke.MethodHandles;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.WPIUtilJNI;
 
-public final class AdaptaiveSlewRateLimiter
+public final class AdaptiveSlewRateLimiter
 {
     // This string gets the full name of the class, including the package name
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
@@ -32,7 +32,7 @@ public final class AdaptaiveSlewRateLimiter
      * AdaptiveSlewRateLimiter for drivetrain
      * @author Robbie F.
      */
-    public AdaptaiveSlewRateLimiter(double accelRateLimit, double decelRateLimit)
+    public AdaptiveSlewRateLimiter(double accelRateLimit, double decelRateLimit)
     {
         System.out.println(" Constructor Stated: " + fullClassName);
 

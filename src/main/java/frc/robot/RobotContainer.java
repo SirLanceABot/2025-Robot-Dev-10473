@@ -36,7 +36,7 @@ public class RobotContainer
     private boolean useRoller               = false;
     private boolean useShifter              = false;
     private boolean usePneumatics           = false;
-    private boolean useClimb                = false;
+    // private boolean useClimb                = false;
     private boolean useLEDs                 = false;
     private boolean usePoseEstimator        = false;
     private boolean useCamera               = false;
@@ -90,9 +90,10 @@ public class RobotContainer
             ? new LEDs()
             : null;
 
-        climb = (useFullRobot || useClimb)
-            ? new Climb()
-            : null;
+        // climb = (useFullRobot || useClimb)
+        //     ? new Climb()
+        //     : null;
+        climb = null;
 
         camera = (useFullRobot || useCamera)
             ? CameraLL.makeCamera(Constants.Camera.CAMERA)

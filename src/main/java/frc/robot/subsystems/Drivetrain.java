@@ -7,6 +7,7 @@ import static edu.wpi.first.units.Units.Volts;
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.zip.Adler32;
 
 import com.pathplanner.lib.util.DriveFeedforwards;
 
@@ -30,6 +31,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+import frc.robot.controls.AdaptiveSlewRateLimiter;
 import frc.robot.motors.TalonFXLance;
 import frc.robot.sensors.GyroLance;
 
@@ -78,7 +80,10 @@ public class Drivetrain extends SubsystemLance
     
         private final PIDController leftPIDController = new PIDController(1, 0, 0);
         private final PIDController rightPIDController = new PIDController(1, 0, 0);
-    
+
+        private final AdaptiveSlewRateLimiter xSpeedLimiter = new AdaptiveSlewRateLimiter(2.0, 1.5);
+        private final AdaptiveSlewRateLimiter rotationLimiter = new AdaptiveSlewRateLimiter(10.0, 10.0);
+
         private final SimpleMotorFeedforward motorFeedforward = new SimpleMotorFeedforward(0.12, 12.0 / 3.7);
     
         private final DifferentialDriveKinematics kinematics;
@@ -362,7 +367,27 @@ public class Drivetrain extends SubsystemLance
      */
     public void arcadeDrive(DoubleSupplier speed, DoubleSupplier rotation, boolean squared)
     {
-        differentialDrive.arcadeDrive(speed.getAsDouble() / divisor, rotation.getAsDouble() / divisor, squared);
+        differentialDrive.arcadeDrive(speed.getAsDouble() / divisor, rotation.getAsDouble() / divisor / 2.0, squared);
+    }   
+
+    public void arcadeDrive(DoubleSupplier speed, DoubleSupplier rotation, boolean squared, boolean useSlewRateLimiter)
+    {
+        double xSpeed;
+        double rotationSpeed;
+
+        if(useSlewRateLimiter)
+        {
+            xSpeed = xSpeedLimiter.calculate(speed.getAsDouble());
+            // rotationSpeed = rotationLimiter.calculate(rotation.getAsDouble());
+        }
+        else
+        {
+            xSpeed = speed.getAsDouble();
+            // rotationSpeed = rotation.getAsDouble();
+        }
+
+        differentialDrive.arcadeDrive(xSpeed, rotation.getAsDouble() / 2.0, squared);
+        // differentialDrive.arcadeDrive(xSpeed / divisor, rotationSpeed / divisor, squared);
     }   
     
     /**
@@ -478,6 +503,11 @@ public class Drivetrain extends SubsystemLance
     public Command arcadeDriveCommand(DoubleSupplier speed, DoubleSupplier rotation, boolean squared)
     {
         return run( () -> arcadeDrive(speed, rotation, squared) ).withName("Arcade Drive");
+    }
+
+    public Command arcadeDriveCommand(DoubleSupplier speed, DoubleSupplier rotation, boolean squared, boolean useSlewRateLimiter)
+    {
+        return run( () -> arcadeDrive(speed, rotation, squared, useSlewRateLimiter) ).withName("Arcade Drive");
     }
 
     /**
@@ -626,7 +656,7 @@ public class Drivetrain extends SubsystemLance
         odometryPublisher.set(pose);
         // System.out.println("LL = " + leftLeader.getMotorVoltage() + " LF = " + leftFollower.getMotorVoltage() + " RL = " + rightLeader.getMotorVoltage() + " RF = " + rightFollower.getMotorVoltage());
         // System.out.println("LL = " + leftLeader.getMotorSupplyVoltage() + " LF = " + leftFollower.getMotorSupplyVoltage() + " RL = " + rightLeader.getMotorSupplyVoltage() + " RF = " + rightFollower.getMotorSupplyVoltage());
-        System.out.println(this);
+        // System.out.println(this);
     }
         
     @Override

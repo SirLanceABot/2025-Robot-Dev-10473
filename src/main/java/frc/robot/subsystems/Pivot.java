@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -211,13 +212,24 @@ public class Pivot extends SubsystemLance
 
     public Command stopCommand()
     {
-        return run(() -> stop()).withName("Stop Pivot");
+        return runOnce(() -> stop()).withName("Stop Pivot");
     }
 
     public Command moveToSetPositionCommand(TargetPosition targetPosition)
     {
         return run(() -> motor.setControlPosition(targetPosition.pivot));
         // return Commands.run(() -> moveToSetPosition(targetPosition), this).withName("Move to Set Position Pivot"); 
+    }
+
+    private double holdPosition;
+
+    public Command holdPositionCommand(DoubleSupplier targetPosition)
+    {
+        // return 
+        // run(() -> holdPosition = targetPosition.getAsDouble())
+        // .andThen(() -> motor.setControlPosition(holdPosition));
+
+        return run (() -> motor.setControlPosition(targetPosition.getAsDouble()));
     }
 
     public Command resetEncoderCommand()
@@ -234,6 +246,13 @@ public class Pivot extends SubsystemLance
     {
         return runOnce(() -> moveDown()).withName("Move Down");
     }
+
+    public DoubleSupplier positionSupplier()
+    {
+        return () -> motor.getPosition(); 
+    }
+
+
 
     // Use a method reference instead of this method
     // public Command stopCommand()

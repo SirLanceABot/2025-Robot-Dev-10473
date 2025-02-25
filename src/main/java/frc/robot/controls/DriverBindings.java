@@ -33,8 +33,8 @@ public final class DriverBindings
     private static Drivetrain drivetrain;
     private static Shifter shifter;
 
-    private static DoubleSupplier yAxisSupplier;
-    private static DoubleSupplier xAxisSupplier;
+    private static DoubleSupplier rotationSupplier;
+    private static DoubleSupplier xSpeedSupplier;
 
     public static final double axisDeadZone = 0.1;
 
@@ -88,8 +88,8 @@ public final class DriverBindings
 
     private static void configSuppliers()
     {
-        xAxisSupplier = () -> -controller.getRawAxis(0);
-        yAxisSupplier = () -> -controller.getRawAxis(1);
+        xSpeedSupplier = () -> -controller.getRawAxis(1);
+        rotationSupplier = () -> -controller.getRawAxis(4);
         
         // double xAxis = Math.abs(-controller.getRawAxis(0)) >= axisDeadZone ? -controller.getRawAxis(0) : 0.0;
         // double yAxis = Math.abs(-controller.getRawAxis(4)) >= axisDeadZone ? -controller.getRawAxis(4) : 0.0;
@@ -211,7 +211,9 @@ public final class DriverBindings
     {
         if(drivetrain != null)
         {
-            drivetrain.setDefaultCommand(drivetrain.arcadeDriveCommand(yAxisSupplier, xAxisSupplier, true) );
+            drivetrain.setDefaultCommand(drivetrain.arcadeDriveCommand(xSpeedSupplier, rotationSupplier, true, true) );
+
+            // drivetrain.setDefaultCommand(drivetrain.arcadeDriveCommand(yAxisSupplier, xAxisSupplier, false, true) );
         }
     }
 

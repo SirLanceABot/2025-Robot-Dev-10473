@@ -63,6 +63,7 @@ public final class OperatorBindings
             configBButton();
             configXButton();
             configYButton();
+            configLeftBumper();
             configBackButton();
             configPOVButton();
 
@@ -90,7 +91,8 @@ public final class OperatorBindings
     {
         Trigger bButtonTrigger = controller.b();
         bButtonTrigger
-            .onTrue( GeneralCommands.resetPivotAndRollerCommand() );
+            // .onTrue( GeneralCommands.resetPivotAndRollerCommand() );
+            .onTrue( roller.stopCommand());
     }
 
     private static void configXButton()
@@ -115,7 +117,16 @@ public final class OperatorBindings
             backButtonTrigger
                 .onTrue( pivot.resetEncoderCommand() );
         }
-        
+    }
+
+    private static void configLeftBumper()
+    {
+        if(pivot != null)
+        {
+            Trigger leftBumperTrigger = controller.leftBumper();
+            leftBumperTrigger  
+                .onTrue( GeneralCommands.resetPivotAndRollerCommand() );
+        }
     }
 
     private static void configPOVButton()
@@ -131,7 +142,7 @@ public final class OperatorBindings
                 .onTrue( pivot.moveDownCommand());
 
             povUpTrigger.negate().and(povDownTrigger.negate())
-                .onTrue( pivot.stopCommand());
+                .onTrue( pivot.holdPositionCommand(pivot.positionSupplier()));
         }
     }
 
