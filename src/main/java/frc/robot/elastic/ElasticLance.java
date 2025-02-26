@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.subsystems.Shifter;
 
 public class ElasticLance 
 {
@@ -39,6 +40,7 @@ public class ElasticLance
         SmartDashboard.putNumber("CPU Temperature", RobotController.getCPUTemp());
 
         updateAllianceColorBox();
+        updateGearBox();
         // SmartDashboard.putString("Alliance Color", color.toHexString());
         // SmartDashboard.putNumber("Pivot", Pivot.getPosition());
 
@@ -64,5 +66,26 @@ public class ElasticLance
         }
 
         SmartDashboard.putString("Alliance Color", color.toHexString());
+    }
+
+
+    public static void updateGearBox()
+    {
+        String gear;
+
+        if(Shifter.isHighGear() == true)
+        {
+            gear = "High";
+        }
+        else
+        {
+            gear = "Low";
+        }
+        // else 
+        // {
+        //     gear = "None";
+        // }
+
+        SmartDashboard.putString("Gear", gear);
     }
 }
