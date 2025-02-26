@@ -35,6 +35,7 @@ public class Pivot extends SubsystemLance
     {
         kStartingPosition(0.0),
         kHoldAlgaePosition(0.9),
+        kScoreCoralPosition(2.5),
         kGrabAlgaePosition(7.75);
         // kOverride(-4237);
 

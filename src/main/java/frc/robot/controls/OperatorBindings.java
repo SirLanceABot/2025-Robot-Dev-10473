@@ -66,6 +66,7 @@ public final class OperatorBindings
             configLeftBumper();
             configBackButton();
             configPOVButton();
+            configRightBumper();
 
             configRumble(5);
             configRumble(15);
@@ -143,6 +144,16 @@ public final class OperatorBindings
 
             povUpTrigger.negate().and(povDownTrigger.negate())
                 .onTrue( pivot.holdPositionCommand(pivot.positionSupplier()));
+        }
+    }
+
+    private static void configRightBumper()
+    {
+        if(pivot != null && roller != null)
+        {
+            Trigger rightBumperTrigger = controller.rightBumper();
+            rightBumperTrigger
+                .onTrue( GeneralCommands.scoreCoralTestCommand());
         }
     }
 

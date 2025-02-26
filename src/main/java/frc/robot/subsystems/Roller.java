@@ -112,7 +112,7 @@ public class Roller extends SubsystemLance
      */
     public Command ejectCoralCommand()
     {
-        return runOnce( () -> set(0.15) )
+        return runOnce( () -> set(0.25) )
         .withName("Eject Roller");
     }
 

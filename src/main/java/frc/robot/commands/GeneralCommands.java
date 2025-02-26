@@ -147,6 +147,34 @@ public final class GeneralCommands
         }
     }
 
+    public static Command scoreCoralTestCommand()
+    {
+        if(roller != null)
+        {
+            return
+            Commands.parallel(
+                setLEDSolid(Color.kRed),
+                pivot.moveToSetPositionCommand(TargetPosition.kScoreCoralPosition)
+                    .until( () -> Math.abs(TargetPosition.kScoreCoralPosition.pivot - pivot.getPosition()) < 0.1)
+                    .withTimeout(2.0),
+                roller.ejectCoralCommand()
+            )
+            .andThen(roller.stopCommand())
+            .andThen(Commands.waitSeconds(1.0))
+            .andThen(
+                Commands.parallel(
+                    operatorRumble(),
+                    pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition),
+                    setLEDOff()
+                )
+            );
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
     /**
      * Command to score algae into the processor
      * @return Command to score algae into the processer
