@@ -143,7 +143,7 @@ public final class OperatorBindings
                 .onTrue( pivot.moveDownCommand());
 
             povUpTrigger.negate().and(povDownTrigger.negate())
-                .onTrue( pivot.holdPositionCommand(pivot.positionSupplier()));
+                .onTrue( pivot.holdCurrentPositionCommand());
         }
     }
 

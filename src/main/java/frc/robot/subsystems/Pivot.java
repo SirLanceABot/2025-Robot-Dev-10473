@@ -7,7 +7,6 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-
 import frc.robot.Constants;
 import frc.robot.motors.SparkFlexLance;
 
@@ -56,6 +55,7 @@ public class Pivot extends SubsystemLance
     // private TargetPosition targetPosition = TargetPosition.kOverride;
     private final double threshold = 0.1;
     private static boolean isWithinThreshold;
+    private double holdPosition;
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -222,8 +222,6 @@ public class Pivot extends SubsystemLance
         // return Commands.run(() -> moveToSetPosition(targetPosition), this).withName("Move to Set Position Pivot"); 
     }
 
-    private double holdPosition;
-
     public Command holdPositionCommand(DoubleSupplier targetPosition)
     {
         // return 
@@ -231,6 +229,14 @@ public class Pivot extends SubsystemLance
         // .andThen(() -> motor.setControlPosition(holdPosition));
 
         return run (() -> motor.setControlPosition(targetPosition.getAsDouble()));
+    }
+
+    public Command holdCurrentPositionCommand()
+    {
+        return startRun(
+            () -> holdPosition = motor.getPosition(),
+            () -> motor.setControlPosition(holdPosition)
+        );
     }
 
     public Command resetEncoderCommand()
