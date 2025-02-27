@@ -157,6 +157,14 @@ public final class OperatorBindings
         }
     }
 
+    public static void configPivotDefaultCommand()
+    {
+        if(pivot != null)
+        {
+            pivot.setDefaultCommand(pivot.holdCurrentPositionCommand());
+        }
+    }
+
 
     
     /**
