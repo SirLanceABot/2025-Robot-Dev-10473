@@ -178,17 +178,20 @@ public final class DriverBindings
      */
     private static void configSysid()
     {
-        Trigger aButtonTriggerSysid = controller.a().and(controller.leftBumper());
-        aButtonTriggerSysid.whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        if(drivetrain != null)
+        {
+            Trigger aButtonTriggerSysid = controller.a().and(controller.leftBumper());
+            aButtonTriggerSysid.whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
 
-        Trigger bButtonTriggerSysid = controller.b().and(controller.leftBumper());
-        bButtonTriggerSysid.whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+            Trigger bButtonTriggerSysid = controller.b().and(controller.leftBumper());
+            bButtonTriggerSysid.whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
 
-        Trigger xButtonTriggerSysid = controller.x().and(controller.leftBumper());
-        xButtonTriggerSysid.whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+            Trigger xButtonTriggerSysid = controller.x().and(controller.leftBumper());
+            xButtonTriggerSysid.whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
 
-        Trigger yButtonTriggerSysid = controller.y().and(controller.leftBumper());
-        yButtonTriggerSysid.whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+            Trigger yButtonTriggerSysid = controller.y().and(controller.leftBumper());
+            yButtonTriggerSysid.whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        }
     }
 
 
