@@ -108,8 +108,8 @@ public final class Constants
 
     public static class AdaptiveSlewRateLimiter
     {
-        public static final double DECEL_RATE                              = 2.0;
-        public static final double ACCEL_RATE                              = 1.5; 
+        public static final double DECEL_RATE                              = 1.5;
+        public static final double ACCEL_RATE                              = 1.0; 
     }
 
 }
