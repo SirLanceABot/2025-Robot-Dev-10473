@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 7.126,
-        "y": 7.428
+        "y": 7.4
       },
       "prevControl": null,
       "nextControl": {
         "x": 6.8774020995389336,
-        "y": 7.454440194521777
+        "y": 7.426440194521783
       },
       "isLocked": false,
       "linkedName": "Left Wall"
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.8,
-    "maxAcceleration": 50.0,
+    "maxAcceleration": 10.0,
     "maxAngularVelocity": 800.0,
     "maxAngularAcceleration": 1925.0,
     "nominalVoltage": 12.0,

@@ -92,7 +92,7 @@ public class Pivot extends SubsystemLance
         motor.setupForwardSoftLimit(8.75, true);
         // motor.setupReverseSoftLimit(0.0, true);
 
-        motor.setupPIDController(0, 0.025, 0, 0);
+        motor.setupPIDController(0, 0.025, 0, 0); //Fix me - try increasing d
 
         motor.setPosition(0.0);
     }
@@ -214,6 +214,11 @@ public class Pivot extends SubsystemLance
     public Command stopCommand()
     {
         return runOnce(() -> stop()).withName("Stop Pivot");
+    }
+
+    public Command stopPivotCommand()
+    {
+        return runOnce(()->{});
     }
 
     public Command moveToSetPositionCommand(TargetPosition targetPosition)

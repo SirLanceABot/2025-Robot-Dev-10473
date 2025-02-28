@@ -66,7 +66,7 @@ public final class OperatorBindings
             configLeftBumper();
             configBackButton();
             configPOVButton();
-            configRightBumper();
+            // configRightBumper();
 
             configRumble(5);
             configRumble(15);
@@ -147,23 +147,23 @@ public final class OperatorBindings
         }
     }
 
-    private static void configRightBumper()
-    {
-        if(pivot != null && roller != null)
-        {
-            Trigger rightBumperTrigger = controller.rightBumper();
-            rightBumperTrigger
-                .onTrue( GeneralCommands.scoreCoralTestCommand());
-        }
-    }
+    // private static void configRightBumper()
+    // {
+    //     if(pivot != null && roller != null)
+    //     {
+    //         Trigger rightBumperTrigger = controller.rightBumper();
+    //         rightBumperTrigger
+    //             .onTrue( GeneralCommands.scoreCoralTestCommand());
+    //     }
+    // }
 
-    public static void configPivotDefaultCommand()
-    {
-        if(pivot != null)
-        {
-            pivot.setDefaultCommand(pivot.holdCurrentPositionCommand());
-        }
-    }
+    // public static void configPivotDefaultCommand()
+    // {
+    //     if(pivot != null)
+    //     {
+    //         pivot.setDefaultCommand(pivot.holdCurrentPositionCommand());
+    //     }
+    // }
 
 
     

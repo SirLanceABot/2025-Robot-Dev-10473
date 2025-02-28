@@ -73,7 +73,7 @@ public final class DriverBindings
             configAButton();
             configBButton();
             configXButton();
-            configRightBumper();
+            configRightTrigger();
             // configYButton();
             configLeftBumper();
             // configRightBumper();
@@ -101,7 +101,7 @@ public final class DriverBindings
         scaleFactorDoubleSupplier = () -> scaleFactor;
         
         xSpeedSupplier = () -> -(controller.getRawAxis(1) * scaleFactorDoubleSupplier.getAsDouble());
-        rotationSupplier = () -> -controller.getRawAxis(4)* scaleFactorDoubleSupplier.getAsDouble();
+        rotationSupplier = () -> -controller.getRawAxis(4);
 
         // double xAxis = Math.abs(-controller.getRawAxis(0)) >= axisDeadZone ? -controller.getRawAxis(0) : 0.0;
         // double yAxis = Math.abs(-controller.getRawAxis(4)) >= axisDeadZone ? -controller.getRawAxis(4) : 0.0;
@@ -151,13 +151,14 @@ public final class DriverBindings
         }
     }
 
-    private static void configRightBumper()
+    private static void configRightTrigger()
     {
         if(drivetrain != null)
         {
-            Trigger rightBumperTrigger = controller.rightBumper();
-            rightBumperTrigger
-                .onTrue(Commands.runOnce(() -> scaleFactor = (scaleFactor > CRAWL_SPEED) ? CRAWL_SPEED : DEFAULT_SPEED));
+            Trigger rightTriggerTrigger = controller.rightTrigger();
+            rightTriggerTrigger
+                .onTrue(Commands.runOnce(() -> scaleFactor = CRAWL_SPEED))
+                .onFalse(Commands.runOnce(() -> scaleFactor = DEFAULT_SPEED));
         }
     }
 

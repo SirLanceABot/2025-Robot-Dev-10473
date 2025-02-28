@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.178,
-        "y": 5.125
+        "x": 5.197222222222222,
+        "y": 5.198958333333333
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.6551548997385765,
-        "y": 5.951456529427648
+        "x": 5.674377121960799,
+        "y": 6.0254148627609805
       },
       "isLocked": false,
       "linkedName": "S6 Middle"
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.8,
-    "maxAcceleration": 50.0,
+    "maxAcceleration": 10.0,
     "maxAngularVelocity": 800.0,
     "maxAngularAcceleration": 1925.0,
     "nominalVoltage": 12.0,

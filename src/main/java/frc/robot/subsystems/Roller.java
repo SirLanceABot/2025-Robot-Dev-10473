@@ -113,7 +113,7 @@ public class Roller extends SubsystemLance
      */
     public Command ejectCoralCommand()
     {
-        return runOnce( () -> set(0.25) )
+        return runOnce( () -> set(0.15) )
         .withName("Eject Roller");
     }
 
@@ -149,11 +149,13 @@ public class Roller extends SubsystemLance
      */
     public BooleanSupplier isDetectedSupplier()
     {
-        if(leftSensor.isDetectedSupplier().getAsBoolean())
-            return leftSensor.isDetectedSupplier();
+        // if(leftSensor.isDetectedSupplier().getAsBoolean())
+        //     return leftSensor.isDetectedSupplier();
 
-        return rightSensor.isDetectedSupplier();
-    }
+        // return rightSensor.isDetectedSupplier();
+
+        return () -> (leftSensor.isDetectedSupplier().getAsBoolean() || rightSensor.isDetectedSupplier().getAsBoolean());
+    }   
 
     /**
      * Command to make the rollers intake until algae is in robot

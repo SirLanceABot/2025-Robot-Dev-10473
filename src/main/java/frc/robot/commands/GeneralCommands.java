@@ -100,7 +100,7 @@ public final class GeneralCommands
             .andThen(Commands.waitUntil(roller.isDetectedSupplier()))
             .andThen(
                 Commands.parallel(
-                    roller.slowRollerCommand(),
+                    roller.stopCommand(),
                     Commands.runOnce( () -> intakeAlgaeTriggersRumble.setPressed(true) ),
                     setLEDSolid(Color.kBlue),
                     pivot.moveToSetPositionCommand(TargetPosition.kHoldAlgaePosition)
@@ -125,38 +125,14 @@ public final class GeneralCommands
      */
     public static Command scoreCoralCommand()
     {
-        if(roller != null)
-        {
-            return
-            Commands.parallel(
-                setLEDSolid(Color.kRed),
-                roller.ejectCoralCommand()
-            )
-            .andThen(Commands.waitSeconds(2.0))
-            .andThen(
-                Commands.parallel(
-                    operatorRumble(),
-                    roller.stopCommand(),
-                    setLEDOff()
-                )
-            );
-        }
-        else
-        {
-            return Commands.none();
-        }
-    }
-
-    public static Command scoreCoralTestCommand()
-    {
-        if(roller != null)
+        if(roller != null && pivot !=null)
         {
             return
             Commands.parallel(
                 setLEDSolid(Color.kRed),
                 pivot.moveToSetPositionCommand(TargetPosition.kScoreCoralPosition)
                     .until( () -> Math.abs(TargetPosition.kScoreCoralPosition.pivot - pivot.getPosition()) < 0.1)
-                    .withTimeout(2.0),
+                    .withTimeout(0.5),
                 roller.ejectCoralCommand()
             )
             .andThen(roller.stopCommand())
@@ -174,6 +150,34 @@ public final class GeneralCommands
             return Commands.none();
         }
     }
+
+    // public static Command scoreCoralTestCommand()
+    // {
+    //     if(roller != null && pivot !=null)
+    //     {
+    //         return
+    //         Commands.parallel(
+    //             setLEDSolid(Color.kRed),
+    //             pivot.moveToSetPositionCommand(TargetPosition.kScoreCoralPosition)
+    //                 .until( () -> Math.abs(TargetPosition.kScoreCoralPosition.pivot - pivot.getPosition()) < 0.1)
+    //                 .withTimeout(2.0),
+    //             roller.ejectCoralCommand()
+    //         )
+    //         .andThen(roller.stopCommand())
+    //         .andThen(Commands.waitSeconds(1.0))
+    //         .andThen(
+    //             Commands.parallel(
+    //                 operatorRumble(),
+    //                 pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition),
+    //                 setLEDOff()
+    //             )
+    //         );
+    //     }
+    //     else
+    //     {
+    //         return Commands.none();
+    //     }
+    // }
 
     /**
      * Command to score algae into the processor

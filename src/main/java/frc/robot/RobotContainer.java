@@ -99,6 +99,11 @@ public class RobotContainer
             ? CameraLL.makeCamera(Constants.Camera.CAMERA)
             : null;
 
+        if(camera != null)
+        {
+            camera.setStreamMode_PiPSecondary();
+        }
+
         // FIXME camera maybe null
         poseEstimator = (useFullRobot || usePoseEstimator)
             ? new PoseEstimatorLance(gyro, drivetrain, camera)
