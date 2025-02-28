@@ -32,7 +32,8 @@ public class Roller extends SubsystemLance
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
     private final SparkFlexLance motor = new SparkFlexLance(Constants.Roller.MOTOR_PORT, Constants.Roller.MOTOR_CAN_BUS, "Roller Motor");
-    private final Proximity sensor = new Proximity(Constants.Roller.PROXIMITY_SENSOR_PORT);
+    private final Proximity rightSensor = new Proximity(Constants.Roller.PROXIMITY_SENSOR_RIGHT_PORT);
+    private final Proximity leftSensor = new Proximity(Constants.Roller.PROXIMITY_SENSOR_LEFT_PORT);
 
     // *** CLASS CONSTRUCTORS ***
     // Put all class constructors here
@@ -148,7 +149,10 @@ public class Roller extends SubsystemLance
      */
     public BooleanSupplier isDetectedSupplier()
     {
-        return sensor.isDetectedSupplier();
+        if(leftSensor.isDetectedSupplier().getAsBoolean())
+            return leftSensor.isDetectedSupplier();
+
+        return rightSensor.isDetectedSupplier();
     }
 
     /**

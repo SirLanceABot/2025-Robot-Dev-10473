@@ -96,7 +96,8 @@ public final class Constants
 
         public static final String MOTOR_CAN_BUS                        = ROBORIO;
 
-        public static final int PROXIMITY_SENSOR_PORT                   = 0;
+        public static final int PROXIMITY_SENSOR_RIGHT_PORT                   = 0;
+        public static final int PROXIMITY_SENSOR_LEFT_PORT                    = 1;
 
     }
 
