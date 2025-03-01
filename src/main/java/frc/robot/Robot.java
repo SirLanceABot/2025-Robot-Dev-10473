@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.GeneralCommands;
 import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
+import frc.robot.controls.SysIDBindings;
 import frc.robot.elastic.ElasticLance;
 import frc.robot.loggers.DataLogFile;
 import frc.robot.motors.MotorControllerLance;
@@ -59,6 +60,7 @@ public class Robot extends TimedRobot
         // (5) Bind the commands to triggers
         DriverBindings.createBindings(robotContainer);
         OperatorBindings.createBindings(robotContainer);
+        SysIDBindings.createBindings(robotContainer);
 
     }
 
