@@ -292,7 +292,7 @@ public class Drivetrain extends SubsystemLance
         SmartDashboard.putNumber("Right Wheel Speeds", wheelSpeeds.rightMetersPerSecond);
         // SmartDashboard.putNumber("Feedforwards", feedforwards);
 
-        double currentVoltage = RobotController.getBatteryVoltage();s
+        double currentVoltage = RobotController.getBatteryVoltage();
         differentialDrive.tankDrive(leftWheelSpeedInVolts / currentVoltage, rightWheelSpeedInVolts / currentVoltage);
         // leftLeader.setControlVelocity(wheelSpeeds.leftMetersPerSecond);
         // rightLeader.setControlVelocity(wheelSpeeds.rightMetersPerSecond);
