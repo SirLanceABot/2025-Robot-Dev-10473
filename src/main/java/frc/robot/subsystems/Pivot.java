@@ -148,6 +148,7 @@ public class Pivot extends SubsystemLance
 
     public void resetEncoder()
     {
+        motor.set(0.0);
         motor.setPosition(0.0);
     }
 

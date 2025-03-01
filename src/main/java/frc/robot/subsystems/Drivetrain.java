@@ -11,6 +11,7 @@ import java.util.zip.Adler32;
 
 import com.pathplanner.lib.util.DriveFeedforwards;
 
+import edu.wpi.first.math.controller.DifferentialDriveFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -208,6 +209,9 @@ public class Drivetrain extends SubsystemLance
         leftLeader.setupVelocityConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
         rightLeader.setupVelocityConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
 
+        leftLeader.setupPIDController(0, 2.5, 0.0, 0.0);
+        rightLeader.setupPIDController(0, 2.5, 0.0, 0.0);
+
         leftFollower.setSafetyEnabled(false);
         rightFollower.setSafetyEnabled(false);
 
@@ -271,9 +275,12 @@ public class Drivetrain extends SubsystemLance
     public void driveRobotRelative(ChassisSpeeds chassisSpeeds, DriveFeedforwards feedforwards)
     {
         DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
-        
+        // DifferentialDriveFeedforward differentialDriveFeedforward = feedforwards.
+
         double leftWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.leftMetersPerSecond);
         double rightWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.rightMetersPerSecond);
+
+
 
         // System.out.println("-------------------LV = " + leftWheelSpeedInVolts + ", RV = " + rightWheelSpeedInVolts + ", RV = " + rightLeaderVelocity + ", LV = " + leftLeaderVelocity + ", CS = " + chassisSpeeds);
         SmartDashboard.putString("Chassis Speeds", chassisSpeeds.toString());
@@ -281,8 +288,14 @@ public class Drivetrain extends SubsystemLance
         SmartDashboard.putNumber("Left Volts", leftWheelSpeedInVolts);
         SmartDashboard.putNumber("Right velocity", rightLeaderVelocity);
         SmartDashboard.putNumber("Left velocity", leftLeaderVelocity);
+        SmartDashboard.putNumber("Left Wheel Speeds", wheelSpeeds.leftMetersPerSecond);
+        SmartDashboard.putNumber("Right Wheel Speeds", wheelSpeeds.rightMetersPerSecond);
+        // SmartDashboard.putNumber("Feedforwards", feedforwards);
 
-        differentialDrive.tankDrive(leftWheelSpeedInVolts / 12.0, rightWheelSpeedInVolts / 12.0);
+        double currentVoltage = RobotController.getBatteryVoltage();s
+        differentialDrive.tankDrive(leftWheelSpeedInVolts / currentVoltage, rightWheelSpeedInVolts / currentVoltage);
+        // leftLeader.setControlVelocity(wheelSpeeds.leftMetersPerSecond);
+        // rightLeader.setControlVelocity(wheelSpeeds.rightMetersPerSecond);
     }
     
     /**

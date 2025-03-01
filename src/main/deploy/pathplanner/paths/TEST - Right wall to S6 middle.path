@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.329,
+        "x": 6.626,
         "y": 7.4
       },
       "isLocked": false,
-      "linkedName": "Left Wall"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.197222222222222,
-        "y": 5.198958333333333
+        "x": 3.126,
+        "y": 7.4
       },
       "prevControl": {
-        "x": 5.610496850762954,
-        "y": 5.914770987445036
+        "x": 3.626,
+        "y": 7.4
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "S6 Middle"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -40,8 +40,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 3.8,
+    "maxAcceleration": 2.5,
     "maxAngularVelocity": 800.0,
     "maxAngularAcceleration": 1925.0,
     "nominalVoltage": 12.0,
