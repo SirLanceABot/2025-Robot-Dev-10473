@@ -43,6 +43,7 @@ public class RobotContainer
 
     private boolean useDriverController     = false;
     private boolean useOperatorController   = false;
+    private boolean useSysIDController      = false;
 
     private final Pivot pivot;
     private final Drivetrain drivetrain;
@@ -57,6 +58,7 @@ public class RobotContainer
 
     private final CommandXboxController operatorController;
     private final CommandXboxController driverController;
+    private final CommandXboxController sysIDController;
 
 
 
@@ -116,6 +118,11 @@ public class RobotContainer
         operatorController = (useFullRobot || useOperatorController)
             ? new CommandXboxController(Constants.Controllers.OPERATOR_CONTROLLER_PORT)
             : null;
+
+        sysIDController = (useSysIDController)
+            ? new CommandXboxController(2)
+            : null;
+
     }
     
     public Drivetrain getDrivetrain()
@@ -171,6 +178,11 @@ public class RobotContainer
     public CommandXboxController getDriverController()
     {
         return driverController;
+    }
+
+    public CommandXboxController getSysIDController()
+    {
+        return sysIDController;
     }
 
     // public BooleanSupplier isRedAllianceSupplier()
