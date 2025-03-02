@@ -39,7 +39,8 @@ public final class DriverBindings
 
     private static double scaleFactor = 1;
     private final static double CRAWL_SPEED = 0.4;
-    private final static double DEFAULT_SPEED = 1.0;
+    private final static double DEFAULT_SPEED = 0.8;
+    private final static double RUN_SPEED = 1.0;
 
     public static final double axisDeadZone = 0.1;
 
@@ -74,6 +75,7 @@ public final class DriverBindings
             configBButton();
             configXButton();
             configRightTrigger();
+            configLeftTrigger();
             // configYButton();
             configLeftBumper();
             // configRightBumper();
@@ -161,7 +163,17 @@ public final class DriverBindings
         }
     }
 
-
+    private static void configLeftTrigger()
+    {
+        if(drivetrain != null)
+        {
+            Trigger rightTriggerTrigger = controller.rightTrigger();
+            Trigger leftTriggerTrigger = controller.leftTrigger();
+            leftTriggerTrigger.and(rightTriggerTrigger.negate())
+                .onTrue(Commands.runOnce(() -> scaleFactor = RUN_SPEED))
+                .onFalse(Commands.runOnce(() -> scaleFactor = DEFAULT_SPEED));
+        }
+    }
 
 
     // private static void configRightBumper()

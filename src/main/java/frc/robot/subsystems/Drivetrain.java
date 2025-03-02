@@ -77,7 +77,7 @@ public class Drivetrain extends SubsystemLance
         private final TalonFXLance rightLeader = new TalonFXLance(Constants.Drivetrain.RIGHT_LEADER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Right Leader");
         private final TalonFXLance rightFollower = new TalonFXLance(Constants.Drivetrain.RIGHT_FOLLOWER_PORT, Constants.Drivetrain.MOTOR_CAN_BUS, "Right Follower");
     
-        private final DifferentialDrive differentialDrive;
+        private DifferentialDrive differentialDrive = null;
     
         private final PIDController leftPIDController = new PIDController(1, 0, 0);
         private final PIDController rightPIDController = new PIDController(1, 0, 0);
@@ -115,7 +115,10 @@ public class Drivetrain extends SubsystemLance
                   // Tell SysId how to plumb the driving voltage to the motors.
                   voltage -> {
                     leftLeader.setVoltage(voltage.magnitude());
+                    leftLeader.feed();
                     rightLeader.setVoltage(voltage.magnitude());
+                    rightLeader.feed();
+                    differentialDrive.feed();
                   },
                   // Tell SysId how to record a frame of data for each motor on the mechanism being
                   // characterized.
@@ -141,6 +144,10 @@ public class Drivetrain extends SubsystemLance
                         .linearVelocity(
                             m_velocity.mut_replace(getRightLeaderVelocity(), MetersPerSecond));
 
+                    // if ((getRightLeaderVelocity() - getRightFollowerVelocity()) / getRightFollowerVelocity() > 0.01)
+                    // {
+                    //     System.out.println("Right motors: " + getRightLeaderVelocity() + ", " + getRightFollowerVelocity());
+                    // }
               },
               // Tell SysId to make generated commands require this subsystem, suffix test state in
               // WPILog with this subsystem's name ("drive")
@@ -207,7 +214,10 @@ public class Drivetrain extends SubsystemLance
         rightLeader.setupPositionConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
 
         leftLeader.setupVelocityConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
+        leftFollower.setupVelocityConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
         rightLeader.setupVelocityConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
+        rightFollower.setupVelocityConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
+
 
         leftLeader.setupPIDController(0, 2.5, 0.0, 0.0);
         rightLeader.setupPIDController(0, 2.5, 0.0, 0.0);
@@ -345,12 +355,22 @@ public class Drivetrain extends SubsystemLance
         return leftLeaderVelocity;
     }
 
+    public double getLeftFollowerVelocity()
+    {
+        return leftFollowerVelocity;
+    }
+
     /**
      * @return the velocity of the right wheels [meters/second]
      */
     public double getRightLeaderVelocity()
     {
         return rightLeaderVelocity;
+    }
+
+    public double getRightFollowerVelocity()
+    {
+        return rightFollowerVelocity;
     }
 
     /**
@@ -662,15 +682,19 @@ public class Drivetrain extends SubsystemLance
 
     private double leftLeaderPosition;
     private double leftLeaderVelocity;
+    private double leftFollowerVelocity;
     private double rightLeaderPosition;
     private double rightLeaderVelocity;
+    private double rightFollowerVelocity;
 
     @Override
     public void periodic()
     {
         leftLeaderVelocity = leftLeader.getVelocity();
+        leftFollowerVelocity = leftFollower.getVelocity();
         leftLeaderPosition = leftLeader.getPosition();
         rightLeaderVelocity = rightLeader.getVelocity();
+        rightFollowerVelocity = rightFollower.getVelocity();
         rightLeaderPosition = rightLeader.getPosition();
         SmartDashboard.putNumber("LLV", leftLeaderVelocity);
         SmartDashboard.putNumber("LLP", leftLeaderPosition);
