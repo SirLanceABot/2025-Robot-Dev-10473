@@ -29,9 +29,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.ReverseLimitSourceValue;
 import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
 import com.ctre.phoenix6.spns.SpnValue;
-import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkBase.ControlType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class TalonFXLance extends MotorControllerLance
@@ -56,6 +55,8 @@ public class TalonFXLance extends MotorControllerLance
     private final PositionVoltage positionVoltage;
     private final VelocityVoltage velocityVoltage;
     private final String motorControllerName;
+    private DigitalInput forwardHardLimit = null;
+    private DigitalInput reverseHardLimit = null;
 
     private final int SETUP_ATTEMPT_LIMIT = 5;
     private int setupErrorCount = 0;
@@ -253,11 +254,55 @@ public class TalonFXLance extends MotorControllerLance
     }
 
     /**
+     * Enable or disable the forward hard limit switch.
+     * @param isEnabled True to enable the hard limit switch
+     */
+    public void setupForwardHardLimitSwitch(boolean isEnabled, boolean isNormallyOpen, int roboRIOPort)
+    {
+        forwardHardLimit = new DigitalInput(roboRIOPort);
+        positionVoltage.LimitForwardMotion = true;
+        velocityVoltage.LimitForwardMotion = true;
+
+        HardwareLimitSwitchConfigs hardwareLimitSwitchConfigs = new HardwareLimitSwitchConfigs();
+        setup(() -> motor.getConfigurator().refresh(hardwareLimitSwitchConfigs), "Refresh Forward Hard Limit");
+
+        hardwareLimitSwitchConfigs.ForwardLimitSource = ForwardLimitSourceValue.LimitSwitchPin;
+        if(isNormallyOpen)
+            hardwareLimitSwitchConfigs.ForwardLimitType = ForwardLimitTypeValue.NormallyOpen;
+        else
+            hardwareLimitSwitchConfigs.ForwardLimitType = ForwardLimitTypeValue.NormallyClosed;
+        hardwareLimitSwitchConfigs.ForwardLimitEnable = isEnabled;
+        setup(() -> motor.getConfigurator().apply(hardwareLimitSwitchConfigs), "Setup Forward Hard Limit");
+    }
+
+    /**
      * Enable or disable the reverse hard limit switch.
      * @param isEnabled True to enable the hard limit switch
      */
     public void setupReverseHardLimitSwitch(boolean isEnabled, boolean isNormallyOpen)
     {
+        HardwareLimitSwitchConfigs hardwareLimitSwitchConfigs = new HardwareLimitSwitchConfigs();
+        setup(() -> motor.getConfigurator().refresh(hardwareLimitSwitchConfigs), "Refresh Reverse Hard Limit");
+
+        hardwareLimitSwitchConfigs.ReverseLimitSource = ReverseLimitSourceValue.LimitSwitchPin;
+        if(isNormallyOpen)
+            hardwareLimitSwitchConfigs.ReverseLimitType = ReverseLimitTypeValue.NormallyOpen;
+        else
+            hardwareLimitSwitchConfigs.ReverseLimitType = ReverseLimitTypeValue.NormallyClosed;
+        hardwareLimitSwitchConfigs.ReverseLimitEnable = isEnabled;
+        setup(() -> motor.getConfigurator().apply(hardwareLimitSwitchConfigs), "Setup Reverse Hard Limit");
+    }
+
+    /**
+     * Enable or disable the reverse hard limit switch.
+     * @param isEnabled True to enable the hard limit switch
+     */
+    public void setupReverseHardLimitSwitch(boolean isEnabled, boolean isNormallyOpen, int roboRIOPort)
+    {
+        reverseHardLimit = new DigitalInput(roboRIOPort);
+        positionVoltage.LimitReverseMotion = true;
+        velocityVoltage.LimitReverseMotion = true;
+
         HardwareLimitSwitchConfigs hardwareLimitSwitchConfigs = new HardwareLimitSwitchConfigs();
         setup(() -> motor.getConfigurator().refresh(hardwareLimitSwitchConfigs), "Refresh Reverse Hard Limit");
 
@@ -595,7 +640,7 @@ public class TalonFXLance extends MotorControllerLance
      */
     public void setControlPosition(double position)
     {
-        motor.setControl(positionVoltage.withPosition(position));
+        setControlPosition(position, 0);
     }
 
     /**
@@ -608,10 +653,26 @@ public class TalonFXLance extends MotorControllerLance
     {
         if(slotId >= 0 && slotId <= 2)
         {
-            motor.setControl( positionVoltage
-                .withPosition(position)
-                .withSlot(slotId)
-            );
+            if(forwardHardLimit == null && reverseHardLimit == null)
+            {
+                motor.setControl(positionVoltage.withPosition(position).withSlot(slotId));
+            }
+            else if(forwardHardLimit != null && reverseHardLimit != null)
+            {
+                motor.setControl(positionVoltage.withPosition(position).withSlot(slotId)
+                    .withLimitForwardMotion(!forwardHardLimit.get())
+                    .withLimitReverseMotion(!reverseHardLimit.get()));
+            }
+            else if(forwardHardLimit != null && reverseHardLimit == null)
+            {
+                motor.setControl(positionVoltage.withPosition(position).withSlot(slotId)
+                    .withLimitForwardMotion(!forwardHardLimit.get()));
+            }
+            else if(forwardHardLimit == null && reverseHardLimit != null)
+            {
+                motor.setControl(positionVoltage.withPosition(position).withSlot(slotId)
+                    .withLimitReverseMotion(!reverseHardLimit.get()));
+            }
         }
     }
 
@@ -624,6 +685,39 @@ public class TalonFXLance extends MotorControllerLance
     public void setControlVelocity(double velocity)
     {
         motor.setControl(velocityVoltage.withVelocity(velocity));
+    }
+
+    /**
+     * Spin the motor to a velocity using PID control.
+     * Units are rotations by default, but can be changed using the conversion factor.
+     * @param velocity The velocity to spin the motor at
+     * @param slotID The PID slot (0-2)
+     */
+    public void setControlVelocity(double velocity, int slotId)
+    {
+        if(slotId >= 0 && slotId <= 2)
+        {
+            if(forwardHardLimit == null && reverseHardLimit == null)
+            {
+                motor.setControl(velocityVoltage.withVelocity(velocity).withSlot(slotId));
+            }
+            else if(forwardHardLimit != null && reverseHardLimit != null)
+            {
+                motor.setControl(velocityVoltage.withVelocity(velocity).withSlot(slotId)
+                    .withLimitForwardMotion(!forwardHardLimit.get())
+                    .withLimitReverseMotion(!reverseHardLimit.get()));
+            }
+            else if(forwardHardLimit != null && reverseHardLimit == null)
+            {
+                motor.setControl(velocityVoltage.withVelocity(velocity).withSlot(slotId)
+                    .withLimitForwardMotion(!forwardHardLimit.get()));
+            }
+            else if(forwardHardLimit == null && reverseHardLimit != null)
+            {
+                motor.setControl(velocityVoltage.withVelocity(velocity).withSlot(slotId)
+                    .withLimitReverseMotion(!reverseHardLimit.get()));
+            }
+        }
     }
 
     /**
