@@ -373,6 +373,22 @@ public class Drivetrain extends SubsystemLance
         return rightFollowerVelocity;
     }
 
+    public void setCoastMode()
+    {
+        leftLeader.setupCoastMode();
+        leftFollower.setupCoastMode();
+        rightLeader.setupCoastMode();
+        rightFollower.setupCoastMode();
+    }
+
+    public void setBrakeMode()
+    {
+        leftLeader.setupBrakeMode();
+        leftFollower.setupBrakeMode();
+        rightLeader.setupBrakeMode();
+        rightFollower.setupBrakeMode();
+    }
+
     /**
      * @return if we should flip out auto paths based on our alliance
      */

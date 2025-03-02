@@ -30,7 +30,7 @@ public class RobotContainer
         System.out.println("Loading: " + fullClassName);
     }
 
-    private boolean useFullRobot            = false;
+    private boolean useFullRobot            = true;
     private boolean usePivot                = false;
     private boolean useDrivetrain           = true;
     private boolean useRoller               = false;
@@ -43,7 +43,7 @@ public class RobotContainer
 
     private boolean useDriverController     = false;
     private boolean useOperatorController   = false;
-    private boolean useSysIDController      = true;
+    private boolean useSysIDController      = false;
 
     private final Pivot pivot;
     private final Drivetrain drivetrain;

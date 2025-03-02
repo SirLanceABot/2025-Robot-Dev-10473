@@ -333,6 +333,18 @@ public class PoseEstimatorLance extends SubsystemLance
         }
     }
 
+    private void periodicOdometryUpdate()
+    {
+        if(gyro != null && drivetrain != null)
+        {
+            estimatedOdometryPose = poseEstimator.update(
+                gyro.getRotation2d(),
+                drivetrain.getLeftLeaderDistance(),
+                drivetrain.getRightLeaderDistance()
+            );
+        }
+    }
+
     // *** OVERRIDEN METHODS ***
     // Put all methods that are Overridden here
 
@@ -344,18 +356,12 @@ public class PoseEstimatorLance extends SubsystemLance
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
 
-        if(gyro != null && drivetrain != null)
-        {
-        estimatedOdometryPose = poseEstimator.update(
-            gyro.getRotation2d(),
-            drivetrain.getLeftLeaderDistance(),
-            drivetrain.getRightLeaderDistance()
-        );
+        periodicOdometryUpdate();
 
-        periodicCameraUpdate();
+        // periodicCameraUpdate();
 
         estimatedPose = poseEstimator.getEstimatedPosition();
-        estimatedPosePublisher.set(estimatedPose);}
+        estimatedPosePublisher.set(estimatedPose);
 
         // publisher.set(poseA);
         // arrayPublisher.set(new Pose2d[] {poseA, poseB} );

@@ -8,6 +8,7 @@ import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.GeneralCommands;
@@ -36,6 +37,7 @@ public class Robot extends TimedRobot
     private final RobotContainer robotContainer;
     private Command autonomousCommand = null;
     private TestMode testMode = null;
+    private Timer timer = new Timer();
 
     /** 
      * Uses the default access modifier so that the Robot object can only be constructed in this same package.
@@ -103,21 +105,33 @@ public class Robot extends TimedRobot
      */
     @Override
     public void disabledInit() 
-    {}
+    {
+        timer.reset();
+        timer.start();
+    }
 
     /**
      * This method runs periodically (20ms) during disabled mode.
      */
     @Override
     public void disabledPeriodic() 
-    {}
+    {
+        if(timer.hasElapsed(4.0))
+        {
+            robotContainer.getDrivetrain().setCoastMode();
+            timer.reset();
+            timer.stop();
+        }
+    }
 
     /**
      * This method runs one time when the robot exits disabled mode.
      */
     @Override
     public void disabledExit() 
-    {}
+    {
+        robotContainer.getDrivetrain().setBrakeMode();
+    }
 
     /**
      * This method runs one time when the robot enters autonomous mode.
