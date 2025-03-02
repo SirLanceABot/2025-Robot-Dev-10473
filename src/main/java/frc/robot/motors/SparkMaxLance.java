@@ -268,10 +268,12 @@ public class SparkMaxLance extends MotorControllerLance
         // setup(() -> forwardLimitSwitch.enableLimitSwitch(isEnabled), "Setup Forward Hard Limit");
 
         SparkMaxConfig motorConfig = new SparkMaxConfig();
+        forwardLimitSwitch = motor.getForwardLimitSwitch();
         if(isNormallyOpen)
             motorConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyOpen);
         else
             motorConfig.limitSwitch.forwardLimitSwitchType(Type.kNormallyClosed);
+        motorConfig.limitSwitch.forwardLimitSwitchEnabled(isEnabled);
         setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Forward Hard Limit");
     }
 
@@ -288,10 +290,12 @@ public class SparkMaxLance extends MotorControllerLance
         // setup(() -> reverseLimitSwitch.enableLimitSwitch(isEnabled), "Setup Reverse Hard Limit");
 
         SparkMaxConfig motorConfig = new SparkMaxConfig();
+        reverseLimitSwitch = motor.getReverseLimitSwitch();
         if(isNormallyOpen)
             motorConfig.limitSwitch.reverseLimitSwitchType(Type.kNormallyOpen);
         else
             motorConfig.limitSwitch.reverseLimitSwitchType(Type.kNormallyClosed);
+        motorConfig.limitSwitch.reverseLimitSwitchEnabled(isEnabled);
         setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Reverse Hard Limit");
     }
 
@@ -321,6 +325,18 @@ public class SparkMaxLance extends MotorControllerLance
         SparkMaxConfig motorConfig = new SparkMaxConfig();
         motorConfig.openLoopRampRate(rampRateSeconds);
         setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Open Loop Ramp Rate");
+    }
+
+    /**
+     * Set the maximum rate at which the motor output can change.
+     * @param rampRateSeconds Time in seconds to go from 0 to full throttle
+     */
+    public void setupClosedLoopRampRate(double rampRateSeconds)
+    {
+        // setup(() -> motor.setOpenLoopRampRate(rampRateSeconds), "Setup Open Loop Ramp Rate");
+        SparkMaxConfig motorConfig = new SparkMaxConfig();
+        motorConfig.closedLoopRampRate(rampRateSeconds);
+        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Closed Loop Ramp Rate");
     }
 
     /**

@@ -3,6 +3,7 @@ package frc.robot.motors;
 import java.lang.invoke.MethodHandles;
 
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.HardwareLimitSwitchConfigs;
@@ -22,11 +23,14 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.ReverseLimitSourceValue;
 import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
 import com.ctre.phoenix6.spns.SpnValue;
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkBase.ControlType;
 
 import edu.wpi.first.wpilibj.DriverStation;
 
@@ -156,8 +160,6 @@ public class TalonFXLance extends MotorControllerLance
     public void setupPeriodicFramePeriod(int frameNumber, int periodMs)
     {
         // FIXME
-        // motor.getVelocity().setUpdateFrequency(100.);
-        // motor.getPosition().setUpdateFrequency(100.);
     }
 
     /**
@@ -301,6 +303,19 @@ public class TalonFXLance extends MotorControllerLance
     }
 
     /**
+     * Set the maximum rate at which the motor output can change.
+     * @param rampRateSeconds Time in seconds to go from 0 to full throttle
+     */
+    public void setupClosedLoopRampRate(double rampRateSeconds)
+    {
+        ClosedLoopRampsConfigs closedLoopRampsConfigs = new ClosedLoopRampsConfigs();
+        setup(() -> motor.getConfigurator().refresh(closedLoopRampsConfigs), "Refresh Closed Loop Ramp Rate");
+
+        closedLoopRampsConfigs.DutyCycleClosedLoopRampPeriod = rampRateSeconds;
+        setup(() -> motor.getConfigurator().apply(closedLoopRampsConfigs), "Setup Closed Loop Ramp Rate");
+    }
+
+    /**
      * Sets the voltage compensation for the motor controller. Use the battery voltage.
      * @param voltageCompensation The nominal voltage to compensate to
      */
@@ -383,6 +398,35 @@ public class TalonFXLance extends MotorControllerLance
             slotConfigs.kV = kV;
             setup(() -> motor.getConfigurator().apply(slotConfigs), "Setup PID Controller"); 
         }
+    }
+
+    /**
+     * Set the PID controls for the motor.
+     * @param slotID The PID slot (0-2)
+     * @param kP The Proportional constant
+     * @param kI The Integral constant
+     * @param kD The Derivative constant
+     * @param kS Velocity feedforward gain
+     * @param kV Acceleration feedforward gain
+     * @param kA Gravity feedforward/feedback gain
+     * @param kG Gravity Feedforward/Feedback Type.
+     * @param gravType Elevator_Static for constant equal gravity, Arm_Cosine for when gravity applies varying force
+     */
+    public void setupPIDController(int slotId, double kP, double kI, double kD, double kS, double kV, double kA, double kG, GravityTypeValue gravType)
+    {
+        SlotConfigs slotConfigs = new SlotConfigs();
+        setup(() -> motor.getConfigurator().refresh(slotConfigs), "Refresh PID Controller");
+
+        slotConfigs.SlotNumber = slotId;
+        slotConfigs.kP = kP;
+        slotConfigs.kI = kI;
+        slotConfigs.kD = kD;
+        slotConfigs.kS = kS;
+        slotConfigs.kV = kV;
+        slotConfigs.kA = kA;
+        slotConfigs.kG = kG;
+        slotConfigs.GravityType = gravType;
+        setup(() -> motor.getConfigurator().apply(slotConfigs), "Setup PID Controller");
     }
 
     public double[] getPID(int slotId)
@@ -555,6 +599,24 @@ public class TalonFXLance extends MotorControllerLance
     }
 
     /**
+     * Move the motor to a position using PID control.
+     * Units are rotations by default, but can be changed using the conversion factor.
+     * @param position The position to move the motor to
+     * @param slotID The PID slot (0-2)
+     */
+    public void setControlPosition(double position, int slotId)
+    {
+        if(slotId >= 0 && slotId <= 2)
+        {
+            motor.setControl( positionVoltage
+                .withPosition(position)
+                .withSlot(slotId)
+            );
+        }
+    }
+
+
+    /**
      * Spin the motor to a velocity using PID control.
      * Units are rotations by default, but can be changed using the conversion factor.
      * @param velocity The velocity to spin the motor at
@@ -591,8 +653,6 @@ public class TalonFXLance extends MotorControllerLance
      */    
     public double getVelocity()
     {
-        // var temp = motor.getVelocity().getValue();
-        // System.out.println("velocity base unit " + temp.baseUnitMagnitude() + ", RPM " + temp.in(RPM));
         return motor.getVelocity().getValueAsDouble();
     }
 

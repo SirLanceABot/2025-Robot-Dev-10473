@@ -323,6 +323,18 @@ public class SparkFlexLance extends MotorControllerLance
     }
 
     /**
+     * Set the maximum rate at which the motor output can change.
+     * @param rampRateSeconds Time in seconds to go from 0 to full throttle
+     */
+    public void setupClosedLoopRampRate(double rampRateSeconds)
+    {
+        // setup(() -> motor.setOpenLoopRampRate(rampRateSeconds), "Setup Open Loop Ramp Rate");
+        SparkFlexConfig motorConfig = new SparkFlexConfig();
+        motorConfig.closedLoopRampRate(rampRateSeconds);
+        setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Closed Loop Ramp Rate");
+    }
+
+    /**
      * Sets the voltage compensation for the motor controller. Use the battery voltage.
      * @param voltageCompensation The nominal voltage to compensate to
      */

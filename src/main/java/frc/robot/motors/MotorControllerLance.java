@@ -94,6 +94,7 @@ public abstract class MotorControllerLance extends MotorSafety implements MotorC
     public abstract void setupReverseHardLimitSwitch(boolean isEnabled, boolean isNormallyOpen);
     public abstract void setupCurrentLimit(double currentLimit, double currentThreshold, double timeThreshold);
     public abstract void setupOpenLoopRampRate(double rampRateSeconds);
+    public abstract void setupClosedLoopRampRate(double rampRateSeconds);
     public abstract void setupVoltageCompensation(double voltageCompensation);
     public abstract void setupPositionConversionFactor(double factor);
     public abstract void setupVelocityConversionFactor(double factor);
