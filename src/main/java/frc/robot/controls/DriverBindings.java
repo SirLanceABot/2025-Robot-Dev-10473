@@ -36,11 +36,16 @@ public final class DriverBindings
     private static DoubleSupplier rotationSupplier;
     private static DoubleSupplier xSpeedSupplier;
     private static DoubleSupplier scaleFactorDoubleSupplier;
+    private static DoubleSupplier rotationScaleFactorDoubleSupplier;
 
     private static double scaleFactor = 1;
     private final static double CRAWL_SPEED = 0.4;
     private final static double DEFAULT_SPEED = 0.8;
     private final static double RUN_SPEED = 1.0;
+
+    private static double rotationScaleFactor = 1;
+    private final static double ROTATION_CRAWL_SPEED = 0.6;
+    private final static double ROTATION_DEFAULT_SPEED = 1;
 
     public static final double axisDeadZone = 0.1;
 
@@ -100,9 +105,10 @@ public final class DriverBindings
         
         // scale factor set up MIGHT BE IN WRONG PLACE
         scaleFactorDoubleSupplier = () -> scaleFactor;
+        rotationScaleFactorDoubleSupplier = () -> rotationScaleFactor;
         
         xSpeedSupplier = () -> -(controller.getRawAxis(1) * scaleFactorDoubleSupplier.getAsDouble());
-        rotationSupplier = () -> -controller.getRawAxis(4);
+        rotationSupplier = () -> -(controller.getRawAxis(4) * rotationScaleFactorDoubleSupplier.getAsDouble());
 
         // double xAxis = Math.abs(-controller.getRawAxis(0)) >= axisDeadZone ? -controller.getRawAxis(0) : 0.0;
         // double yAxis = Math.abs(-controller.getRawAxis(4)) >= axisDeadZone ? -controller.getRawAxis(4) : 0.0;
@@ -158,8 +164,12 @@ public final class DriverBindings
         {
             Trigger rightTriggerTrigger = controller.rightTrigger();
             rightTriggerTrigger
-                .onTrue(Commands.runOnce(() -> scaleFactor = CRAWL_SPEED))
-                .onFalse(Commands.runOnce(() -> scaleFactor = DEFAULT_SPEED));
+                .onTrue(
+                    Commands.runOnce(() -> scaleFactor = CRAWL_SPEED)
+                        .andThen(Commands.runOnce(() -> rotationScaleFactor = ROTATION_CRAWL_SPEED)))
+                .onFalse(
+                    Commands.runOnce(() -> scaleFactor = DEFAULT_SPEED)
+                        .andThen(Commands.runOnce(() -> rotationScaleFactor = ROTATION_DEFAULT_SPEED)));
         }
     }
 
