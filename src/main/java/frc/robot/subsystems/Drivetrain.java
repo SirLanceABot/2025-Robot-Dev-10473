@@ -290,8 +290,6 @@ public class Drivetrain extends SubsystemLance
         double leftWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.leftMetersPerSecond);
         double rightWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.rightMetersPerSecond);
 
-
-
         // System.out.println("-------------------LV = " + leftWheelSpeedInVolts + ", RV = " + rightWheelSpeedInVolts + ", RV = " + rightLeaderVelocity + ", LV = " + leftLeaderVelocity + ", CS = " + chassisSpeeds);
         SmartDashboard.putString("Chassis Speeds", chassisSpeeds.toString());
         SmartDashboard.putNumber("Right Volts", rightWheelSpeedInVolts);
@@ -306,6 +304,17 @@ public class Drivetrain extends SubsystemLance
         differentialDrive.tankDrive(leftWheelSpeedInVolts / currentVoltage, rightWheelSpeedInVolts / currentVoltage);
         // leftLeader.setControlVelocity(wheelSpeeds.leftMetersPerSecond);
         // rightLeader.setControlVelocity(wheelSpeeds.rightMetersPerSecond);
+
+        feedMotors();
+    }
+
+    public void feedMotors()
+    {
+        leftLeader.feed();
+        leftFollower.feed();
+        rightLeader.feed();
+        rightFollower.feed();
+        differentialDrive.feed();   
     }
     
     /**
@@ -371,6 +380,16 @@ public class Drivetrain extends SubsystemLance
     public double getRightFollowerVelocity()
     {
         return rightFollowerVelocity;
+    }
+
+    public double getLeftLeaderDistanceMeters()
+    {
+        return getRightLeaderDistance() * MOTORREVOLUTIONSTOWHEELMETERS;
+    }
+
+    public double getRightLeaderDistanceMeters()
+    {
+        return getLeftLeaderDistance() * MOTORREVOLUTIONSTOWHEELMETERS;
     }
 
     public void setCoastMode()
@@ -667,6 +686,8 @@ public class Drivetrain extends SubsystemLance
         return arcadeDriveCommand(() -> driveSpeed, () -> rotationSpeed, false).withName("Turn And Drive Command");
     }
 
+    // public Commmand backUp
+
     public Command snapParallelNearestReefSideCommand(double turnSpeed, double targetRotation)
     {
         // double targetRotation = optimizeRotation(gyro.getYaw(), );
@@ -688,7 +709,14 @@ public class Drivetrain extends SubsystemLance
     }
 
 
+    public Command reefBackOutCommand()
+    {
+        // double starting_pose_meters = getLeftLeaderDistanceMeters();
 
+        return run(() -> arcadeDriveCommand(() -> -0.1, () -> 0.0, false))
+                    .withTimeout(0.5)
+                    .withName("Back Out Of Reef (bc Pathplanner can't do it)");
+    }
 
 
 

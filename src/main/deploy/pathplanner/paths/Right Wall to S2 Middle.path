@@ -4,24 +4,40 @@
     {
       "anchor": {
         "x": 7.176,
-        "y": 0.603
+        "y": 0.7239
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.175999999999998,
-        "y": 0.6030000000000001
+        "x": 6.620045593354674,
+        "y": 0.7238999999999999
       },
       "isLocked": false,
       "linkedName": "Right Wall"
     },
     {
       "anchor": {
-        "x": 5.22,
-        "y": 2.921
+        "x": 6.315277777777777,
+        "y": 0.8804687499999989
       },
       "prevControl": {
-        "x": 5.72,
-        "y": 2.0549745962155614
+        "x": 6.455034722222222,
+        "y": 0.656857638888888
+      },
+      "nextControl": {
+        "x": 6.182778042776982,
+        "y": 1.092468326001271
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.225173611111111,
+        "y": 2.9348958333333326
+      },
+      "prevControl": {
+        "x": 5.725173611111111,
+        "y": 2.068870429548894
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,14 +45,35 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 1.1402985074626861,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 2.5,
+        "maxAngularVelocity": 90.0,
+        "maxAngularAcceleration": 90.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Score Coral",
+      "waypointRelativePos": 2.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 2.5,
-    "maxAngularVelocity": 360.0,
-    "maxAngularAcceleration": 360.0,
+    "maxAngularVelocity": 90.0,
+    "maxAngularAcceleration": 90.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
@@ -50,5 +87,5 @@
     "velocity": 0,
     "rotation": 0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

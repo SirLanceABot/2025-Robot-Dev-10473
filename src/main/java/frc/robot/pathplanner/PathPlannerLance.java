@@ -52,7 +52,7 @@ public class PathPlannerLance
         configAutoBuilder();
         configAutoChooser();
 
-        // configPathPlannerLogging();
+        configPathPlannerLogging();
         
         createEventTriggers();
 
@@ -172,6 +172,7 @@ public class PathPlannerLance
         PathPlannerLogging.setLogActivePathCallback(
             (poses) -> {
                 // Do whatever you want with the poses here
+                poses.forEach((pose) -> System.out.println(pose.toString()));
                 field.getObject("path").setPoses(poses);
             }
         );
@@ -184,6 +185,8 @@ public class PathPlannerLance
 
         // NamedCommands.registerCommand("Score Algae", GeneralCommands.scoreAlgaeCommand());
         new EventTrigger("Score Algae").onTrue( GeneralCommands.scoreAlgaeCommand());
+
+        new EventTrigger("Back Out of Reef").onTrue( drivetrain.reefBackOutCommand());
 
         // NamedCommands.registerCommand("Score Coral", GeneralCommands.scoreAlgaeCommand());
         new EventTrigger("Score Coral").onTrue(GeneralCommands.scoreCoralCommand());

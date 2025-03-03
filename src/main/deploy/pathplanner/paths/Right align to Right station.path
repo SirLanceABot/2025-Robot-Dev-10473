@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.8151041666666656,
-        "y": 1.5932291666666663
+        "x": 2.164496527777777,
+        "y": 1.9705729166666663
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5824734067386064,
-        "y": 1.2845177213545147
+        "x": 1.9318657678497175,
+        "y": 1.6618614713545148
       },
       "isLocked": false,
       "linkedName": "Align Right Station"
@@ -35,8 +35,8 @@
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 2.5,
-    "maxAngularVelocity": 360.0,
-    "maxAngularAcceleration": 360.0,
+    "maxAngularVelocity": 180.0,
+    "maxAngularAcceleration": 180.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },

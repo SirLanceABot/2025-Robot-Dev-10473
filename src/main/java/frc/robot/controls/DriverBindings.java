@@ -81,7 +81,7 @@ public final class DriverBindings
             configXButton();
             configRightTrigger();
             configLeftTrigger();
-            // configYButton();
+            configYButton();
             configLeftBumper();
             // configRightBumper();
             // configBackButton();
@@ -141,6 +141,14 @@ public final class DriverBindings
     {
         Trigger xButtonTrigger = controller.x();
         xButtonTrigger.onTrue(GeneralCommands.shiftWhileMovingCommand());
+    }
+
+    private static void configYButton()
+    {   if(drivetrain != null)
+        {
+            Trigger yButtonTrigger = controller.y();
+            yButtonTrigger.onTrue(drivetrain.reefBackOutCommand());
+        }
     }
 
     // private static void configYButton()

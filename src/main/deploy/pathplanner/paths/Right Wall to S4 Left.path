@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 7.176,
-        "y": 0.603
+        "y": 0.7239
       },
       "prevControl": null,
       "nextControl": {
         "x": 6.176,
-        "y": 0.6030000000000001
+        "y": 0.7239000000000001
       },
       "isLocked": false,
       "linkedName": "Right Wall"
@@ -20,7 +20,7 @@
         "y": 4.421830985915492
       },
       "prevControl": {
-        "x": 1.1787535211267623,
+        "x": 1.1787535211267628,
         "y": 4.168580985915492
       },
       "nextControl": null,
@@ -35,8 +35,8 @@
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 2.5,
-    "maxAngularVelocity": 360.0,
-    "maxAngularAcceleration": 360.0,
+    "maxAngularVelocity": 180.0,
+    "maxAngularAcceleration": 180.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
