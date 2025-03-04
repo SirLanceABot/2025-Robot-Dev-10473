@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 5.225173611111111,
-        "y": 2.9348958333333326
+        "x": 5.156700825159666,
+        "y": 2.954657479721799
       },
       "prevControl": {
-        "x": 5.725173611111111,
-        "y": 2.068870429548894
+        "x": 5.656700825159666,
+        "y": 2.0886320759373604
       },
       "nextControl": null,
       "isLocked": false,
@@ -70,7 +70,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 0.5,
     "maxAcceleration": 2.5,
     "maxAngularVelocity": 90.0,
     "maxAngularAcceleration": 90.0,
@@ -82,7 +82,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Right Wall Starts",
+  "folder": "Competition Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

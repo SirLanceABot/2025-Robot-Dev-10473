@@ -8,22 +8,24 @@
     "Left Wall Starts",
     "Middle Starts",
     "Move to Station",
-    "Test Paths",
+    "Competition Paths",
     "Reef Back Out",
     "Reef Starts",
     "Right Station Starts",
-    "Right Wall Starts"
+    "Right Wall Starts",
+    "Test Paths"
   ],
   "autoFolders": [
     "Left Wall Starts",
     "Middle Starts",
+    "Competition Autos",
     "Right Starts",
-    "Test Autos"
+    "TEST"
   ],
   "defaultMaxVel": 2.0,
   "defaultMaxAccel": 2.5,
-  "defaultMaxAngVel": 180.0,
-  "defaultMaxAngAccel": 180.0,
+  "defaultMaxAngVel": 90.0,
+  "defaultMaxAngAccel": 90.0,
   "defaultNominalVoltage": 12.0,
   "robotMass": 38.555,
   "robotMOI": 3.534,

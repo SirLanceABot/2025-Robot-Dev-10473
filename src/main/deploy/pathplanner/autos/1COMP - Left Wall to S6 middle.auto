@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Wall to S2 Middle"
+            "pathName": "1COMP - Left Wall to S6 Middle"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Test Autos",
+  "folder": "Competition Autos",
   "choreoAuto": false
 }

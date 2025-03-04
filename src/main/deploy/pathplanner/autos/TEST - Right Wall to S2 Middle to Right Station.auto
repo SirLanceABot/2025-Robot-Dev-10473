@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Wall to S2 Middle"
+            "pathName": "1COMP - Right Wall to S2 Middle"
           }
         },
         {
@@ -20,6 +20,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Test Autos",
+  "folder": "TEST",
   "choreoAuto": false
 }

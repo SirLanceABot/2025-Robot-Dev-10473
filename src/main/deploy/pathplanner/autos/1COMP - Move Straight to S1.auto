@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S6 Right - Align Left Station"
+            "pathName": "1COMP - Middle to S1 Middle"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Test Autos",
+  "folder": "Competition Autos",
   "choreoAuto": false
 }
