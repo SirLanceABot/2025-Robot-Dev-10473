@@ -455,6 +455,8 @@ public class Drivetrain extends SubsystemLance
         }
 
         differentialDrive.arcadeDrive(xSpeed, rotation.getAsDouble() / 2.0, squared);
+
+        feedMotors();
         // differentialDrive.arcadeDrive(xSpeed / divisor, rotationSpeed / divisor, squared);
     }  
 
@@ -480,6 +482,8 @@ public class Drivetrain extends SubsystemLance
     public void tankDrive(DoubleSupplier driveSpeed, DoubleSupplier rotationSpeed, boolean squared)
     {
         differentialDrive.tankDrive(driveSpeed.getAsDouble() / divisor, rotationSpeed.getAsDouble() / divisor, squared);
+    
+        feedMotors();
     }
 
     /**
@@ -645,75 +649,73 @@ public class Drivetrain extends SubsystemLance
         return run( () -> postShiftToHigh()).withName("Shifted to High");
     }
 
-    /**
-     * @param rotationSpeed
-     * sets the rotation speed of the motors
-     * @param driveTime
-     * the amount of time for which the motors will run
-     * @return
-     * the command
-     */
-    public Command driveTurnCommand(double rotationSpeed)
-    {
-        return arcadeDriveCommand(() -> 0.0, () -> rotationSpeed, false).withName("Turn Command");
-    }
+    // /**
+    //  * @param rotationSpeed
+    //  * sets the rotation speed of the motors
+    //  * @param driveTime
+    //  * the amount of time for which the motors will run
+    //  * @return
+    //  * the command
+    //  */
+    // public Command driveTurnCommand(double rotationSpeed)
+    // {
+    //     return arcadeDriveCommand(() -> 0.0, () -> rotationSpeed, false).withName("Turn Command");
+    // }
 
-    /**
-     * @param driveSpeed
-     * sets speed of arcadeDriveCommand
-     * @param driveTime
-     * time for which the Command will run
-     * @return
-     * the command
-     */
-    public Command driveStraightCommand(double driveSpeed)
-    {
-        return arcadeDriveCommand(() -> driveSpeed, () -> 0.0, false).withName("Drive Command");
-    }
+    // /**
+    //  * @param driveSpeed
+    //  * sets speed of arcadeDriveCommand
+    //  * @param driveTime
+    //  * time for which the Command will run
+    //  * @return
+    //  * the command
+    //  */
+    // public Command driveStraightCommand(double driveSpeed)
+    // {
+    //     return arcadeDriveCommand(() -> driveSpeed, () -> 0.0, false).withName("Drive Command");
+    // }
 
-    /**
-     * @param driveSpeed
-     * sets the forward speed of the motors
-     * @param rotationSpeed
-     * sets the rotation speed of the motors
-     * @param driveTime
-     * the amount of time for which the motors will run
-     * @return
-     * the command
-     */
-    public Command turnAndDriveCommand(double driveSpeed, double rotationSpeed, double driveTime)
-    {
-        return arcadeDriveCommand(() -> driveSpeed, () -> rotationSpeed, false).withName("Turn And Drive Command");
-    }
+    // /**
+    //  * @param driveSpeed
+    //  * sets the forward speed of the motors
+    //  * @param rotationSpeed
+    //  * sets the rotation speed of the motors
+    //  * @param driveTime
+    //  * the amount of time for which the motors will run
+    //  * @return
+    //  * the command
+    //  */
+    // public Command turnAndDriveCommand(double driveSpeed, double rotationSpeed, double driveTime)
+    // {
+    //     return arcadeDriveCommand(() -> driveSpeed, () -> rotationSpeed, false).withName("Turn And Drive Command");
+    // }
 
-    // public Commmand backUp
+    // public Command snapParallelNearestReefSideCommand(double turnSpeed, double targetRotation)
+    // {
+    //     // double targetRotation = optimizeRotation(gyro.getYaw(), );
+    //     double speed = isRotationSpeedInverted( gyro.getYaw(), targetRotation) ? -turnSpeed : turnSpeed;
 
-    public Command snapParallelNearestReefSideCommand(double turnSpeed, double targetRotation)
-    {
-        // double targetRotation = optimizeRotation(gyro.getYaw(), );
-        double speed = isRotationSpeedInverted( gyro.getYaw(), targetRotation) ? -turnSpeed : turnSpeed;
+    //     return run(() -> driveTurnCommand(speed) )
+    //                     .until(isAtRotationSupplier(targetRotation, 2.0)) // tolerance is in degrees
+    //                     .withName("Snap To Heading (parallel to reef): " + targetRotation);
+    // }
 
-        return run(() -> driveTurnCommand(speed) )
-                        .until(isAtRotationSupplier(targetRotation, 2.0)) // tolerance is in degrees
-                        .withName("Snap To Heading (parallel to reef): " + targetRotation);
-    }
+    // public Command snapPerpendicularNearestReefSideCommand(double turnSpeed, double targetRotation)
+    // {
+    //     // double targetRotation = optimizeRotation(gyro.getYaw(), );
+    //     double speed = isRotationSpeedInverted( gyro.getYaw(), targetRotation) ? -turnSpeed : turnSpeed;
 
-    public Command snapPerpendicularNearestReefSideCommand(double turnSpeed, double targetRotation)
-    {
-        // double targetRotation = optimizeRotation(gyro.getYaw(), );
-        double speed = isRotationSpeedInverted( gyro.getYaw(), targetRotation) ? -turnSpeed : turnSpeed;
-
-        return run(() -> driveTurnCommand(speed) )
-                        .until(isAtRotationSupplier(targetRotation, 2.0)) // tolerance is in degrees
-                        .withName("Snap To Heading (perpendicular to reef): " + targetRotation);
-    }
+    //     return run(() -> driveTurnCommand(speed) )
+    //                     .until(isAtRotationSupplier(targetRotation, 2.0)) // tolerance is in degrees
+    //                     .withName("Snap To Heading (perpendicular to reef): " + targetRotation);
+    // }
 
 
     public Command reefBackOutCommand()
     {
         // double starting_pose_meters = getLeftLeaderDistanceMeters();
 
-        return run(() -> arcadeDriveCommand(() -> -0.1, () -> 0.0, false))
+        return run( () -> arcadeDriveCommand(() -> -0.1, () -> 0.0, false) )
                     .withTimeout(0.5)
                     .withName("Back Out Of Reef (bc Pathplanner can't do it)");
     }
