@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.controls.AdaptiveSlewRateLimiter;
@@ -670,10 +671,10 @@ public class Drivetrain extends SubsystemLance
     //  * @return
     //  * the command
     //  */
-    // public Command driveStraightCommand(double driveSpeed)
-    // {
-    //     return arcadeDriveCommand(() -> driveSpeed, () -> 0.0, false).withName("Drive Command");
-    // }
+    public Command driveStraightCommand(double driveSpeed)
+    {
+        return arcadeDriveCommand(() -> driveSpeed, () -> 0.0, false).withName("Drive Command");
+    }
 
     // /**
     //  * @param driveSpeed
@@ -685,10 +686,10 @@ public class Drivetrain extends SubsystemLance
     //  * @return
     //  * the command
     //  */
-    // public Command turnAndDriveCommand(double driveSpeed, double rotationSpeed, double driveTime)
-    // {
-    //     return arcadeDriveCommand(() -> driveSpeed, () -> rotationSpeed, false).withName("Turn And Drive Command");
-    // }
+    public Command turnAndDriveCommand(double driveSpeed, double rotationSpeed)
+    {
+        return arcadeDriveCommand(() -> driveSpeed, () -> rotationSpeed, false).withName("Turn And Drive Command");
+    }
 
     // public Command snapParallelNearestReefSideCommand(double turnSpeed, double targetRotation)
     // {
@@ -714,10 +715,17 @@ public class Drivetrain extends SubsystemLance
     public Command reefBackOutCommand()
     {
         // double starting_pose_meters = getLeftLeaderDistanceMeters();
+        System.out.println("Reef Back Out Command");
 
-        return run( () -> arcadeDriveCommand(() -> -0.1, () -> 0.0, false) )
-                    .withTimeout(0.5)
-                    .withName("Back Out Of Reef (bc Pathplanner can't do it)");
+        return turnAndDriveCommand(-0.2, -1.0)
+            .andThen(Commands.print("Reef Back Out Command"))
+            .until( () -> (gyro.getRotation2d().getDegrees() > 179.0 && gyro.getRotation2d().getDegrees() < 181.0))
+            .withTimeout(10.0);
+    }
+
+    public Command driveSpecifiedMetersCommand()
+    {
+        return driveStraightCommand(1.2);
     }
 
 

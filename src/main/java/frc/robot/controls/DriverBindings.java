@@ -1,6 +1,7 @@
 package frc.robot.controls;
 
 import java.lang.invoke.MethodHandles;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -144,17 +145,11 @@ public final class DriverBindings
     }
 
     private static void configYButton()
-    {   if(drivetrain != null)
-        {
-            Trigger yButtonTrigger = controller.y();
-            yButtonTrigger.onTrue(drivetrain.reefBackOutCommand());
-        }
+    {
+        Trigger yButtonTrigger = controller.y();
+        yButtonTrigger
+            .onTrue(drivetrain.reefBackOutCommand());
     }
-
-    // private static void configYButton()
-    // {
-    //     Trigger yButtonTrigger = controller.y();
-    // }
 
     private static void configLeftBumper()
     {
@@ -236,6 +231,8 @@ public final class DriverBindings
         if(drivetrain != null)
         {
             drivetrain.setDefaultCommand(drivetrain.arcadeDriveCommand(xSpeedSupplier, rotationSupplier, true, true) );
+
+            // drivetrain.setDefaultCommand(drivetrain.arcadeDriveCommand(0.05, 0.05, false, false) );
 
             // drivetrain.setDefaultCommand(drivetrain.arcadeDriveCommand(yAxisSupplier, xAxisSupplier, false, true) );
         }
