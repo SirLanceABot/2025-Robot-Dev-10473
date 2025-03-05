@@ -7,11 +7,9 @@ import static edu.wpi.first.units.Units.Volts;
 import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-import java.util.zip.Adler32;
 
 import com.pathplanner.lib.util.DriveFeedforwards;
 
-import edu.wpi.first.math.controller.DifferentialDriveFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -154,7 +152,18 @@ public class Drivetrain extends SubsystemLance
               // WPILog with this subsystem's name ("drive")
               this));
 
-    
+
+    /**
+     * PID controller used for PP auto driving
+     * Tune feedforward first then PID
+     */
+    private int slotID = 0;
+    private double kP = 0.;
+    private double kI = 0.;
+    private double kD = 0.;
+    private double kS = 0.12; // max volts that doesn't move the robot
+    private double kV = 12./3.7; // low gear 12 volts yields 3.7 m/s 
+  
     // *** INNER ENUMS and INNER CLASSES ***
     // Put all inner enums and inner classes here
 
@@ -219,9 +228,7 @@ public class Drivetrain extends SubsystemLance
         rightLeader.setupVelocityConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
         rightFollower.setupVelocityConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
 
-
-        leftLeader.setupPIDController(0, 2.5, 0.0, 0.0);
-        rightLeader.setupPIDController(0, 2.5, 0.0, 0.0);
+        setupChassisPIDController(slotID, kP, kI, kD, kS, kV);
 
         leftFollower.setSafetyEnabled(false);
         rightFollower.setSafetyEnabled(false);
@@ -238,6 +245,23 @@ public class Drivetrain extends SubsystemLance
         // BaseStatusSignal.setUpdateFrequencyForAll(200, BaseStatusSignal.  positionSignal, velocitySignal);
         
         // all motors should be running in the same direction
+    }
+
+    /**
+     * Setup left and right drive motors with same PID values
+     * callable from other classes for tuning purposes
+     * 
+     * @param slotId
+     * @param kP
+     * @param kI
+     * @param kD
+     * @param kS
+     * @param kV
+     */
+    public void setupChassisPIDController(int slotId, double kP, double kI, double kD, double kS, double kV)
+    {
+        leftLeader.setupPIDController(slotID, kP, kI, kD, kS, kV);
+        rightLeader.setupPIDController(slotID, kP, kI, kD, kS, kV);
     }
 
     /**
@@ -286,7 +310,6 @@ public class Drivetrain extends SubsystemLance
     public void driveRobotRelative(ChassisSpeeds chassisSpeeds, DriveFeedforwards feedforwards)
     {
         DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
-        // DifferentialDriveFeedforward differentialDriveFeedforward = feedforwards.
 
         double leftWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.leftMetersPerSecond);
         double rightWheelSpeedInVolts = motorFeedforward.calculate(wheelSpeeds.rightMetersPerSecond);
@@ -299,12 +322,31 @@ public class Drivetrain extends SubsystemLance
         SmartDashboard.putNumber("Left velocity", leftLeaderVelocity);
         SmartDashboard.putNumber("Left Wheel Speeds", wheelSpeeds.leftMetersPerSecond);
         SmartDashboard.putNumber("Right Wheel Speeds", wheelSpeeds.rightMetersPerSecond);
-        // SmartDashboard.putNumber("Feedforwards", feedforwards);
 
         double currentVoltage = RobotController.getBatteryVoltage();
         differentialDrive.tankDrive(leftWheelSpeedInVolts / currentVoltage, rightWheelSpeedInVolts / currentVoltage);
-        // leftLeader.setControlVelocity(wheelSpeeds.leftMetersPerSecond);
-        // rightLeader.setControlVelocity(wheelSpeeds.rightMetersPerSecond);
+
+        feedMotors();
+    }
+
+    /**
+     * Used for PP auto driving
+     * @param chassisSpeeds the robot's chassis speed
+     * @param feedforwards PP feeds forward - not used
+     */
+    public void driveRobotRelativeVelocity(ChassisSpeeds chassisSpeeds, DriveFeedforwards feedforwards)
+    {
+        DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
+
+        // System.out.println("-------------------LV = " + leftWheelSpeedInVolts + ", RV = " + rightWheelSpeedInVolts + ", RV = " + rightLeaderVelocity + ", LV = " + leftLeaderVelocity + ", CS = " + chassisSpeeds);
+        SmartDashboard.putString("Chassis Speeds", chassisSpeeds.toString());
+        SmartDashboard.putNumber("Left velocity", leftLeaderVelocity);
+        SmartDashboard.putNumber("Right velocity", rightLeaderVelocity);
+        SmartDashboard.putNumber("Left Wheel Speeds", wheelSpeeds.leftMetersPerSecond);
+        SmartDashboard.putNumber("Right Wheel Speeds", wheelSpeeds.rightMetersPerSecond);
+
+        leftLeader.setControlVelocity(wheelSpeeds.leftMetersPerSecond);
+        rightLeader.setControlVelocity(wheelSpeeds.rightMetersPerSecond);
 
         feedMotors();
     }
