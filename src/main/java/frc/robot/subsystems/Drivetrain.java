@@ -791,7 +791,7 @@ public class Drivetrain extends SubsystemLance
      * <p>Control with SmartDashboard interactions
      * <p>Use in testing init
      */
-    public void startDriveTrainPIDTuning()
+    public void startPIDTuning()
     {
         new TuneVelocityPID().schedule();
     }

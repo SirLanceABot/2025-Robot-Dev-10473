@@ -7,7 +7,6 @@ package frc.robot.tests;
 import java.lang.invoke.MethodHandles;
 
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Drivetrain;
 
 public class RThomasTest implements Test {
       // This string gets the full name of the class, including the package name
@@ -22,19 +21,13 @@ public class RThomasTest implements Test {
 
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
-    private final RobotContainer robotContainer;
-    
-    private final Drivetrain driveTrain;
+    // private final RobotContainer robotContainer;
 
     RThomasTest(RobotContainer robotContainer)
     {
       System.out.println("  Constructor Started:  " + fullClassName);
 
-      this.robotContainer = robotContainer;
-
-      driveTrain = robotContainer.getDrivetrain();
-
-      driveTrain.startDriveTrainPIDTuning();
+    //   this.robotContainer = robotContainer;
 
       System.out.println("  Constructor Finished: " + fullClassName);
     }

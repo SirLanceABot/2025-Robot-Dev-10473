@@ -251,6 +251,9 @@ public class Robot extends TimedRobot
     {
         CommandScheduler.getInstance().cancelAll();
 
+        // Activate Drivetrain PID Velocity Tuning
+        // robotContainer.getDrivetrain().startPIDTuning();
+
         // Create a TestMode object to test one team members code.
         testMode = new TestMode(robotContainer);
 
