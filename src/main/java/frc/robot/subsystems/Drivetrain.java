@@ -307,7 +307,7 @@ public class Drivetrain extends SubsystemLance
      * @param chassisSpeeds
      * the robot's chassis speed
      */
-    public void driveRobotRelative(ChassisSpeeds chassisSpeeds, DriveFeedforwards feedforwards)
+    public void driveRobotRelative(ChassisSpeeds chassisSpeeds)
     {
         DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
 
@@ -784,6 +784,120 @@ public class Drivetrain extends SubsystemLance
         return driveStraightCommand(1.2);
     }
 
+/********************************************************************************************************************** */
+
+    /**
+     * Start the Drivetrain PID tuning process
+     * <p>Control with SmartDashboard interactions
+     * <p>Use in testing init
+     */
+    public void startDriveTrainPIDTuning()
+    {
+        new TuneVelocityPID().schedule();
+    }
+
+    public class TuneVelocityPID extends Command {
+
+    private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
+    static
+    {
+        System.out.println("Loading: " + fullClassName);
+    }
+
+    private double velocitySetpoint;
+
+    TuneVelocityPID()
+    {
+        addRequirements(Drivetrain.this);
+    }
+
+  public void initialize()
+  {
+    setName(fullClassName);
+    setupChassisPIDController(0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    clearGainsSetpoints();
+    // set highest possible in case limits are enabled
+    // not reset to previous value before PID tuning
+    leftLeader.setupCurrentLimit(800., 511., 1.275);
+    rightLeader.setupCurrentLimit(800., 511., 1.275);
+}
+
+  public void execute()
+  {
+    if (SmartDashboard.getBoolean("Apply Parameters", false))
+    {
+        // kF for other PID controllers is essentially this kV and maybe the kS crudely wrapped into it, too.
+        // There is also an arbitrary feed-forward that can be used if kS, kV (or others' kF) aren't adequate
+        kP = SmartDashboard.getNumber("kP", 0.);
+        kI = SmartDashboard.getNumber("kI", 0.);
+        kD = SmartDashboard.getNumber("kD", 0.);
+        kS = SmartDashboard.getNumber("kS (Rev: 0)", 0.);
+        kV = SmartDashboard.getNumber("kV (Rev: kF)", 0.);
+        setupChassisPIDController(slotID, kP, kI, kD, kS, kV);
+
+        velocitySetpoint = SmartDashboard.getNumber("velocity setpoint [mps]", 0.);
+        leftLeader.setControlVelocity(velocitySetpoint);
+        rightLeader.setControlVelocity(velocitySetpoint);
+
+        SmartDashboard.putBoolean("Apply Parameters", false);
+        System.out.println("PID set");
+    }
+
+    feedMotors();
+
+    double tentativeKv = 0.0;
+    double avgVelocity = (leftLeaderVelocity+rightLeaderVelocity)/2.0;
+
+    if ( avgVelocity != 0.)
+    {
+        tentativeKv = ((leftLeader.getMotorVoltage()+rightLeader.getMotorVoltage())/2. - kS) / avgVelocity;
+    }
+    SmartDashboard.putNumber("avg velocity [mps] plot", avgVelocity);
+    SmartDashboard.putNumber("avg velocity [mps]", avgVelocity);
+    SmartDashboard.putNumber("avg motor voltage", (leftLeader.getMotorVoltage()+rightLeader.getMotorVoltage())/2.);
+    SmartDashboard.putNumber("tentative avg Kv", tentativeKv);
+    SmartDashboard.putNumber("tentative avg Kv plot", tentativeKv);
+  }
+
+  public void end(boolean interrupted)
+  {
+    leftLeader.set(0.);
+    rightLeader.set(0.);
+  }
+
+  /**
+   * Whether the command has finished. Once a command finishes, the scheduler will call its end()
+   * method and un-schedule it.
+   *
+   * @return whether the command has finished.
+   */
+  public boolean isFinished() {
+    return false; // always false; let the trigger handle start/stop logic
+  }
+
+  public boolean runsWhenDisabled() {
+    return false;
+  }
+
+  private void clearGainsSetpoints()
+  {
+    SmartDashboard.putBoolean("Apply Parameters", false);
+    SmartDashboard.putNumber("kP", 0.);
+    SmartDashboard.putNumber("kI", 0.);
+    SmartDashboard.putNumber("kD", 0.);
+    SmartDashboard.putNumber("kS (Rev: 0)", 0.);
+    SmartDashboard.putNumber("kV (Rev: kF)", 0.);
+    SmartDashboard.putNumber("velocity setpoint [mps]", 0.);
+
+    SmartDashboard.putNumber("avg velocity [mps] plot", 0);
+    SmartDashboard.putNumber("avg velocity [mps]", 0);
+    SmartDashboard.putNumber("avg motor voltage", 0);
+    SmartDashboard.putNumber("tentative avg Kv", 0);
+    SmartDashboard.putNumber("tentative avg Kv plot", 0);
+    SmartDashboard.updateValues();
+  }
+}
+/************************************************************************************************************************** */
 
 
 
@@ -808,8 +922,10 @@ public class Drivetrain extends SubsystemLance
         rightLeaderPosition = rightLeader.getPosition();
         SmartDashboard.putNumber("LLV", leftLeaderVelocity);
         SmartDashboard.putNumber("LLP", leftLeaderPosition);
+        SmartDashboard.putNumber("LFV", leftFollowerVelocity);
         SmartDashboard.putNumber("RLV", rightLeaderVelocity);
         SmartDashboard.putNumber("RLP", rightLeaderPosition);
+        SmartDashboard.putNumber("RFV", rightFollowerVelocity);
         Pose2d pose = odometry.update(gyro.getRotation2d(), leftLeaderPosition, rightLeaderPosition);
         odometryPublisher.set(pose);
         
@@ -827,3 +943,11 @@ public class Drivetrain extends SubsystemLance
         // return "Left = " + leftLeaderPosition + " Right = " + rightLeaderPosition;
     }
 }
+
+// var slot0ConfigsNew = slot0Configs.serialize();
+// if(!slot0ConfigsNew.equals(slot0ConfigsPrevious))
+// {
+//     setupChassisPIDController(0, slot0Configs.kP, slot0Configs.kI, slot0Configs.kD, slot0Configs.kS, slot0Configs.kV);
+//     slot0ConfigsPrevious = slot0ConfigsNew;
+// }
+
