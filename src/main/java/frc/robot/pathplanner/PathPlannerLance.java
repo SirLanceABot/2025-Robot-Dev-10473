@@ -118,9 +118,18 @@ public class PathPlannerLance
 
     private static void configAutoChooser()
     {
+        boolean competitionAutos = false;
+
         if(AutoBuilder.isConfigured())
         {
-            autoChooser = AutoBuilder.buildAutoChooser();
+            // autoChooser = AutoBuilder.buildAutoChooser();
+            autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
+                (stream) -> competitionAutos ?
+                stream.filter(auto -> auto.getName().startsWith("1COMP")) :
+                stream
+            );
+
+            autoChooser.setDefaultOption("None", Commands.none());
             SmartDashboard.putData("Auto Chooser", autoChooser);
         }
         else

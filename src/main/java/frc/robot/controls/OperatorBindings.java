@@ -138,15 +138,32 @@ public final class OperatorBindings
             leftBumperTrigger  
                 .onTrue( GeneralCommands.resetPivotAndRollerCommand() );
         }
+
+        // if(gyro != null && drivetrain != null)
+        // {
+        //     Trigger leftBumperTrigger = controller.leftBumper();
+        //     leftBumperTrigger
+        //         .onTrue( 
+        //             Commands.print("Right Bumper")
+        //             .andThen(Commands.runOnce(() -> drivetrain.resetOdometryPose(Pose2d.kZero) ) ) 
+        //             .andThen(Commands.print("--Right Bumper--") ) );
+        // }
     }
 
     private static void configRightBumper()
     {
+        System.out.println("Config Right Bumper");
+
         if(gyro != null && drivetrain != null)
         {
+            System.out.println("Called Right Bumper");
             Trigger rightBumperTrigger = controller.rightBumper();
             rightBumperTrigger
-                .onTrue( Commands.runOnce(() -> drivetrain.resetOdometryPose(Pose2d.kZero) ) );
+                .onTrue( 
+                    Commands.print("Right Bumper")
+                    // .andThen(Commands.runOnce(() -> drivetrain.resetOdometryPose(Pose2d.kZero) ) ) 
+                    // .andThen(Commands.print("--Right Bumper--") ) 
+                    );
         }
     }
 

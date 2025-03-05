@@ -157,7 +157,7 @@ public class LEDs extends SubsystemLance
     /**
      * Sets the LEDs color to solid
      */
-    private void setColorSolid(Color color)
+    public void setColorSolid(Color color)
     {
         solid = LEDPattern.solid(color);
         solid.applyTo(ledBuffer);

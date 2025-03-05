@@ -9,8 +9,10 @@ import java.lang.invoke.MethodHandles;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.GeneralCommands;
 import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
@@ -19,6 +21,7 @@ import frc.robot.elastic.ElasticLance;
 import frc.robot.loggers.DataLogFile;
 import frc.robot.motors.MotorControllerLance;
 import frc.robot.pathplanner.PathPlannerLance;
+import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Pneumatics;
 
 public class Robot extends TimedRobot 
@@ -35,7 +38,10 @@ public class Robot extends TimedRobot
     }
 
     private final RobotContainer robotContainer;
+    private Pivot pivot;
+    private boolean isPreMatch = true;
     private Command autonomousCommand = null;
+
     private TestMode testMode = null;
     private Timer timer = new Timer();
 
@@ -106,6 +112,8 @@ public class Robot extends TimedRobot
     @Override
     public void disabledInit() 
     {
+        robotContainer.getLEDs().setColorSolid(Color.kRed);
+
         timer.reset();
         timer.start();
     }
@@ -121,6 +129,26 @@ public class Robot extends TimedRobot
             robotContainer.getDrivetrain().setCoastMode();
             timer.reset();
             timer.stop();
+        }
+
+        if(isPreMatch)
+        {
+            autonomousCommand = PathPlannerLance.getAutonomousCommand();
+
+            if(autonomousCommand.getName().startsWith("1COMP"))
+            {
+                robotContainer.getLEDs().setColorSolid(Color.kGreen);
+            }
+            else
+            {
+                robotContainer.getLEDs().setColorSolid(Color.kRed);
+            }
+
+            // if(currentAutoCommand != previousAutoCommand)
+            // {
+            //     autonomousCommand = currentAutoCommand;
+            // }
+            // previousAutoCommand = currentAutoCommand;
         }
     }
 
@@ -140,7 +168,7 @@ public class Robot extends TimedRobot
     public void autonomousInit() 
     {
         DataLogManager.start();
-        autonomousCommand = PathPlannerLance.getAutonomousCommand();
+        // autonomousCommand = PathPlannerLance.getAutonomousCommand();
 
         if (autonomousCommand != null) 
         {
@@ -155,6 +183,8 @@ public class Robot extends TimedRobot
         {
             pneumatics.enableCompressor();
         }
+
+        pivot.resetEncoder();
     }
 
     /**
@@ -169,7 +199,15 @@ public class Robot extends TimedRobot
      */
     @Override
     public void autonomousExit() 
-    {}
+    {
+        if (autonomousCommand != null) 
+        {
+            autonomousCommand.cancel();
+            autonomousCommand = null;
+        }
+
+        isPreMatch = false;
+    }
 
     /**
      * This method runs one time when the robot enters teleop mode.
@@ -184,6 +222,8 @@ public class Robot extends TimedRobot
             autonomousCommand.cancel();
             autonomousCommand = null;
         }
+
+        isPreMatch = true;
     }
 
     /**

@@ -330,6 +330,7 @@ public class Drivetrain extends SubsystemLance
     public void resetOdometryPose(Pose2d pose)
     {
         odometry.resetPose(pose);
+        System.out.println("ResetOdomPose Pose = " + pose);
     }
 
     /**
@@ -769,6 +770,9 @@ public class Drivetrain extends SubsystemLance
         SmartDashboard.putNumber("RLP", rightLeaderPosition);
         Pose2d pose = odometry.update(gyro.getRotation2d(), leftLeaderPosition, rightLeaderPosition);
         odometryPublisher.set(pose);
+        
+        // System.out.println("Drivetrain periodic pose" + pose);
+
         // System.out.println("LL = " + leftLeader.getMotorVoltage() + " LF = " + leftFollower.getMotorVoltage() + " RL = " + rightLeader.getMotorVoltage() + " RF = " + rightFollower.getMotorVoltage());
         // System.out.println("LL = " + leftLeader.getMotorSupplyVoltage() + " LF = " + leftFollower.getMotorSupplyVoltage() + " RL = " + rightLeader.getMotorSupplyVoltage() + " RF = " + rightFollower.getMotorSupplyVoltage());
         // System.out.println(this);

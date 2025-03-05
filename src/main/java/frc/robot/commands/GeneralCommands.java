@@ -141,8 +141,10 @@ public final class GeneralCommands
                 Commands.parallel(
                     operatorRumble(),
                     pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition),
-                    setLEDOff()
+                    setLEDSolid(Color.kYellow)
                 )
+            .andThen(Commands.waitSeconds(0.5))
+            .andThen(setLEDOff())
             );
         }
         else
