@@ -1,15 +1,20 @@
 package frc.robot.controls;
 
 import java.lang.invoke.MethodHandles;
+import java.security.PrivateKey;
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import frc.robot.RobotContainer;
 import frc.robot.commands.GeneralCommands;
+import frc.robot.sensors.GyroLance;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Roller;
 
@@ -30,6 +35,11 @@ public final class OperatorBindings
     private static CommandXboxController controller;
     private static Roller roller;
     private static Pivot pivot;
+    private static GyroLance gyro;
+    private static Drivetrain drivetrain;
+
+
+
 
 
     // *** CLASS CONSTRUCTORS ***
@@ -64,9 +74,9 @@ public final class OperatorBindings
             configXButton();
             configYButton();
             configLeftBumper();
+            configRightBumper();
             configBackButton();
             configPOVButton();
-            // configRightBumper();
 
             configRumble(5);
             configRumble(15);
@@ -127,6 +137,16 @@ public final class OperatorBindings
             Trigger leftBumperTrigger = controller.leftBumper();
             leftBumperTrigger  
                 .onTrue( GeneralCommands.resetPivotAndRollerCommand() );
+        }
+    }
+
+    private static void configRightBumper()
+    {
+        if(gyro != null && drivetrain != null)
+        {
+            Trigger rightBumperTrigger = controller.rightBumper();
+            rightBumperTrigger
+                .onTrue( Commands.runOnce(() -> drivetrain.resetOdometryPose(Pose2d.kZero) ) );
         }
     }
 

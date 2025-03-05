@@ -383,6 +383,14 @@ public class Drivetrain extends SubsystemLance
         return rightFollowerVelocity;
     }
 
+    public void resetMotorEncoders()
+    {
+        rightLeader.setPosition(0.0);
+        leftLeader.setPosition(0.0);
+        rightFollower.setPosition(0.0);
+        leftFollower.setPosition(0.0);
+    }
+
     public double getLeftLeaderDistanceMeters()
     {
         return getRightLeaderDistance() * MOTORREVOLUTIONSTOWHEELMETERS;
@@ -616,6 +624,11 @@ public class Drivetrain extends SubsystemLance
     public Command stopDriveCommand()
     {
         return run( () -> stopDrive() ).withName("Stop Drive");
+    }
+
+    public Command resetMotorEncodersCommand()
+    {
+        return runOnce( () -> resetMotorEncoders() ).withName("Reset Motor Encoders");
     }
 
     /**
