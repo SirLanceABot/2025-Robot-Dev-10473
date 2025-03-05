@@ -21,6 +21,8 @@ import frc.robot.elastic.ElasticLance;
 import frc.robot.loggers.DataLogFile;
 import frc.robot.motors.MotorControllerLance;
 import frc.robot.pathplanner.PathPlannerLance;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Pneumatics;
 
@@ -38,7 +40,8 @@ public class Robot extends TimedRobot
     }
 
     private final RobotContainer robotContainer;
-    private Pivot pivot;
+    private LEDs leds;
+    private Drivetrain drivetrain;
     private boolean isPreMatch = true;
     private Command autonomousCommand = null;
 
@@ -58,6 +61,8 @@ public class Robot extends TimedRobot
 
         // (2) Create the subsystems, sensors, etc.
         robotContainer = new RobotContainer();
+        leds = robotContainer.getLEDs();
+        drivetrain = robotContainer.getDrivetrain();
 
         // (3) Create the commands
         GeneralCommands.createGeneralCommands(robotContainer);
@@ -112,8 +117,10 @@ public class Robot extends TimedRobot
     @Override
     public void disabledInit() 
     {
-        robotContainer.getLEDs().setColorSolid(Color.kRed);
-
+        if(leds != null)
+        {
+           leds.setColorSolid(Color.kRed);
+        }
         timer.reset();
         timer.start();
     }
@@ -126,7 +133,10 @@ public class Robot extends TimedRobot
     {
         if(timer.hasElapsed(4.0))
         {
-            robotContainer.getDrivetrain().setCoastMode();
+            if(drivetrain != null)
+            {
+                drivetrain.setCoastMode();
+            }
             timer.reset();
             timer.stop();
         }
@@ -135,14 +145,17 @@ public class Robot extends TimedRobot
         {
             autonomousCommand = PathPlannerLance.getAutonomousCommand();
 
-            if(autonomousCommand.getName().startsWith("1COMP"))
+            if(leds != null)
             {
-                robotContainer.getLEDs().setColorSolid(Color.kGreen);
-            }
-            else
-            {
-                robotContainer.getLEDs().setColorSolid(Color.kRed);
-            }
+                if(autonomousCommand.getName().startsWith("1COMP"))
+                {
+                    leds.setColorSolid(Color.kGreen);
+                }
+                else
+                {
+                    leds.setColorSolid(Color.kRed);
+                }
+            }    
 
             // if(currentAutoCommand != previousAutoCommand)
             // {
@@ -158,7 +171,10 @@ public class Robot extends TimedRobot
     @Override
     public void disabledExit() 
     {
-        robotContainer.getDrivetrain().setBrakeMode();
+        if(drivetrain != null)
+        {
+            drivetrain.setBrakeMode();
+        }
     }
 
     /**
@@ -184,7 +200,11 @@ public class Robot extends TimedRobot
             pneumatics.enableCompressor();
         }
 
-        pivot.resetEncoder();
+        Pivot pivot = robotContainer.getPivot();
+        if(pivot != null)
+        {
+            pivot.resetEncoder();
+        }
     }
 
     /**

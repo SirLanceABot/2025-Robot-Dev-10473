@@ -39,7 +39,8 @@ public final class GeneralCommands
     private static CommandXboxController driverController;
     private static CommandXboxController operatorController;
     private static LEDs leds;
-    private static final InternalButton intakeAlgaeTriggersRumble = new InternalButton();
+    private static final InternalButton operatorTriggerRumble = new InternalButton();
+    private static final InternalButton ledTriggerOff = new InternalButton();
 
     private GeneralCommands()
     {}
@@ -51,8 +52,8 @@ public final class GeneralCommands
         driverController = robotContainer.getDriverController();
         operatorController = robotContainer.getOperatorController();
         leds = robotContainer.getLEDs();
-        intakeAlgaeTriggersRumble.onTrue(operatorRumble());
-        
+        operatorTriggerRumble.onTrue(operatorRumble());
+        ledTriggerOff.onTrue(timedLEDOff());
     }
 
     public static Command resetPivotAndRollerCommand()
@@ -69,7 +70,7 @@ public final class GeneralCommands
                     Commands.parallel(
                         roller.stopCommand(),
                         // operatorRumble(),
-                        setLEDOff()
+                        Commands.runOnce( () -> ledTriggerOff.setPressed(true))
                     )
                 );    
         }
@@ -101,15 +102,14 @@ public final class GeneralCommands
             .andThen(
                 Commands.parallel(
                     roller.stopCommand(),
-                    Commands.runOnce( () -> intakeAlgaeTriggersRumble.setPressed(true) ),
+                    Commands.runOnce( () -> operatorTriggerRumble.setPressed(true) ),
                     setLEDSolid(Color.kBlue),
                     pivot.moveToSetPositionCommand(TargetPosition.kHoldAlgaePosition)
                         .until( () -> Math.abs(TargetPosition.kHoldAlgaePosition.pivot - pivot.getPosition()) < 0.1)
                         .withTimeout(2.0)
                 )
             )
-            .andThen(roller.stopCommand())
-            .andThen( () -> intakeAlgaeTriggersRumble.setPressed(false) );
+            .andThen( () -> ledTriggerOff.setPressed(true) );
         }
         else
         {
@@ -139,13 +139,14 @@ public final class GeneralCommands
             .andThen(Commands.waitSeconds(1.0))
             .andThen(
                 Commands.parallel(
-                    operatorRumble(),
-                    pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition),
+                    Commands.runOnce( () -> operatorTriggerRumble.setPressed(true)),
+                    pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
+                        .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1)
+                        .withTimeout(0.5),
                     setLEDSolid(Color.kYellow)
                 )
-            .andThen(Commands.waitSeconds(0.5))
-            .andThen(setLEDOff())
-            );
+            )
+            .andThen( () -> ledTriggerOff.setPressed(true) );
         }
         else
         {
@@ -201,10 +202,11 @@ public final class GeneralCommands
             .andThen(
                 Commands.parallel(
                     pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
-                    .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1),
-                    operatorRumble(),
+                        .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1)
+                        .withTimeout(1.0),
+                    Commands.runOnce( () -> operatorTriggerRumble.setPressed(true)),
                     roller.stopCommand(),
-                    setLEDOff()
+                    Commands.runOnce(() -> ledTriggerOff.setPressed(true))
                 )
             );
         }
@@ -253,14 +255,34 @@ public final class GeneralCommands
      */
     public static Command operatorRumble()
     {
-        if(operatorController != null && DriverStation.isTeleopEnabled())
+        if(operatorController != null)
         {
             return
-            Commands.runEnd(
-                () -> operatorController.getHID().setRumble(RumbleType.kBothRumble, 1), 
-                () -> operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)
-            )
-            .withTimeout(0.2);
+            Commands.either(
+                Commands.runEnd(
+                    () -> operatorController.getHID().setRumble(RumbleType.kBothRumble, 1), 
+                    () -> operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)
+                )
+                .withTimeout(0.2)
+                .andThen( () -> operatorTriggerRumble.setPressed(false) ),
+                Commands.none(),
+                () -> DriverStation.isTeleopEnabled()
+            );
+        }
+        else
+        {
+            return Commands.none();
+        }
+    }
+
+    public static Command timedLEDOff()
+    {
+        if(leds != null)
+        {
+            return
+            Commands.waitSeconds(2.0)
+            .andThen(leds.offCommand())
+            .andThen(() -> ledTriggerOff.setPressed(false));
         }
         else
         {
@@ -330,24 +352,24 @@ public final class GeneralCommands
         }
     }
 
-    /**
-     * Command to turn the LEDs off
-     * @return command to turn the LEDs off
-     * @author Brady Woodard
-     * @author Mason Bellinger
-     */
-    public static Command setLEDOff()
-    {
-        if(leds != null)
-        {
-            return leds.offCommand();
+    // /**
+    //  * Command to turn the LEDs off
+    //  * @return command to turn the LEDs off
+    //  * @author Brady Woodard
+    //  * @author Mason Bellinger
+    //  */
+    // public static Command setLEDOff()
+    // {
+    //     if(leds != null)
+    //     {
+    //         return leds.offCommand();
             
-        }
-        else
-        {
-            return Commands.none();
-        }
-    }
+    //     }
+    //     else
+    //     {
+    //         return Commands.none();
+    //     }
+    // }
 
     /**
      * Toggles the shifter while the robot is moving

@@ -15,6 +15,7 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.GeneralCommands;
 import frc.robot.sensors.GyroLance;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Roller;
 
@@ -35,7 +36,8 @@ public final class OperatorBindings
     private static CommandXboxController controller;
     private static Roller roller;
     private static Pivot pivot;
-    private static GyroLance gyro;
+    // private static GyroLance gyro;
+    private static LEDs leds;
     private static Drivetrain drivetrain;
 
 
@@ -66,6 +68,9 @@ public final class OperatorBindings
         controller = robotContainer.getOperatorController();
         roller = robotContainer.getRoller();
         pivot = robotContainer.getPivot();
+        leds = robotContainer.getLEDs();
+        drivetrain = robotContainer.getDrivetrain();
+
 
         if(controller != null)
         {
@@ -74,7 +79,8 @@ public final class OperatorBindings
             configXButton();
             configYButton();
             configLeftBumper();
-            configRightBumper();
+            // configRightBumper();
+            configLeftTrigger();
             configBackButton();
             configPOVButton();
 
@@ -150,20 +156,30 @@ public final class OperatorBindings
         // }
     }
 
-    private static void configRightBumper()
-    {
-        System.out.println("Config Right Bumper");
+    // private static void configRightBumper()
+    // {
+    //     System.out.println("Config Right Bumper");
 
-        if(gyro != null && drivetrain != null)
+    //     if(gyro != null && drivetrain != null)
+    //     {
+    //         System.out.println("Called Right Bumper");
+    //         Trigger rightBumperTrigger = controller.rightBumper();
+    //         rightBumperTrigger
+    //             .onTrue( 
+    //                 Commands.print("Right Bumper")
+    //                 // .andThen(Commands.runOnce(() -> drivetrain.resetOdometryPose(Pose2d.kZero) ) ) 
+    //                 // .andThen(Commands.print("--Right Bumper--") ) 
+    //                 );
+    //     }
+    // }
+
+    private static void configLeftTrigger()
+    {
+        if(leds != null)
         {
-            System.out.println("Called Right Bumper");
-            Trigger rightBumperTrigger = controller.rightBumper();
-            rightBumperTrigger
-                .onTrue( 
-                    Commands.print("Right Bumper")
-                    // .andThen(Commands.runOnce(() -> drivetrain.resetOdometryPose(Pose2d.kZero) ) ) 
-                    // .andThen(Commands.print("--Right Bumper--") ) 
-                    );
+            Trigger leftTriggerTrigger = controller.leftTrigger();
+            leftTriggerTrigger
+                .onTrue(leds.offCommand());
         }
     }
 
