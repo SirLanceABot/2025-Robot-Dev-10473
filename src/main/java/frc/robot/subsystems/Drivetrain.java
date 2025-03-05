@@ -787,14 +787,10 @@ public class Drivetrain extends SubsystemLance
 /********************************************************************************************************************** */
 
     /**
-     * Start the Drivetrain PID tuning process
+     * Drivetrain Velocity PID tuning process
      * <p>Control with SmartDashboard interactions
-     * <p>Use in testing init
+     * <p>Use in Robot.testInit()
      */
-    public void startPIDTuning()
-    {
-        new TuneVelocityPID().schedule();
-    }
 
     public class TuneVelocityPID extends Command {
 
@@ -806,7 +802,7 @@ public class Drivetrain extends SubsystemLance
 
     private double velocitySetpoint;
 
-    TuneVelocityPID()
+    public TuneVelocityPID()
     {
         addRequirements(Drivetrain.this);
     }
