@@ -35,7 +35,7 @@ public class Shifter extends SubsystemLance
     // Put all class variables and instance variables here
     private final DoubleSolenoid solenoid = new DoubleSolenoid(Constants.Pneumatics.PNEUMATIC_HUB_PORT, PneumaticsModuleType.REVPH,
     Constants.Shifter.FORWARD_CHANNEL_PORT, Constants.Shifter.REVERSE_CHANNEL_PORT);
-    private static boolean isHighGear;
+    private boolean isHighGear;
 
     
     // *** CLASS CONSTRUCTORS ***
@@ -51,7 +51,7 @@ public class Shifter extends SubsystemLance
         System.out.println("  Constructor Started:  " + fullClassName);
 
 
-        shiftHighCommand();
+        shiftLow();
         System.out.println("  Constructor Finished: " + fullClassName);
     }
 
@@ -79,7 +79,7 @@ public class Shifter extends SubsystemLance
     /**
      * Returns isHigh gear boolean
      */
-    public static boolean isHighGear()
+    public boolean isHighGear()
     {
         return isHighGear;
     }

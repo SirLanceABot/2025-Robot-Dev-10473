@@ -1,11 +1,25 @@
 package frc.robot.elastic;
 
+import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.util.struct.parser.ParseException;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.RobotContainer;
+import frc.robot.pathplanner.PathPlannerLance;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shifter;
 
 public class ElasticLance 
@@ -23,6 +37,11 @@ public class ElasticLance
 
     // *** CLASS VARIABLES & INSTANCE VARIABLES ***
     // Put all class variables and instance variables here
+    private static Field2d autofield = new Field2d();
+        
+    private static String autoName;
+    private static Drivetrain drivetrain;
+    private static Shifter shifter;
 
     private ElasticLance()
     {}
@@ -31,6 +50,13 @@ public class ElasticLance
     // {
     //     updateAllianceColorBox();
     // }
+
+    public static void configElastic(RobotContainer robotContainer)
+    {
+        drivetrain = robotContainer.getDrivetrain();
+        shifter = robotContainer.getShifter();
+        createAutoField();
+    }
 
     public static void sendDataToSmartDashboard()
     {
@@ -41,6 +67,7 @@ public class ElasticLance
 
         updateAllianceColorBox();
         updateGearBox();
+        //updateAutoField();
         // SmartDashboard.putString("Alliance Color", color.toHexString());
         // SmartDashboard.putNumber("Pivot", Pivot.getPosition());
 
@@ -73,7 +100,7 @@ public class ElasticLance
     {
         String gear;
 
-        if(Shifter.isHighGear() == true)
+        if(shifter.isHighGear() == true)
         {
             gear = "High";
         }
@@ -88,4 +115,59 @@ public class ElasticLance
 
         SmartDashboard.putString("Gear", gear);
     }
+
+
+
+    private static void createAutoField()
+    {
+        //Create and push Field2d to SmartDashboard.
+        SmartDashboard.putData("AutoField", autofield);
+        Pose2d pose = drivetrain.getPose();
+        autofield.setRobotPose(pose);
+        
+    }
+
+    public static void updateAutoField() 
+    {
+        autoName = PathPlannerLance.getAutonomousCommand().getName();
+        List<PathPlannerPath> pathPlannerPaths = null;
+        try 
+        {
+            pathPlannerPaths = getPathPlannerPaths(autoName);
+        } catch (IOException | ParseException | org.json.simple.parser.ParseException e) 
+        {
+            e.printStackTrace();
+        }
+
+        if (pathPlannerPaths != null) 
+        {
+            List<Pose2d> poses = extractPosesFromPaths(pathPlannerPaths);
+            autofield.getObject("path").setPoses(poses);
+        }    
+            
+    }                        
+                    
+                    
+    private static List<PathPlannerPath>getPathPlannerPaths(String autoName) throws IOException, ParseException, org.json.simple.parser.ParseException
+    {
+        return PathPlannerAuto.getPathGroupFromAutoFile(autoName);
+    } 
+
+
+
+    private static List<Pose2d>extractPosesFromPaths(List<PathPlannerPath> pathPlannerPaths)
+    {
+        List<Pose2d> poses = new ArrayList<>();
+        for (PathPlannerPath path : pathPlannerPaths) 
+        {
+            poses.addAll(path.getAllPathPoints().stream()
+                .map(
+                    point -> new Pose2d(point.position.getX(), point.position.getY(), new Rotation2d()))
+                .collect(Collectors.toList()));
+        }
+        return poses;
+    }
+
+
+
 }

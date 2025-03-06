@@ -52,6 +52,7 @@ public final class GeneralCommands
         driverController = robotContainer.getDriverController();
         operatorController = robotContainer.getOperatorController();
         leds = robotContainer.getLEDs();
+        shifter = robotContainer.getShifter();
         operatorTriggerRumble.onTrue(operatorRumble());
         ledTriggerOff.onTrue(timedLEDOff());
     }
@@ -380,14 +381,14 @@ public final class GeneralCommands
     {
         if(shifter != null && drivetrain != null)
         {
-            if(Shifter.isHighGear() == true)
+            if(shifter.isHighGear() == true)
             {
                 return drivetrain.prepareShiftToHighCommand()
                     .andThen (shifter.shiftHighCommand()) 
                     .andThen ( drivetrain.postShiftToHighCommand());
                 
             }
-            else if(Shifter.isHighGear() == false)
+            else if(shifter.isHighGear() == false)
             {
                 return drivetrain.prepareShiftToLowCommand()
                 .andThen (shifter.shiftLowCommand()) 

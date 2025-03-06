@@ -17,10 +17,11 @@ import frc.robot.commands.GeneralCommands;
 import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
 // import frc.robot.controls.SysIDBindings;
-import frc.robot.elastic.ElasticLance;
+
 import frc.robot.loggers.DataLogFile;
 import frc.robot.motors.MotorControllerLance;
 import frc.robot.pathplanner.PathPlannerLance;
+import frc.robot.elastic.ElasticLance;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pivot;
@@ -69,7 +70,7 @@ public class Robot extends TimedRobot
 
         // (4) Configuring the pathplanner
         PathPlannerLance.configPathPlanner(robotContainer);
-
+        ElasticLance.configElastic(robotContainer);
         // (5) Bind the commands to triggers
         DriverBindings.createBindings(robotContainer);
         OperatorBindings.createBindings(robotContainer);
@@ -144,7 +145,7 @@ public class Robot extends TimedRobot
         if(isPreMatch)
         {
             autonomousCommand = PathPlannerLance.getAutonomousCommand();
-
+            
             if(leds != null)
             {
                 if(autonomousCommand.getName().startsWith("1COMP"))
