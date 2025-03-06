@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.126,
+        "y": 7.4
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.334446834970563,
+        "y": 7.4
+      },
+      "isLocked": false,
+      "linkedName": "Left Wall"
+    },
+    {
+      "anchor": {
+        "x": 5.462760416666666,
+        "y": 5.059201388888889
+      },
+      "prevControl": {
+        "x": 6.2340448163657785,
+        "y": 6.395105156253014
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "S6 Right"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 90.0,
+    "maxAngularAcceleration": 90.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": 150.46121774044192
+  },
+  "reversed": false,
+  "folder": "Left Wall Starts",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

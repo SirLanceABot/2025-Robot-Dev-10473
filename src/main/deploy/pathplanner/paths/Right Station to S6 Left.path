@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.3539062499999988,
+        "y": 0.9503472222222217
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.3539062499999988,
+        "y": 0.950347222222222
+      },
+      "isLocked": false,
+      "linkedName": "Right Station"
+    },
+    {
+      "anchor": {
+        "x": 3.030989583331325,
+        "y": 5.017274305557103
+      },
+      "prevControl": {
+        "x": 2.5829143136675996,
+        "y": 3.830265737190203
+      },
+      "nextControl": {
+        "x": 3.4790648529950503,
+        "y": 6.204282873924
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.849207746478872,
+        "y": 5.343045774647887
+      },
+      "prevControl": {
+        "x": 5.455569434597273,
+        "y": 6.393295026232193
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "S6 Left"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 90.0,
+    "maxAngularAcceleration": 90.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 152.5011963340437
+  },
+  "reversed": false,
+  "folder": "Right Station Starts",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

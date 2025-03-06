@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.164496527777777,
+        "y": 1.9705729166666663
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.068243412011745,
+        "y": 1.5434702066657895
+      },
+      "isLocked": false,
+      "linkedName": "Align Right Station"
+    },
+    {
+      "anchor": {
+        "x": 3.14850352112676,
+        "y": 3.6848591549295766
+      },
+      "prevControl": {
+        "x": 2.0564003738758725,
+        "y": 3.6848591549295766
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "S4 Right"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 90.0,
+    "maxAngularAcceleration": 90.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": "Align Starts",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -70.63457508099978
+  },
+  "useDefaultConstraints": true
+}

@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.176,
+        "y": 0.7239
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.572007067605939,
+        "y": 0.6452832855575195
+      },
+      "isLocked": false,
+      "linkedName": "Right Wall"
+    },
+    {
+      "anchor": {
+        "x": 5.95691906005222,
+        "y": 3.8875326370757177
+      },
+      "prevControl": {
+        "x": 5.984250879105199,
+        "y": 2.7532621463771116
+      },
+      "nextControl": {
+        "x": 5.928573989629684,
+        "y": 5.063853059610931
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.1399833615176655,
+        "y": 5.152442727835694
+      },
+      "prevControl": {
+        "x": 6.023161555919897,
+        "y": 6.440073096393351
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "S6 Middle"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 90.0,
+    "maxAngularAcceleration": 90.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Right Wall Starts",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

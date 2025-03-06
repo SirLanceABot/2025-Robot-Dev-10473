@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.826,
+        "y": 3.997
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.988789316743511,
+        "y": 4.00273293692814
+      },
+      "isLocked": false,
+      "linkedName": "S1 Middle"
+    },
+    {
+      "anchor": {
+        "x": 4.6558843085085,
+        "y": 5.55362367021586
+      },
+      "prevControl": {
+        "x": 5.320853456024966,
+        "y": 5.231844982447406
+      },
+      "nextControl": {
+        "x": 3.3150457545103036,
+        "y": 6.202455682988612
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.6219747340404147,
+        "y": 3.997
+      },
+      "prevControl": {
+        "x": 1.3302526595723296,
+        "y": 3.9316489361733074
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Middle Algae"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 90.0,
+    "maxAngularAcceleration": 90.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": true,
+  "folder": "Reef Back Out",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

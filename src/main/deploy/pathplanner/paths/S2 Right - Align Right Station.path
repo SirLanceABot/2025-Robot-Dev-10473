@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.025638343789641,
+        "y": 2.699425562526419
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.556475927853887,
+        "y": 1.7799878963600302
+      },
+      "isLocked": false,
+      "linkedName": "S2 Right"
+    },
+    {
+      "anchor": {
+        "x": 3.6319444444444433,
+        "y": 1.5932291666666663
+      },
+      "prevControl": {
+        "x": 3.876727720605925,
+        "y": 1.6911900093460037
+      },
+      "nextControl": {
+        "x": 3.3998408163784863,
+        "y": 1.5003426453698714
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.164496527777777,
+        "y": 1.9705729166666663
+      },
+      "prevControl": {
+        "x": 1.4052399191999265,
+        "y": 0.9630053659723559
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Align Right Station"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 90.0,
+    "maxAngularAcceleration": 90.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -70.63457508099978
+  },
+  "reversed": true,
+  "folder": "Reef Back Out",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.126,
+        "y": 7.4
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.1259999999999994,
+        "y": 7.4
+      },
+      "isLocked": false,
+      "linkedName": "Left Wall"
+    },
+    {
+      "anchor": {
+        "x": 6.203472222222222,
+        "y": 3.6756076388888888
+      },
+      "prevControl": {
+        "x": 6.175520833333333,
+        "y": 4.248611111111111
+      },
+      "nextControl": {
+        "x": 6.215652860650574,
+        "y": 3.4259045511076636
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.43,
+        "y": 2.962059859154928
+      },
+      "prevControl": {
+        "x": 5.9890277777777765,
+        "y": 1.8219730535993715
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "S2 Left"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 90.0,
+    "maxAngularAcceleration": 90.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Left Wall Starts",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

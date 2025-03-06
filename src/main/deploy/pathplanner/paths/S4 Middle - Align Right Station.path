@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.14850352112676,
+        "y": 4.024999999999999
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.5697177221979226,
+        "y": 4.024999999999999
+      },
+      "isLocked": false,
+      "linkedName": "S4 Middle"
+    },
+    {
+      "anchor": {
+        "x": 1.633532219570406,
+        "y": 2.265811455847255
+      },
+      "prevControl": {
+        "x": 1.9230174339217991,
+        "y": 2.927040018882724
+      },
+      "nextControl": {
+        "x": 1.3440470052190134,
+        "y": 1.6045828928117847
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.164496527777777,
+        "y": 1.9705729166666663
+      },
+      "prevControl": {
+        "x": 1.934772810322088,
+        "y": 1.6657192470137043
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Align Right Station"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 90.0,
+    "maxAngularAcceleration": 90.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -70.63457508099978
+  },
+  "reversed": true,
+  "folder": "Reef Back Out",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.815,
+        "y": 6.693
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.2703896609002236,
+        "y": 7.134005489511269
+      },
+      "isLocked": false,
+      "linkedName": "Align Left Station"
+    },
+    {
+      "anchor": {
+        "x": 3.55950704225352,
+        "y": 3.018749999999999
+      },
+      "prevControl": {
+        "x": 3.038343128805736,
+        "y": 2.116067622837008
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "S3 Left"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 90.0,
+    "maxAngularAcceleration": 90.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -29.999999999999996
+  },
+  "reversed": false,
+  "folder": "Align Starts",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 71.70924176151732
+  },
+  "useDefaultConstraints": true
+}

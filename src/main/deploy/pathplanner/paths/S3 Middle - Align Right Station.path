@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.8099999999999996,
+        "y": 2.8
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.1503902721765065,
+        "y": 1.6575224382430302
+      },
+      "isLocked": false,
+      "linkedName": "S3 Middle "
+    },
+    {
+      "anchor": {
+        "x": 2.164496527777777,
+        "y": 1.9705729166666663
+      },
+      "prevControl": {
+        "x": 1.59697120160217,
+        "y": 1.2174413714268937
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Align Right Station"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 90.0,
+    "maxAngularAcceleration": 90.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -70.63457508099978
+  },
+  "reversed": true,
+  "folder": "Reef Back Out",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
