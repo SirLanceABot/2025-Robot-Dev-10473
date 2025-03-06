@@ -195,7 +195,7 @@ public final class GeneralCommands
         {
             return
             Commands.parallel(
-                setLEDSolid(Color.kBlue)
+                setLEDSolid(Color.kPurple)
                     .withTimeout(2.0),
                 roller.ejectAlgaeCommand()
             )
@@ -281,7 +281,7 @@ public final class GeneralCommands
         if(leds != null)
         {
             return
-            Commands.waitSeconds(2.0)
+            Commands.waitSeconds(0.5)
             .andThen(leds.offCommand())
             .andThen(() -> ledTriggerOff.setPressed(false));
         }

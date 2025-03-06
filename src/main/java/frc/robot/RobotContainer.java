@@ -185,6 +185,10 @@ public class RobotContainer
         return sysIDController;
     }
 
+    public boolean useFullRobot()
+    {
+        return useFullRobot;
+    }
     // public BooleanSupplier isRedAllianceSupplier()
     // {
     //     return () ->

@@ -1,6 +1,6 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// the WPILib BSD license file in the root directory of this project.h
 
 package frc.robot;
 
@@ -148,15 +148,21 @@ public class Robot extends TimedRobot
             
             if(leds != null)
             {
-                if(autonomousCommand.getName().startsWith("1COMP"))
+                if(!robotContainer.useFullRobot())
+                {
+                    leds.setColorSolid(Color.kRed);
+                }
+                else if(autonomousCommand.getName().startsWith("1COMP"))
                 {
                     leds.setColorSolid(Color.kGreen);
                 }
                 else
                 {
-                    leds.setColorSolid(Color.kRed);
+                    leds.setColorSolid(Color.kYellow);
                 }
             }    
+
+
 
             // if(currentAutoCommand != previousAutoCommand)
             // {
@@ -206,6 +212,11 @@ public class Robot extends TimedRobot
         {
             pivot.resetEncoder();
         }
+
+        if(leds != null)
+        {
+            leds.off();
+        }
     }
 
     /**
@@ -245,6 +256,11 @@ public class Robot extends TimedRobot
         }
 
         isPreMatch = true;
+
+        if(leds != null)
+        {
+            leds.off();
+        }
     }
 
     /**

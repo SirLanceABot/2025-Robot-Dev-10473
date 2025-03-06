@@ -230,6 +230,9 @@ public class Drivetrain extends SubsystemLance
 
         setupChassisPIDController(slotID, kP, kI, kD, kS, kV);
 
+        leftLeader.setSafetyEnabled(false);
+        rightLeader.setSafetyEnabled(false);
+
         leftFollower.setSafetyEnabled(false);
         rightFollower.setSafetyEnabled(false);
 

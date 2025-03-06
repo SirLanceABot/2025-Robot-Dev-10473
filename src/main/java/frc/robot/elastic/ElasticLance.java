@@ -98,20 +98,19 @@ public class ElasticLance
 
     public static void updateGearBox()
     {
-        String gear;
+        String gear = "";
 
-        if(shifter.isHighGear() == true)
+        if(shifter != null)
         {
-            gear = "High";
+            if(shifter.isHighGear() == true)
+            {
+                gear = "High";
+            }
+            else
+            {
+                gear = "Low";
+            }
         }
-        else
-        {
-            gear = "Low";
-        }
-        // else 
-        // {
-        //     gear = "None";
-        // }
 
         SmartDashboard.putString("Gear", gear);
     }
@@ -121,9 +120,12 @@ public class ElasticLance
     private static void createAutoField()
     {
         //Create and push Field2d to SmartDashboard.
-        SmartDashboard.putData("AutoField", autofield);
-        Pose2d pose = drivetrain.getPose();
-        autofield.setRobotPose(pose);
+        if(drivetrain != null)
+        {
+            SmartDashboard.putData("AutoField", autofield);
+            Pose2d pose = drivetrain.getPose();
+            autofield.setRobotPose(pose);
+        }
         
     }
 

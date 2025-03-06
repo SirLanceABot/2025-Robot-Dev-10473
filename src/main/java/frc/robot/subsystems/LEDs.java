@@ -148,7 +148,7 @@ public class LEDs extends SubsystemLance
     /**
      * Turns the LEDs off
      */
-    private void off()
+    public void off()
     {
         off.applyTo(ledBuffer);
         led.setData(ledBuffer);

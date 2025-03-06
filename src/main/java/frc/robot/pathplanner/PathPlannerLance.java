@@ -196,8 +196,6 @@ public class PathPlannerLance
         // NamedCommands.registerCommand("Score Algae", GeneralCommands.scoreAlgaeCommand());
         new EventTrigger("Score Algae").onTrue( GeneralCommands.scoreAlgaeCommand());
 
-        new EventTrigger("Back Out of Reef").onTrue( drivetrain.reefBackOutCommand());
-
         // NamedCommands.registerCommand("Score Coral", GeneralCommands.scoreAlgaeCommand());
         new EventTrigger("Score Coral").onTrue(GeneralCommands.scoreCoralCommand());
 
