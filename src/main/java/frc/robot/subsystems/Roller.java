@@ -125,7 +125,7 @@ public class Roller extends SubsystemLance
      */
     public Command ejectAlgaeCommand()
     {
-        return runOnce( () -> set(-0.5) )
+        return runOnce( () -> set(-0.2) )
         .withName("Eject Roller");
     }
 
