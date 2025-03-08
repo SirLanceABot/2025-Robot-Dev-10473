@@ -99,6 +99,12 @@ public class Roller extends SubsystemLance
         .withName("Intake Roller");
     }
 
+    public Command pulseAlgaeCommand()
+    {
+        return runOnce( () -> set(0.1) )
+        .withName("Pulse Algae");
+    }
+
     public Command slowRollerCommand()
     {
         return runOnce( () -> set(0.2) )

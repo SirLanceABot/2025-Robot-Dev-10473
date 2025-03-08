@@ -80,6 +80,7 @@ public final class OperatorBindings
             configYButton();
             configLeftBumper();
             // configRightBumper();
+            configRightTrigger();
             configLeftTrigger();
             configBackButton();
             configPOVButton();
@@ -172,6 +173,17 @@ public final class OperatorBindings
     //                 );
     //     }
     // }
+
+    private static void configRightTrigger()
+    {
+        if(roller != null)
+        {
+            Trigger rightTriggerTrigger = controller.rightTrigger();
+            rightTriggerTrigger
+                .onTrue(roller.pulseAlgaeCommand())
+                .onFalse(roller.stopCommand());
+        }
+    }
 
     private static void configLeftTrigger()
     {
