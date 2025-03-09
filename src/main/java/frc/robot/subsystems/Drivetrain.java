@@ -155,14 +155,14 @@ public class Drivetrain extends SubsystemLance
 
     /**
      * PID controller used for PP auto driving
-     * Tune feedforward first then PID
+     * First Tune feeds forward kS, then kV, then kP
      */
     private int slotID = 0;
-    private double kP = 0.;
+    private double kP = 15.;
     private double kI = 0.;
     private double kD = 0.;
-    private double kS = 0.12; // max volts that doesn't move the robot
-    private double kV = 12./3.7; // low gear 12 volts yields 3.7 m/s 
+    private double kS = 0.14; // max volts that doesn't move the robot
+    private double kV = 3.15; // low gear 12 volts yields 3.7 m/s 
   
     // *** INNER ENUMS and INNER CLASSES ***
     // Put all inner enums and inner classes here
