@@ -15,12 +15,10 @@ package frc.robot.tests;
 import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDouble;
 
-
 import frc.robot.RobotContainer;
-import frc.robot.sensors.CameraLance;
-import frc.robot.subsystems.Drivetrain.TuneVelocityPID;
 
 public class RickC137Test implements Test {
       // This string gets the full name of the class, including the package name
@@ -36,8 +34,14 @@ public class RickC137Test implements Test {
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
-    // private final DoublePublisher stream;
+    private final DoublePublisher voltageStepSizePublisher;
+    private final DoublePublisher leftLeaderVelocityPublisher;
+    private final DoublePublisher rightLeaderVelocityPublisher;
+    private final DoublePublisher leftLeaderMotorVoltagePublisher;
+    private final DoublePublisher rightLeaderMotorVoltagePublisher;
+
     // private TimestampedDouble data;
+    private double voltageStepSize = 10.;
 
 
     public RickC137Test(RobotContainer robotContainer)
@@ -46,9 +50,14 @@ public class RickC137Test implements Test {
 
       this.robotContainer = robotContainer;
 
-        // var name = "sysid4237";
-        // var table = CameraLance.NTinstance.getTable(name);
-        // stream = table.getDoubleTopic("stream").publish();
+        var name = "sysid4237";
+        var table = NetworkTableInstance.getDefault().getTable(name);
+        voltageStepSizePublisher = table.getDoubleTopic("voltageStepSize").publish();
+        leftLeaderVelocityPublisher = table.getDoubleTopic("leftLeaderVelocity").publish();
+        rightLeaderVelocityPublisher = table.getDoubleTopic("rightLeaderVelocity").publish();
+        leftLeaderMotorVoltagePublisher = table.getDoubleTopic("leftLeaderMotorVoltage").publish();
+        rightLeaderMotorVoltagePublisher = table.getDoubleTopic("rightLeaderMotorVoltage").publish();
+        
         System.out.println("  Constructor Finished: " + fullClassName);
     }
 
@@ -56,16 +65,23 @@ public class RickC137Test implements Test {
     public void init() {
         // Activate Drivetrain PID Velocity Tuning
         robotContainer.getDrivetrain().new TuneVelocityPID().schedule();
-
+        //FIXME take voltage step here
+        // run a few seconds??
     }
 
     @Override
     public void periodic() {
-        // stream.set(1.);
+        leftLeaderVelocityPublisher.set(robotContainer.getDrivetrain().getLeftLeaderVelocity());
+        rightLeaderVelocityPublisher.set(robotContainer.getDrivetrain().getRightLeaderVelocity());
+        leftLeaderMotorVoltagePublisher.set(robotContainer.getDrivetrain().getLeftLeaderMotorVoltage());
+        rightLeaderMotorVoltagePublisher.set(robotContainer.getDrivetrain().getRightLeaderMotorVoltage());
+        voltageStepSizePublisher.set(voltageStepSize);
     }
 
     @Override
-    public void exit() {}
+    public void exit() {
+        robotContainer.getDrivetrain().stopDrive();
+    }
 }
 //     String toString(double[] array) {
 //         return Arrays.stream(array)

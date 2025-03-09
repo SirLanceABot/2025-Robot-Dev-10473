@@ -787,6 +787,16 @@ public class Drivetrain extends SubsystemLance
         return driveStraightCommand(1.2);
     }
 
+    public double getLeftLeaderMotorVoltage()
+    {
+        return leftLeader.getMotorVoltage();
+    }
+
+    public double getRightLeaderMotorVoltage()
+    {
+        return rightLeader.getMotorVoltage();
+    }
+
 /********************************************************************************************************************** */
 
     /**
