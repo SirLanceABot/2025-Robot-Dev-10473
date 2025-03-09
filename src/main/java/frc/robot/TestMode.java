@@ -29,7 +29,7 @@ import frc.robot.tests.Test;
 
 // import frc.robot.tests.JWoodTest;
 // import frc.robot.tests.MKlannTest;
-// import frc.robot.tests.RickC137Test;
+import frc.robot.tests.RickC137Test;
 
 
 public class TestMode
@@ -67,7 +67,7 @@ public class TestMode
 
         // myTest = new JWoodTest(robotContainer);
         // myTest = new MKlannTest(robotContainer);
-        // myTest = new RickC137Test(robotContainer);
+        myTest = new RickC137Test(robotContainer);
     }
 
     /**

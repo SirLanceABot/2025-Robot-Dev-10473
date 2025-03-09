@@ -7,8 +7,9 @@ package frc.robot.tests;
 import java.lang.invoke.MethodHandles;
 
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Drivetrain.TuneVelocityPID;
 
-public class RThomasTest implements Test {
+public class RickC137Test implements Test {
       // This string gets the full name of the class, including the package name
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
 
@@ -21,20 +22,21 @@ public class RThomasTest implements Test {
 
     // *** CLASS & INSTANCE VARIABLES ***
     // Put all class and instance variables here.
-    // private final RobotContainer robotContainer;
+    private final RobotContainer robotContainer;
 
-    RThomasTest(RobotContainer robotContainer)
+    public RickC137Test(RobotContainer robotContainer)
     {
       System.out.println("  Constructor Started:  " + fullClassName);
 
-    //   this.robotContainer = robotContainer;
+      this.robotContainer = robotContainer;
 
       System.out.println("  Constructor Finished: " + fullClassName);
     }
 
     @Override
     public void init() {
-        throw new UnsupportedOperationException("Unimplemented method 'init'");
+        // Activate Drivetrain PID Velocity Tuning
+        robotContainer.getDrivetrain().new TuneVelocityPID().schedule();
     }
 
     @Override
