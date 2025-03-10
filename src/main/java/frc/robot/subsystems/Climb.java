@@ -138,7 +138,7 @@ public class Climb extends SubsystemLance
         return runOnce(() -> stop() ).withName("Stops Climb");
     }
     
-    // *** OVERRIDEN METHODS ***
+    // *** OVERRIDDEN METHODS ***
     // Put all methods that are Overridden here
 
     @Override

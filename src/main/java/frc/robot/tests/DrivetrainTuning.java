@@ -1,8 +1,5 @@
 // activate this test class in the TestMode class
 
-
-//FIXME CHANGE PathPlannerLance AutoBuilder to use drivetrain PID
-
 // B-Bot drivetrain testing rkt 3/9/2025 LEF Learning Center carpet
 // TalonFX velocity mode
 // test velocity 1 m/s
@@ -16,7 +13,7 @@ import java.lang.invoke.MethodHandles;
 
 import frc.robot.RobotContainer;
 
-public class RickC137Test implements Test {
+public class DrivetrainTuning implements Test {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
     static
     {
@@ -24,8 +21,10 @@ public class RickC137Test implements Test {
     }
 
     private final RobotContainer robotContainer;
+    private boolean tunePID = false;
+    private boolean measureAcceleration = true;
 
-    public RickC137Test(RobotContainer robotContainer)
+    public DrivetrainTuning(RobotContainer robotContainer)
     {
         System.out.println("  Constructor Started:  " + fullClassName);
 
@@ -35,19 +34,25 @@ public class RickC137Test implements Test {
     }
 
     @Override
-    public void init() {}
+    public void init() {
+
+        // one or the other but not both
+        if(tunePID) // Activate Drivetrain PID Velocity Tuning
+        {
+            robotContainer.getDrivetrain().new TuneVelocityPID().schedule();
+        }
+        else
+        if(measureAcceleration) // Activate acceleration measurement
+        {
+            robotContainer.getDrivetrain().new MeasureAcceleration().schedule();       
+        }
+    }
 
     @Override
     public void periodic() {}
 
     @Override
-    public void exit() {}
+    public void exit() {
+        robotContainer.getDrivetrain().stopDrive();
+    }
 }
-//     String toString(double[] array) {
-//         return Arrays.stream(array)
-//             .mapToObj(i -> String.format("%5.2f", i))
-//            // .collect(Collectors.joining(", ", "[", "]"));
-//             .collect(Collectors.joining("|", "|", "|"));
-//   }
-
-// private TimestampedDouble data;

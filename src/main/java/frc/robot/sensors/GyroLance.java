@@ -177,7 +177,7 @@ public class GyroLance extends SensorLance
         return Commands.runOnce(() -> reset());
     }
 
-    // *** OVERRIDEN METHODS ***
+    // *** OVERRIDDEN METHODS ***
     // Put all methods that are Overridden here
 
     @Override

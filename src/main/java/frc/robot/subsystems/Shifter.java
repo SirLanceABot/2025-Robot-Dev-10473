@@ -131,7 +131,7 @@ public class Shifter extends SubsystemLance
         return () -> isHighGear();
     }
 
-    // *** OVERRIDEN METHODS ***
+    // *** OVERRIDDEN METHODS ***
     // Put all methods that are Overridden here
 
     @Override

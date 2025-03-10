@@ -69,7 +69,7 @@ public class Proximity extends SensorLance
         return () -> !getSensorValue();
     }
 
-    // *** OVERRIDEN METHODS ***
+    // *** OVERRIDDEN METHODS ***
     // Put all methods that are Overridden here
 
     @Override

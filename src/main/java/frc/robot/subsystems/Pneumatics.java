@@ -141,7 +141,7 @@ public class Pneumatics extends SubsystemLance
     {
         return runOnce(() -> enableCompressor()).withName("Enable compressor");
     }
-    // *** OVERRIDEN METHODS ***
+    // *** OVERRIDDEN METHODS ***
     // Put all methods that are Overridden here
 
     @Override

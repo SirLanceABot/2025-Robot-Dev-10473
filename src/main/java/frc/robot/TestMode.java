@@ -29,7 +29,7 @@ import frc.robot.tests.Test;
 
 // import frc.robot.tests.JWoodTest;
 // import frc.robot.tests.MKlannTest;
-import frc.robot.tests.RickC137Test;
+// import frc.robot.tests.RickC137Test;
 
 
 public class TestMode
