@@ -1,16 +1,15 @@
 package frc.robot.controls;
 
 import java.lang.invoke.MethodHandles;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.RobotContainer;
 import frc.robot.commands.GeneralCommands;
 import frc.robot.subsystems.Drivetrain;
@@ -82,7 +81,7 @@ public final class DriverBindings
             configXButton();
             configRightTrigger();
             configLeftTrigger();
-            configYButton();
+            // configYButton();
             configLeftBumper();
             // configRightBumper();
             // configBackButton();
@@ -101,21 +100,11 @@ public final class DriverBindings
 
     private static void configSuppliers()
     {
-        // xSpeedSupplier = () -> -controller.getRawAxis(1);
-        // rotationSupplier = () -> -controller.getRawAxis(4);
-        
-        // scale factor set up MIGHT BE IN WRONG PLACE
         scaleFactorDoubleSupplier = () -> scaleFactor;
         rotationScaleFactorDoubleSupplier = () -> rotationScaleFactor;
-        
-        xSpeedSupplier = () -> -(controller.getRawAxis(1) * scaleFactorDoubleSupplier.getAsDouble());
-        rotationSupplier = () -> -(controller.getRawAxis(4) * rotationScaleFactorDoubleSupplier.getAsDouble());
 
-        // double xAxis = Math.abs(-controller.getRawAxis(0)) >= axisDeadZone ? -controller.getRawAxis(0) : 0.0;
-        // double yAxis = Math.abs(-controller.getRawAxis(4)) >= axisDeadZone ? -controller.getRawAxis(4) : 0.0;
-
-        // xAxisSupplier = () -> xAxis;
-        // yAxisSupplier = () -> yAxis;
+        xSpeedSupplier = () -> MathUtil.applyDeadband(-(controller.getRawAxis(1) * scaleFactorDoubleSupplier.getAsDouble()), 0.1);
+        rotationSupplier = () -> MathUtil.applyDeadband(-(controller.getRawAxis(4) * rotationScaleFactorDoubleSupplier.getAsDouble()), 0.1);
     }  
 
     private static void configAButton()
@@ -140,16 +129,19 @@ public final class DriverBindings
 
     private static void configXButton()
     {
-        Trigger xButtonTrigger = controller.x();
-        xButtonTrigger.onTrue(GeneralCommands.shiftWhileMovingCommand());
+        if(shifter != null)
+        {
+            Trigger xButtonTrigger = controller.x();
+            xButtonTrigger.onTrue(GeneralCommands.shiftWhileMovingCommand());
+        }
     }
 
-    private static void configYButton()
-    {
-        Trigger yButtonTrigger = controller.y();
-        yButtonTrigger
-            .onTrue(drivetrain.reefBackOutCommand());
-    }
+    // private static void configYButton()
+    // {
+    //     Trigger yButtonTrigger = controller.y();
+    //     yButtonTrigger
+    //         .onTrue(drivetrain.reefBackOutCommand());
+    // }
 
     private static void configLeftBumper()
     {

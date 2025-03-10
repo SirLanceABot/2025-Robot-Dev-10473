@@ -22,7 +22,6 @@ import frc.robot.sensors.CameraLL;
 import frc.robot.sensors.GyroLance;
 
 /**
- * @author Robbie Frank
  * @author Mason Bellinger
  * @author Brady Woodard
  * @author Aditya Yadav

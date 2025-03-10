@@ -12,16 +12,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.GeneralCommands;
 import frc.robot.controls.DriverBindings;
 import frc.robot.controls.OperatorBindings;
-// import frc.robot.controls.SysIDBindings;
-
+import frc.robot.elastic.ElasticLance;
 import frc.robot.loggers.DataLogFile;
 import frc.robot.motors.MotorControllerLance;
 import frc.robot.pathplanner.PathPlannerLance;
-import frc.robot.elastic.ElasticLance;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Pivot;

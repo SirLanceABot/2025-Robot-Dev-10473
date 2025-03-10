@@ -37,7 +37,6 @@ import frc.robot.motors.TalonFXLance;
 import frc.robot.sensors.GyroLance;
 
 /**
- * @author Robbie Frank 
  * @author Aditya Yadav
  * 
  * makes robot drive
@@ -58,15 +57,15 @@ public class Drivetrain extends SubsystemLance
         // *** CLASS VARIABLES & INSTANCE VARIABLES ***
         // Put all class variables and instance variables here
     
-        private final double FIRSTSTAGEGEARRATIO = 12.0 / 60.0;
-        private final double SECONDSTAGEGEARRATIO = 24.0 / 32.0;
-        private final double LOWGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (22.0 / 44.0);    // 0.075
-        private final double HIGHGEARRATIO = FIRSTSTAGEGEARRATIO * SECONDSTAGEGEARRATIO * (32.0 / 34.0);     // 0.159375
+        private final double FIRST_STAGE_GEAR_RATIO = 12.0 / 60.0;
+        private final double SECOND_STAGE_GEAR_RATIO = 24.0 / 32.0;
+        private final double LOW_GEAR_RATIO = FIRST_STAGE_GEAR_RATIO * SECOND_STAGE_GEAR_RATIO * (22.0 / 44.0);    // 0.075
+        // private final double HIGH_GEAR_RATIO = FIRST_STAGE_GEAR_RATIO * SECOND_STAGE_GEAR_RATIO * (32.0 / 34.0);     // 0.159375
     
-        private final double WHEELRADIUSINCHES = 3.0;
-        private final double TRACKWIDTHINCHES = 21.5; //originally 20.625 // a larger value may be needed to account for wheel slip
-        private final double WHEELCIRCUMFERENCEMETERS = 2.0 * Math.PI * Units.inchesToMeters(WHEELRADIUSINCHES);
-        private final double MOTORREVOLUTIONSTOWHEELMETERS = 1.0 / (WHEELCIRCUMFERENCEMETERS * LOWGEARRATIO);
+        private final double WHEEL_RADIUS_INCHES = 3.0;
+        private final double TRACK_WIDTH_INCHES = 21.5; //originally 20.625 // a larger value may be needed to account for wheel slip
+        private final double WHEEL_CIRCUMFERENCE_METERS = 2.0 * Math.PI * Units.inchesToMeters(WHEEL_RADIUS_INCHES);
+        private final double MOTOR_REVOLUTIONS_TO_WHEEL_METERS = 1.0 / (WHEEL_CIRCUMFERENCE_METERS * LOW_GEAR_RATIO);
         
     
         private final GyroLance gyro;
@@ -80,7 +79,7 @@ public class Drivetrain extends SubsystemLance
         private DifferentialDrive differentialDrive = null;
     
         private final AdaptiveSlewRateLimiter xSpeedLimiter = new AdaptiveSlewRateLimiter(Constants.AdaptiveSlewRateLimiter.ACCEL_RATE, Constants.AdaptiveSlewRateLimiter.DECEL_RATE);
-        private final AdaptiveSlewRateLimiter rotationLimiter = new AdaptiveSlewRateLimiter(10.0, 10.0);
+        // private final AdaptiveSlewRateLimiter rotationLimiter = new AdaptiveSlewRateLimiter(10.0, 10.0);
 
         /**
          * PID controller used for PP auto driving
@@ -181,7 +180,7 @@ public class Drivetrain extends SubsystemLance
 
         differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
 
-        kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(TRACKWIDTHINCHES)); // find track width
+        kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(TRACK_WIDTH_INCHES)); // find track width
         
         odometry = new DifferentialDriveOdometry(
             gyro.getRotation2d(),
@@ -217,13 +216,13 @@ public class Drivetrain extends SubsystemLance
         rightLeader.setupBrakeMode();
         rightFollower.setupBrakeMode();
 
-        leftLeader.setupPositionConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
-        rightLeader.setupPositionConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
+        leftLeader.setupPositionConversionFactor(MOTOR_REVOLUTIONS_TO_WHEEL_METERS);
+        rightLeader.setupPositionConversionFactor(MOTOR_REVOLUTIONS_TO_WHEEL_METERS);
 
-        leftLeader.setupVelocityConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
-        leftFollower.setupVelocityConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
-        rightLeader.setupVelocityConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
-        rightFollower.setupVelocityConversionFactor(MOTORREVOLUTIONSTOWHEELMETERS);
+        leftLeader.setupVelocityConversionFactor(MOTOR_REVOLUTIONS_TO_WHEEL_METERS);
+        leftFollower.setupVelocityConversionFactor(MOTOR_REVOLUTIONS_TO_WHEEL_METERS);
+        rightLeader.setupVelocityConversionFactor(MOTOR_REVOLUTIONS_TO_WHEEL_METERS);
+        rightFollower.setupVelocityConversionFactor(MOTOR_REVOLUTIONS_TO_WHEEL_METERS);
 
         setupChassisPIDController(slotID, kP, kI, kD, kS, kV);
 
@@ -436,12 +435,12 @@ public class Drivetrain extends SubsystemLance
 
     public double getLeftLeaderDistanceMeters()
     {
-        return getRightLeaderDistance() * MOTORREVOLUTIONSTOWHEELMETERS;
+        return getRightLeaderDistance() * MOTOR_REVOLUTIONS_TO_WHEEL_METERS;
     }
 
     public double getRightLeaderDistanceMeters()
     {
-        return getLeftLeaderDistance() * MOTORREVOLUTIONSTOWHEELMETERS;
+        return getLeftLeaderDistance() * MOTOR_REVOLUTIONS_TO_WHEEL_METERS;
     }
 
     public void setCoastMode()
@@ -493,7 +492,7 @@ public class Drivetrain extends SubsystemLance
     public void arcadeDrive(DoubleSupplier speed, DoubleSupplier rotation, boolean squared, boolean useSlewRateLimiter)
     {
         double xSpeed;
-        double rotationSpeed;
+        // double rotationSpeed;
 
         if(useSlewRateLimiter)
         {
