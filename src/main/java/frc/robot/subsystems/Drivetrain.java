@@ -613,6 +613,16 @@ public class Drivetrain extends SubsystemLance
     }
 
     /**
+     * Set both sides of motors to the same speed
+     * @param speed %VBus -1 to +1
+     */
+    public void setDrive(double speed)
+    {
+        leftLeader.set(speed);
+        rightLeader.set(speed);
+    }
+
+    /**
      * stops the drivetrain motors
      */
     public void stopDrive()

@@ -17,7 +17,7 @@ import java.lang.invoke.MethodHandles;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDouble;
-
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.RobotContainer;
 
 public class RickC137Test implements Test {
@@ -35,13 +35,13 @@ public class RickC137Test implements Test {
     // Put all class and instance variables here.
     private final RobotContainer robotContainer;
     private final DoublePublisher voltageStepSizePublisher;
-    private final DoublePublisher leftLeaderVelocityPublisher;
-    private final DoublePublisher rightLeaderVelocityPublisher;
+    private final DoublePublisher leftLeaderAccelerationPublisher;
+    private final DoublePublisher rightLeaderAccelerationPublisher;
     private final DoublePublisher leftLeaderMotorVoltagePublisher;
     private final DoublePublisher rightLeaderMotorVoltagePublisher;
 
     // private TimestampedDouble data;
-    private double voltageStepSize = 10.;
+    private double stepSize = 1.; // %VBus -1 to +1
 
 
     public RickC137Test(RobotContainer robotContainer)
@@ -53,29 +53,53 @@ public class RickC137Test implements Test {
         var name = "sysid4237";
         var table = NetworkTableInstance.getDefault().getTable(name);
         voltageStepSizePublisher = table.getDoubleTopic("voltageStepSize").publish();
-        leftLeaderVelocityPublisher = table.getDoubleTopic("leftLeaderVelocity").publish();
-        rightLeaderVelocityPublisher = table.getDoubleTopic("rightLeaderVelocity").publish();
+        leftLeaderAccelerationPublisher = table.getDoubleTopic("leftLeaderAcceleration").publish();
+        rightLeaderAccelerationPublisher = table.getDoubleTopic("rightLeaderAcceleration").publish();
         leftLeaderMotorVoltagePublisher = table.getDoubleTopic("leftLeaderMotorVoltage").publish();
         rightLeaderMotorVoltagePublisher = table.getDoubleTopic("rightLeaderMotorVoltage").publish();
         
         System.out.println("  Constructor Finished: " + fullClassName);
     }
 
+    private double leftLeaderVelocityPrevious;
+    private double rightLeaderVelocityPrevious;
+    private double timePrevious;
+
     @Override
     public void init() {
+//FIXME don't activate both at the same time!!!!!!!!
+
         // Activate Drivetrain PID Velocity Tuning
         robotContainer.getDrivetrain().new TuneVelocityPID().schedule();
-        //FIXME take voltage step here
+
+        //Activate acceleration measurement //FIXME change to a command
+        leftLeaderVelocityPrevious = robotContainer.getDrivetrain().getLeftLeaderVelocity();
+        rightLeaderVelocityPrevious = robotContainer.getDrivetrain().getRightLeaderVelocity();
+        timePrevious = Timer.getFPGATimestamp();
+        robotContainer.getDrivetrain().setDrive(stepSize);
         // run a few seconds??
     }
 
     @Override
     public void periodic() {
-        leftLeaderVelocityPublisher.set(robotContainer.getDrivetrain().getLeftLeaderVelocity());
-        rightLeaderVelocityPublisher.set(robotContainer.getDrivetrain().getRightLeaderVelocity());
+        var time = Timer.getFPGATimestamp();
+        var leftLeaderVelocity = robotContainer.getDrivetrain().getLeftLeaderVelocity();
+        var rightLeaderVelocity = robotContainer.getDrivetrain().getRightLeaderVelocity();
+        var leftAcceleration =
+            (leftLeaderVelocity - leftLeaderVelocityPrevious)
+            / (time - timePrevious);
+        var rightAcceleration =
+            (rightLeaderVelocity - rightLeaderVelocityPrevious)
+            / (time - timePrevious);
+        leftLeaderVelocityPrevious = leftLeaderVelocity;
+        rightLeaderVelocityPrevious = rightLeaderVelocity;
+        timePrevious = time;
+        
+        leftLeaderAccelerationPublisher.set(leftAcceleration);
+        rightLeaderAccelerationPublisher.set(rightAcceleration);
         leftLeaderMotorVoltagePublisher.set(robotContainer.getDrivetrain().getLeftLeaderMotorVoltage());
         rightLeaderMotorVoltagePublisher.set(robotContainer.getDrivetrain().getRightLeaderMotorVoltage());
-        voltageStepSizePublisher.set(voltageStepSize);
+        voltageStepSizePublisher.set(stepSize);
     }
 
     @Override
