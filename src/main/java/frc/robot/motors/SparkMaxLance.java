@@ -74,6 +74,7 @@ public class SparkMaxLance extends MotorControllerLance
         encoder = motor.getEncoder();
         // sparkPIDController = motor.getPIDController();                       // 2024 version
         sparkPIDController = motor.getClosedLoopController();
+        
 
         clearStickyFaults();
         setupFactoryDefaults();
@@ -313,6 +314,11 @@ public class SparkMaxLance extends MotorControllerLance
         motorConfig.smartCurrentLimit((int) currentLimit);
         motorConfig.secondaryCurrentLimit(currentThreshold, (int) (timeThreshold * 20000));
         setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Current Limit");
+    }
+
+    public double getCurrentAmps()
+    {
+        return motor.getOutputCurrent();
     }
 
     /**

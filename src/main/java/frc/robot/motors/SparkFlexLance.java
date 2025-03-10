@@ -309,6 +309,11 @@ public class SparkFlexLance extends MotorControllerLance
         motorConfig.secondaryCurrentLimit(currentThreshold, (int) (timeThreshold * 20000));
         setup(() -> motor.configure(motorConfig, resetMode, persistMode), "Setup Current Limit");
     }
+    
+    public double getCurrentAmps()
+    {
+        return motor.getOutputCurrent();
+    }
 
     /**
      * Set the maximum rate at which the motor output can change.

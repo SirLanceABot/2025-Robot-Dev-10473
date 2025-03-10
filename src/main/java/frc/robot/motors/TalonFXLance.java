@@ -326,12 +326,18 @@ public class TalonFXLance extends MotorControllerLance
         CurrentLimitsConfigs currentLimitsConfigs = new CurrentLimitsConfigs();
         setup(() -> motor.getConfigurator().refresh(currentLimitsConfigs), "Refresh Current Limit");
 
-        currentLimitsConfigs.SupplyCurrentLimit = currentLimit;
+        currentLimitsConfigs.SupplyCurrentLimit = currentThreshold;
         // currentLimitsConfigs.SupplyCurrentThreshold = currentThreshold;          // 2024 version
-        currentLimitsConfigs.SupplyCurrentLowerLimit = currentThreshold;
+        currentLimitsConfigs.SupplyCurrentLowerLimit = currentLimit;
         // currentLimitsConfigs.SupplyTimeThreshold = timeThreshold;                // 2024 version
         currentLimitsConfigs.SupplyCurrentLowerTime = timeThreshold;
+        currentLimitsConfigs.SupplyCurrentLimitEnable = true;
         setup(() -> motor.getConfigurator().apply(currentLimitsConfigs), "Setup Current Limit");
+    }
+
+    public double getCurrentAmps()
+    {
+        return motor.getSupplyCurrent().getValueAsDouble();
     }
 
     /**
