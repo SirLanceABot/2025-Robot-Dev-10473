@@ -972,8 +972,8 @@ public class Drivetrain extends SubsystemLance
             leftLeaderVelocityPrevious = 0.;
             rightLeaderVelocityPrevious = 0.;
             timePrevious = Timer.getFPGATimestamp();
-            setDrive(stepSize); // first time required, then refresh every time
-            Timer.delay(0.02); // wait approximately the right time to make the first time step otherwise it's immediately hereafter
+            setDrive(stepSize);
+            Timer.delay(0.0195); // wait approximately the right time (0.02) to make the first time step otherwise it's immediately hereafter
         }
     
       public void execute()
@@ -1001,6 +1001,7 @@ public class Drivetrain extends SubsystemLance
         leftLeaderMotorVoltagePublisher.set(getLeftLeaderMotorVoltage());
         rightLeaderMotorVoltagePublisher.set(getRightLeaderMotorVoltage());
 
+        setDrive(stepSize); // first time required, then refresh every time
         feedMotors();
       }
     
