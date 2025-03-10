@@ -16,43 +16,43 @@ import java.lang.invoke.MethodHandles;
 
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.TimestampedDouble;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class RickC137Test implements Test {
-      // This string gets the full name of the class, including the package name
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
-
-    // *** STATIC INITIALIZATION BLOCK ***
-    // This block of code is run first when the class is loaded
     static
     {
         System.out.println("Loading: " + fullClassName);
     }
 
-    // *** CLASS & INSTANCE VARIABLES ***
-    // Put all class and instance variables here.
+    private boolean tunePID = false; // one or the other but not both
+    private boolean measureAcceleration = true && !tunePID; // one or the other but not both
+    
+    private final double stepSize = 1.; // %VBus -1 to 0 to +1
+    private final double stopAt = 0.2; // stop motors if below this m/s/s
+    private double leftLeaderVelocityPrevious;
+    private double rightLeaderVelocityPrevious;
+    private double timePrevious;
+    private boolean firstTime;
     private final RobotContainer robotContainer;
     private final DoublePublisher voltageStepSizePublisher;
+    private final DoublePublisher timePublisher;
     private final DoublePublisher leftLeaderAccelerationPublisher;
     private final DoublePublisher rightLeaderAccelerationPublisher;
     private final DoublePublisher leftLeaderMotorVoltagePublisher;
     private final DoublePublisher rightLeaderMotorVoltagePublisher;
 
-    // private TimestampedDouble data;
-    private double stepSize = 1.; // %VBus -1 to +1
-
-
     public RickC137Test(RobotContainer robotContainer)
     {
-      System.out.println("  Constructor Started:  " + fullClassName);
+        System.out.println("  Constructor Started:  " + fullClassName);
 
-      this.robotContainer = robotContainer;
+        this.robotContainer = robotContainer;
 
-        var name = "sysid4237";
-        var table = NetworkTableInstance.getDefault().getTable(name);
+        var table = NetworkTableInstance.getDefault().getTable(Constants.ADVANTAGE_SCOPE_TABLE_NAME);
         voltageStepSizePublisher = table.getDoubleTopic("voltageStepSize").publish();
+        timePublisher = table.getDoubleTopic("time").publish();
         leftLeaderAccelerationPublisher = table.getDoubleTopic("leftLeaderAcceleration").publish();
         rightLeaderAccelerationPublisher = table.getDoubleTopic("rightLeaderAcceleration").publish();
         leftLeaderMotorVoltagePublisher = table.getDoubleTopic("leftLeaderMotorVoltage").publish();
@@ -61,45 +61,70 @@ public class RickC137Test implements Test {
         System.out.println("  Constructor Finished: " + fullClassName);
     }
 
-    private double leftLeaderVelocityPrevious;
-    private double rightLeaderVelocityPrevious;
-    private double timePrevious;
-
     @Override
     public void init() {
-//FIXME don't activate both at the same time!!!!!!!!
 
         // Activate Drivetrain PID Velocity Tuning
-        robotContainer.getDrivetrain().new TuneVelocityPID().schedule();
+        if(tunePID)
+        {
+            robotContainer.getDrivetrain().new TuneVelocityPID().schedule();
+        }
 
-        //Activate acceleration measurement //FIXME change to a command
-        leftLeaderVelocityPrevious = robotContainer.getDrivetrain().getLeftLeaderVelocity();
-        rightLeaderVelocityPrevious = robotContainer.getDrivetrain().getRightLeaderVelocity();
-        timePrevious = Timer.getFPGATimestamp();
-        robotContainer.getDrivetrain().setDrive(stepSize);
-        // run a few seconds??
+        // Activate acceleration measurement
+        //FIXME change to a command
+        if(measureAcceleration)
+        {
+            firstTime = true;            
+        }
     }
 
     @Override
     public void periodic() {
-        var time = Timer.getFPGATimestamp();
-        var leftLeaderVelocity = robotContainer.getDrivetrain().getLeftLeaderVelocity();
-        var rightLeaderVelocity = robotContainer.getDrivetrain().getRightLeaderVelocity();
-        var leftAcceleration =
-            (leftLeaderVelocity - leftLeaderVelocityPrevious)
-            / (time - timePrevious);
-        var rightAcceleration =
-            (rightLeaderVelocity - rightLeaderVelocityPrevious)
-            / (time - timePrevious);
-        leftLeaderVelocityPrevious = leftLeaderVelocity;
-        rightLeaderVelocityPrevious = rightLeaderVelocity;
-        timePrevious = time;
-        
-        leftLeaderAccelerationPublisher.set(leftAcceleration);
-        rightLeaderAccelerationPublisher.set(rightAcceleration);
-        leftLeaderMotorVoltagePublisher.set(robotContainer.getDrivetrain().getLeftLeaderMotorVoltage());
-        rightLeaderMotorVoltagePublisher.set(robotContainer.getDrivetrain().getRightLeaderMotorVoltage());
-        voltageStepSizePublisher.set(stepSize);
+
+        if(measureAcceleration)
+        {
+            robotContainer.getDrivetrain().setDrive(stepSize); // first time required, then refresh every time
+
+            if(firstTime)
+            {
+                // assume starting at rest at time "0"
+                timePrevious = Timer.getFPGATimestamp();
+                leftLeaderVelocityPrevious = 0.;
+                rightLeaderVelocityPrevious = 0.;
+                firstTime = false;
+            }
+            else
+            {
+                var time = Timer.getFPGATimestamp();
+
+                var leftLeaderVelocity = robotContainer.getDrivetrain().getLeftLeaderVelocity();
+                var rightLeaderVelocity = robotContainer.getDrivetrain().getRightLeaderVelocity();
+
+                var leftAcceleration =
+                    (leftLeaderVelocity - leftLeaderVelocityPrevious)
+                    / (time - timePrevious);
+                var rightAcceleration =
+                    (rightLeaderVelocity - rightLeaderVelocityPrevious)
+                    / (time - timePrevious);
+
+                timePrevious = time;
+                leftLeaderVelocityPrevious = leftLeaderVelocity;
+                rightLeaderVelocityPrevious = rightLeaderVelocity;
+                
+                voltageStepSizePublisher.set(stepSize);
+                timePublisher.set(time);
+                leftLeaderAccelerationPublisher.set(leftAcceleration);
+                rightLeaderAccelerationPublisher.set(rightAcceleration);
+                leftLeaderMotorVoltagePublisher.set(robotContainer.getDrivetrain().getLeftLeaderMotorVoltage());
+                rightLeaderMotorVoltagePublisher.set(robotContainer.getDrivetrain().getRightLeaderMotorVoltage());
+
+                if(leftAcceleration < stopAt || rightAcceleration < stopAt)
+                {
+                    robotContainer.getDrivetrain().stopDrive();
+                    measureAcceleration = false;
+                }
+            }
+        }
     }
 
     @Override
@@ -114,3 +139,4 @@ public class RickC137Test implements Test {
 //             .collect(Collectors.joining("|", "|", "|"));
 //   }
 
+    // private TimestampedDouble data;
