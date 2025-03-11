@@ -120,7 +120,7 @@ public class RobotContainer
             : null;
 
         sysIDController = (useSysIDController)
-            ? new CommandXboxController(2)
+            ? new CommandXboxController(Constants.Controllers.SYSID_CONTROLLER_PORT)
             : null;
 
     }
@@ -198,7 +198,7 @@ public class RobotContainer
     //         {
     //         return alliance.get() == DriverStation.Alliance.Red;
     //         }
-    //         DriverStation.reportError("No alliance is avaliable, assuming Blue", false);
+    //         DriverStation.reportError("No alliance is available, assuming Blue", false);
     //         return false;
     //     };
     // }

@@ -71,7 +71,7 @@ public class Robot extends TimedRobot
         // (5) Bind the commands to triggers
         DriverBindings.createBindings(robotContainer);
         OperatorBindings.createBindings(robotContainer);
-        // SysIDBindings.createBindings(robotContainer);
+        // SysIDBindings.createBindings(robotContainer); //FIXME commented out for extra super-duper security against running accidentally
 
     }
 

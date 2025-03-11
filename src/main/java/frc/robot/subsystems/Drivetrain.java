@@ -877,8 +877,7 @@ public class Drivetrain extends SubsystemLance
     
       public void end(boolean interrupted)
       {
-        leftLeader.set(0.);
-        rightLeader.set(0.);
+        stopDrive();
       }
     
       /**
@@ -944,6 +943,8 @@ public class Drivetrain extends SubsystemLance
         private final DoublePublisher rightLeaderAccelerationPublisher;
         private final DoublePublisher leftLeaderMotorVoltagePublisher;
         private final DoublePublisher rightLeaderMotorVoltagePublisher;
+        private final DoublePublisher leftLeaderKaPublisher;
+        private final DoublePublisher rightLeaderKaPublisher;
     
         public MeasureAcceleration()
         {
@@ -956,6 +957,8 @@ public class Drivetrain extends SubsystemLance
             rightLeaderAccelerationPublisher = table.getDoubleTopic("rightLeaderAcceleration").publish();
             leftLeaderMotorVoltagePublisher = table.getDoubleTopic("leftLeaderMotorVoltage").publish();
             rightLeaderMotorVoltagePublisher = table.getDoubleTopic("rightLeaderMotorVoltage").publish();
+            leftLeaderKaPublisher = table.getDoubleTopic("leftLeaderKa").publish();
+            rightLeaderKaPublisher = table.getDoubleTopic("rightLeaderKa").publish();
         }
     
         public void initialize()
@@ -978,9 +981,10 @@ public class Drivetrain extends SubsystemLance
       public void execute()
       {
         var time = Timer.getFPGATimestamp();
-
         var leftLeaderVelocity = getLeftLeaderVelocity();
         var rightLeaderVelocity = getRightLeaderVelocity();
+        var leftLeaderMotorVoltage = getLeftLeaderMotorVoltage();
+        var rightLeaderMotorVoltage = getRightLeaderMotorVoltage();
 
         leftAcceleration =
             (leftLeaderVelocity - leftLeaderVelocityPrevious)
@@ -989,16 +993,21 @@ public class Drivetrain extends SubsystemLance
             (rightLeaderVelocity - rightLeaderVelocityPrevious)
             / (time - timePrevious);
 
-        timePrevious = time;
-        leftLeaderVelocityPrevious = leftLeaderVelocity;
-        rightLeaderVelocityPrevious = rightLeaderVelocity;
+        var leftLeaderKa = leftLeaderMotorVoltage/leftAcceleration;
+        var rightLeaderKa = rightLeaderMotorVoltage/rightAcceleration;
 
         voltageStepSizePublisher.set(stepSize);
         timePublisher.set(time);
         leftLeaderAccelerationPublisher.set(leftAcceleration);
         rightLeaderAccelerationPublisher.set(rightAcceleration);
-        leftLeaderMotorVoltagePublisher.set(getLeftLeaderMotorVoltage());
-        rightLeaderMotorVoltagePublisher.set(getRightLeaderMotorVoltage());
+        leftLeaderMotorVoltagePublisher.set(leftLeaderMotorVoltage);
+        rightLeaderMotorVoltagePublisher.set(rightLeaderMotorVoltage);
+        leftLeaderKaPublisher.set(leftLeaderKa);
+        rightLeaderKaPublisher.set(rightLeaderKa);
+
+        timePrevious = time;
+        leftLeaderVelocityPrevious = leftLeaderVelocity;
+        rightLeaderVelocityPrevious = rightLeaderVelocity;
 
         setDrive(stepSize); // first time required, then refresh every time
         feedMotors();
