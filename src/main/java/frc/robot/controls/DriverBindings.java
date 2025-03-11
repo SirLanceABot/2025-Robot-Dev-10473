@@ -44,7 +44,7 @@ public final class DriverBindings
     private final static double RUN_SPEED = 1.0;
 
     private static double rotationScaleFactor = 1;
-    private final static double ROTATION_CRAWL_SPEED = 0.6;
+    private final static double ROTATION_CRAWL_SPEED = 0.;
     private final static double ROTATION_DEFAULT_SPEED = 1;
 
     public static final double axisDeadZone = 0.1;
