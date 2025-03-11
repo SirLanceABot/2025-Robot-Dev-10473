@@ -137,7 +137,7 @@ public final class GeneralCommands
                 roller.ejectCoralCommand()
             )
             .andThen(roller.stopCommand())
-            .andThen(Commands.waitSeconds(1.0))
+            .andThen(Commands.waitSeconds(0.50))
             .andThen(
                 Commands.parallel(
                     Commands.runOnce( () -> operatorTriggerRumble.setPressed(true)),

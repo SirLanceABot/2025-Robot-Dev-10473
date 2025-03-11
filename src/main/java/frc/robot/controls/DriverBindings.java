@@ -44,8 +44,9 @@ public final class DriverBindings
     private final static double RUN_SPEED = 1.0;
 
     private static double rotationScaleFactor = 1;
-    private final static double ROTATION_CRAWL_SPEED = 0.;
+    private final static double ROTATION_CRAWL_SPEED = 0.75;
     private final static double ROTATION_DEFAULT_SPEED = 1;
+    private final static double ROTATION_RUN_SPEED = 1.8;
 
     public static final double axisDeadZone = 0.1;
 
@@ -175,8 +176,11 @@ public final class DriverBindings
             Trigger rightTriggerTrigger = controller.rightTrigger();
             Trigger leftTriggerTrigger = controller.leftTrigger();
             leftTriggerTrigger.and(rightTriggerTrigger.negate())
-                .onTrue(Commands.runOnce(() -> scaleFactor = RUN_SPEED))
-                .onFalse(Commands.runOnce(() -> scaleFactor = DEFAULT_SPEED));
+                .onTrue(Commands.runOnce(() -> scaleFactor = RUN_SPEED)                        
+                    .andThen(Commands.runOnce(() -> rotationScaleFactor = ROTATION_RUN_SPEED)))
+                .onFalse(Commands.runOnce(() -> scaleFactor = DEFAULT_SPEED)
+                    .andThen(Commands.runOnce(() -> rotationScaleFactor = ROTATION_DEFAULT_SPEED)));
+
         }
     }
 

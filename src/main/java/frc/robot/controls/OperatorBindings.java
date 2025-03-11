@@ -185,9 +185,13 @@ public final class OperatorBindings
     {
         if(leds != null)
         {
+            // Trigger leftTriggerTrigger = controller.leftTrigger();
+            // leftTriggerTrigger
+            //     .onTrue(leds.offCommand());
             Trigger leftTriggerTrigger = controller.leftTrigger();
             leftTriggerTrigger
-                .onTrue(leds.offCommand());
+                .onTrue(roller.ejectCoralCommand())
+                .onFalse(roller.stopCommand());
         }
     }
 

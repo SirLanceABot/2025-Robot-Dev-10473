@@ -86,7 +86,7 @@ public class Drivetrain extends SubsystemLance
          * First Tune feeds forward kS, then kV, then kP
          */
         private int slotID = 0; // TalonFX internal PID controller
-        private double kP = 15.; // TalonFX internal PID controller
+        private double kP = 4.; // TalonFX internal PID controller
         private double kI = 0.;
         private double kD = 0.;
         private double kS = 0.13; // max volts that doesn't move the robot
@@ -331,7 +331,7 @@ public class Drivetrain extends SubsystemLance
      * @param chassisSpeeds the robot's chassis speed
      * @param feedforwards PP feeds forward - not used
      */
-    public void driveRobotRelativeVelocity(ChassisSpeeds chassisSpeeds, DriveFeedforwards feedforwards)
+    public void driveRobotRelativeVelocity(ChassisSpeeds chassisSpeeds)
     {
         DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
 
