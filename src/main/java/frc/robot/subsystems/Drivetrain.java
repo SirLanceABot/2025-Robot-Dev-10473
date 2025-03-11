@@ -136,7 +136,7 @@ public class Drivetrain extends SubsystemLance
                     log.motor("drive-left")
                         .voltage(
                             m_appliedVoltage.mut_replace(
-                                leftLeader.get() * RobotController.getBatteryVoltage(), Volts))
+                                getLeftLeaderMotorVoltage(), Volts))
                         .linearPosition(m_distance.mut_replace(getLeftLeaderDistance(), Meters))
                         .linearVelocity(
                             m_velocity.mut_replace(getLeftLeaderVelocity(), MetersPerSecond));
@@ -146,7 +146,7 @@ public class Drivetrain extends SubsystemLance
                     log.motor("drive-right")
                         .voltage(
                             m_appliedVoltage.mut_replace(
-                                rightLeader.get() * RobotController.getBatteryVoltage(), Volts))
+                                getRightLeaderMotorVoltage(), Volts))
                         .linearPosition(m_distance.mut_replace(getRightLeaderDistance(), Meters))
                         .linearVelocity(
                             m_velocity.mut_replace(getRightLeaderVelocity(), MetersPerSecond));
