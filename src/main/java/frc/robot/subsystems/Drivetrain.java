@@ -240,8 +240,6 @@ public class Drivetrain extends SubsystemLance
 
         leftLeader.setPosition(0.0);
         rightLeader.setPosition(0.0);
-
-        // BaseStatusSignal.setUpdateFrequencyForAll(200, BaseStatusSignal.  positionSignal, velocitySignal);
         
         // all motors should be running in the same direction
     }
@@ -862,15 +860,16 @@ public class Drivetrain extends SubsystemLance
         feedMotors();
     
         double tentativeKv = 0.0;
-        double avgVelocity = (leftLeaderVelocity+rightLeaderVelocity)/2.0;
-    
+        double avgVelocity = (getLeftLeaderVelocity() + getRightLeaderVelocity()) / 2.0;
+        double avgMotorVoltage = (getLeftLeaderMotorVoltage() + getRightLeaderMotorVoltage()) / 2.;
+        
         if ( avgVelocity != 0.)
         {
-            tentativeKv = ((leftLeader.getMotorVoltage()+rightLeader.getMotorVoltage())/2. - kS) / avgVelocity;
+            tentativeKv = (avgMotorVoltage - kS) / avgVelocity;
         }
         SmartDashboard.putNumber("avg velocity [mps] plot", avgVelocity);
         SmartDashboard.putNumber("avg velocity [mps]", avgVelocity);
-        SmartDashboard.putNumber("avg motor voltage", (leftLeader.getMotorVoltage()+rightLeader.getMotorVoltage())/2.);
+        SmartDashboard.putNumber("avg motor voltage", avgMotorVoltage);
         SmartDashboard.putNumber("tentative avg Kv", tentativeKv);
         SmartDashboard.putNumber("tentative avg Kv plot", tentativeKv);
       }

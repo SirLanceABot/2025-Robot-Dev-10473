@@ -84,6 +84,16 @@ public class TalonFXLance extends MotorControllerLance
         setupFactoryDefaults();
         setupFeedbackSensor();
 
+        // potential additions to this class are getters for signals such as:
+        // BaseStatusSignal positionSignal = motor.getPosition();
+        // BaseStatusSignal velocitySignal = motor.getVelocity();
+        // BaseStatusSignal voltageSignal = motor.getMotorVoltage();
+        // Example usage at a higher level such as drivetrain to synchronize and specify update frequency would be:
+        // BaseStatusSignal.setUpdateFrequencyForAll(200,
+        //     motor1.positionSignal, motor2.positionSignal,
+        //     motor1.velocitySignal, motor2.velocitySignal,
+        //     motor1.voltageSignal, motor2.voltageSignal);
+
         System.out.println("  Constructor Finished: " + fullClassName + " >> " + motorControllerName);
     }
 
