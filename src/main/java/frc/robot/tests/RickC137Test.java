@@ -1,15 +1,5 @@
 // activate this test class in the TestMode class
 
-
-//FIXME CHANGE PathPlannerLance AutoBuilder to use drivetrain PID
-
-// B-Bot drivetrain testing rkt 3/9/2025 LEF Learning Center carpet
-// TalonFX velocity mode
-// test velocity 1 m/s
-// Ks = 0.13
-// Kv = 3.15
-// Kp = 15. [seems a little better than 10 or 20]
-
 package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
@@ -23,13 +13,13 @@ public class RickC137Test implements Test {
         System.out.println("Loading: " + fullClassName);
     }
 
-    private final RobotContainer robotContainer;
+    // private final RobotContainer robotContainer;
 
     public RickC137Test(RobotContainer robotContainer)
     {
         System.out.println("  Constructor Started:  " + fullClassName);
 
-        this.robotContainer = robotContainer;
+        // this.robotContainer = robotContainer;
         
         System.out.println("  Constructor Finished: " + fullClassName);
     }

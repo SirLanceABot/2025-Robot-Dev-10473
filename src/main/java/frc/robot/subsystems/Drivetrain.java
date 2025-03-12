@@ -856,9 +856,7 @@ public class Drivetrain extends SubsystemLance
             SmartDashboard.putBoolean("Apply Parameters", false);
             System.out.println("PID set");
         }
-    
-        feedMotors();
-    
+
         double tentativeKv = 0.0;
         double avgVelocity = (getLeftLeaderVelocity() + getRightLeaderVelocity()) / 2.0;
         double avgMotorVoltage = (getLeftLeaderMotorVoltage() + getRightLeaderMotorVoltage()) / 2.;
@@ -930,12 +928,13 @@ public class Drivetrain extends SubsystemLance
         }
             
         private final double stepSize = 1.; // %VBus -1 to 0 to +1
-        private final double stopAt = 0.2; // stop motors if below this m/s/s
         private double leftAcceleration;
         private double rightAcceleration;
         private double leftLeaderVelocityPrevious;
         private double rightLeaderVelocityPrevious;
         private double timePrevious;
+        private double leftLeaderKa;
+        private double rightLeaderKa;
         private final DoublePublisher voltageStepSizePublisher;
         private final DoublePublisher timePublisher;
         private final DoublePublisher leftLeaderAccelerationPublisher;
@@ -992,8 +991,18 @@ public class Drivetrain extends SubsystemLance
             (rightLeaderVelocity - rightLeaderVelocityPrevious)
             / (time - timePrevious);
 
-        var leftLeaderKa = leftLeaderMotorVoltage/leftAcceleration;
-        var rightLeaderKa = rightLeaderMotorVoltage/rightAcceleration;
+        if(leftAcceleration == 0. || rightAcceleration == 0.)
+        {
+            leftLeaderKa = Double.NaN;
+            rightLeaderKa = Double.NaN;
+        }
+        else
+        {
+            leftLeaderKa = leftLeaderMotorVoltage/leftAcceleration;
+            rightLeaderKa = rightLeaderMotorVoltage/rightAcceleration;
+        }
+
+        System.out.println("acceleration " + leftAcceleration + ", " + rightAcceleration + ", " + leftLeaderKa + ", " + rightLeaderKa);
 
         voltageStepSizePublisher.set(stepSize);
         timePublisher.set(time);
@@ -1009,7 +1018,6 @@ public class Drivetrain extends SubsystemLance
         rightLeaderVelocityPrevious = rightLeaderVelocity;
 
         setDrive(stepSize); // first time required, then refresh every time
-        feedMotors();
       }
     
       public void end(boolean interrupted)
@@ -1021,16 +1029,14 @@ public class Drivetrain extends SubsystemLance
        * Whether the command has finished. Once a command finishes, the scheduler will call its end()
        * method and un-schedule it.
        *
+       * <p>Minimal safety stop - the driver releases the controller button or presses disable or a timeout works.
+       * <p>Tried to check for no longer accelerating much but velocities are not perfect and jitter a bit.
+       * 
        * @return whether the command has finished.
        */
       public boolean isFinished()
       {
-        var finished = false;
-        if(leftAcceleration < stopAt || rightAcceleration < stopAt)
-        {
-            finished = true;
-        }
-        return finished;
+        return false;
       }
     
       public boolean runsWhenDisabled() {
@@ -1052,6 +1058,7 @@ public class Drivetrain extends SubsystemLance
     @Override
     public void periodic()
     {
+        feedMotors();
         leftLeaderVelocity = leftLeader.getVelocity();
         leftFollowerVelocity = leftFollower.getVelocity();
         leftLeaderPosition = leftLeader.getPosition();
