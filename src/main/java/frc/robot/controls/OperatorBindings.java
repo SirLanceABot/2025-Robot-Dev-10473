@@ -140,7 +140,7 @@ public final class OperatorBindings
         {
             Trigger startButtonTrigger = controller.start();
             startButtonTrigger
-                .onTrue(pivot.resetToTopCommand());
+                .onTrue(pivot.stopCommand());
         }
     }
 

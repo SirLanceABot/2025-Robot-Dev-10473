@@ -333,7 +333,7 @@ public class Pivot extends SubsystemLance
         // if (!limitSwitch.get())
         // {
             // resetEncoderCommand().schedule();
-        System.out.println(limitSwitch.get());
+        // System.out.println(limitSwitch.get());
         // }
 
 
