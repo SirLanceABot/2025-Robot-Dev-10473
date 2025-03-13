@@ -5,8 +5,11 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.motors.SparkFlexLance;
 
@@ -51,6 +54,7 @@ public class Pivot extends SubsystemLance
     // Put all class variables and instance variables here
 
     private final SparkFlexLance motor = new SparkFlexLance(Constants.Pivot.MOTOR_PORT, Constants.Pivot.MOTOR_CAN_BUS, "Pivot Motor");
+    private final DigitalInput limitSwitch = new DigitalInput(2);
 
     // private TargetPosition targetPosition = TargetPosition.kOverride;
     private final double threshold = 0.1;
@@ -69,6 +73,10 @@ public class Pivot extends SubsystemLance
         System.out.println("  Constructor Started:  " + fullClassName);
 
         configMotor();
+
+        new Trigger(() -> !limitSwitch.get()).debounce(0.2)
+        .onTrue(Commands.print("Trigger---------")
+            .andThen(resetEncoderCommand()));
 
         System.out.println("  Constructor Finished: " + fullClassName);
     }
@@ -240,14 +248,26 @@ public class Pivot extends SubsystemLance
     public Command holdCurrentPositionCommand()
     {
         return startRun(
-            () -> holdPosition = motor.getPosition(),
-            () -> motor.setControlPosition(holdPosition)
-        );
+                () -> holdPosition = motor.getPosition(),
+                () -> motor.setControlPosition(holdPosition)
+            );
+
+        // if(motor.getPosition() >= 0.0)
+        // {
+        //     return startRun(
+        //         () -> holdPosition = motor.getPosition(),
+        //         () -> motor.setControlPosition(holdPosition)
+        //     );
+        // }
+        // else
+        // {
+        //     return Commands.none();
+        // }
     }
 
     public Command resetEncoderCommand()
     {
-        return runOnce(() -> resetEncoder()).withName("Reset Encoder");
+        return runOnce(() -> resetEncoder()).andThen(Commands.print("Reset Encoder Command")).withName("Reset Encoder");
     }
 
     public Command moveUpCommand()
@@ -283,6 +303,16 @@ public class Pivot extends SubsystemLance
         // This method will be called once per scheduler run
         // Use this for sensors that need to be read periodically.
         // Use this for data that needs to be logged.
+
+        // System.out.println(getPosition());
+
+        // if (!limitSwitch.get())
+        // {
+        //     resetEncoderCommand().schedule();
+        //     System.out.println(limitSwitch.get());
+        // }
+
+
 
         SmartDashboard.putNumber("Pivot Position", getPosition());
     }

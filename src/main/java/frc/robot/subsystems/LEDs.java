@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Percent;
+
 // import static edu.wpi.first.units.Units.Percent;
 // import static edu.wpi.first.units.Units.Second;
 
@@ -159,7 +161,7 @@ public class LEDs extends SubsystemLance
      */
     public void setColorSolid(Color color)
     {
-        solid = LEDPattern.solid(color);
+        solid = LEDPattern.solid(color).atBrightness(Percent.of(25));
         solid.applyTo(ledBuffer);
     }
 
