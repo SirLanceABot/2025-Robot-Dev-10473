@@ -126,6 +126,11 @@ public class Pivot extends SubsystemLance
         set(-0.05);
     }
 
+    private void setResetSpeed()
+    {
+        set(-0.05);
+    }
+
     private void moveDown()
     {
         set(0.05);
@@ -275,9 +280,28 @@ public class Pivot extends SubsystemLance
         return runOnce(() -> moveUp()).withName("Move Up");
     }
 
+    // public Command moveUpToLimitSwitchCommand()
+    // {
+    //     return runOnce(() -> moveUpCommand())
+    //         .until(() -> !limitSwitch.get())
+    //         .andThen(stopCommand());
+    // }
+
     public Command moveDownCommand()
     {
         return runOnce(() -> moveDown()).withName("Move Down");
+    }
+
+    public BooleanSupplier isAtTop()
+    {
+        return () -> !limitSwitch.get();
+    }
+
+    public Command resetToTopCommand()
+    {
+        return moveUpCommand()
+            .until(isAtTop())
+            .withName("Reset To Top");
     }
 
     public DoubleSupplier positionSupplier()
@@ -308,14 +332,15 @@ public class Pivot extends SubsystemLance
 
         // if (!limitSwitch.get())
         // {
-        //     resetEncoderCommand().schedule();
-        //     System.out.println(limitSwitch.get());
+            // resetEncoderCommand().schedule();
+        System.out.println(limitSwitch.get());
         // }
 
 
 
         SmartDashboard.putNumber("Pivot Position", getPosition());
     }
+
 
     @Override
     public String toString()

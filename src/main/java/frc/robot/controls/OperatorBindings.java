@@ -79,6 +79,7 @@ public final class OperatorBindings
             configRightTrigger();
             configLeftTrigger();
             configBackButton();
+            configStartButton();
             configPOVButton();
 
             configRumble(5);
@@ -130,6 +131,16 @@ public final class OperatorBindings
             Trigger backButtonTrigger = controller.back();
             backButtonTrigger
                 .onTrue( pivot.resetEncoderCommand() );
+        }
+    }
+
+    public static void configStartButton()
+    {
+        if(pivot != null)
+        {
+            Trigger startButtonTrigger = controller.start();
+            startButtonTrigger
+                .onTrue(pivot.resetToTopCommand());
         }
     }
 

@@ -57,14 +57,39 @@ public final class GeneralCommands
         ledTriggerOff.onTrue(timedLEDOff());
     }
 
+    // OLD
+
+    // public static Command resetPivotAndRollerCommand()
+    // {
+    //     if(pivot != null && roller != null)
+    //     {
+    //         return
+    //             setLEDSolid(Color.kWhite)
+    //             .andThen(pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
+    //                 .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1)
+    //                 .withTimeout(2.0)
+    //             )
+    //             .andThen(
+    //                 Commands.parallel(
+    //                     roller.stopCommand(),
+    //                     // operatorRumble(),
+    //                     Commands.runOnce( () -> ledTriggerOff.setPressed(true))
+    //                 )
+    //             );    
+    //     }
+    //     else
+    //     {
+    //         return Commands.none();
+    //     }
+    // }
+
     public static Command resetPivotAndRollerCommand()
     {
         if(pivot != null && roller != null)
         {
             return
                 setLEDSolid(Color.kWhite)
-                .andThen(pivot.moveToSetPositionCommand(TargetPosition.kStartingPosition)
-                    .until( () -> Math.abs(TargetPosition.kStartingPosition.pivot - pivot.getPosition()) < 0.1)
+                .andThen(pivot.resetToTopCommand()
                     .withTimeout(2.0)
                 )
                 .andThen(
