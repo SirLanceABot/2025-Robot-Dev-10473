@@ -2,6 +2,8 @@ package frc.robot.tests;
 
 import java.lang.invoke.MethodHandles;
 
+import javax.lang.model.util.ElementScanner14;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.RobotContainer;
@@ -89,18 +91,22 @@ public class NiyatiPTest implements Test
         {
             leds.setColorSolidCommand(Color.kMediumOrchid).schedule();
         }
-        else if(joystick.getRawButton(5))
+        else if (joystick.getRawButton(5))
         {
             leds.setColorBlinkCommand(Color.kRed, Color.kFuchsia).schedule();
         }
-        else if(joystick.getRawButton(6))
-        {
-            leds.setColorBreatheCommand(Color.kOrange, Color.kAliceBlue).schedule();
-        }
         // else if(joystick.getRawButton(6))
         // {
-        //     leds.setColorMovingMaskCommand(Color.kBlueViolet, Color.kGreen, Color.kBeige).schedule();
+        //     leds.setColorBreatheCommand(Color.kOrange, Color.kAliceBlue).schedule();
         // }
+        else if(joystick.getRawButton(6))
+        {
+            leds.setBlindingLightCommand().schedule();
+        }
+        else 
+        {
+            System.out.println("Else");
+        }
 
         // else if(joystick.getRawButton(5))
         // {

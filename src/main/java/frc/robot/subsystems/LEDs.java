@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Percent;
+import static edu.wpi.first.units.Units.Second;
 
 // import static edu.wpi.first.units.Units.Percent;
 // import static edu.wpi.first.units.Units.Second;
@@ -8,6 +9,7 @@ import static edu.wpi.first.units.Units.Percent;
 import java.lang.invoke.MethodHandles;
 // import java.util.function.DoubleSupplier;
 // import java.util.Map;
+import java.util.Map;
 
 // import edu.wpi.first.units.measure.Distance;
 // import edu.wpi.first.math.MathUtil;
@@ -91,8 +93,11 @@ public class LEDs extends SubsystemLance
     private LEDPattern breathePattern;
     private LEDPattern blinkPattern;
 
+    private LEDPattern base2 =  LEDPattern.rainbow(255, 255);
+    private Map<Double, Color> maskSteps = Map.of(0.25, Color.kWhite, 0.5, Color.kBlack);
+    private LEDPattern mask ;
+    private LEDPattern awesomePattern;
 
-    // public Map<Double, Color> maskSteps = Map.of(0, Color.kWhite, 0.5, Color.kBlack);
     // private LEDPattern mask = LEDPattern.steps(Map.of(0, Color.kWhite, 0.5, Color.kBlack)).scrollAtRelativeSpeed(Percent.per(Second).of(0.25));
     // private LEDPattern movingMask = base.mask(mask);
     // LEDPattern pattern = base.scrollAtRelativeSpeed(Percent.per(Second).of(25));
@@ -163,6 +168,7 @@ public class LEDs extends SubsystemLance
     {
         solid = LEDPattern.solid(color).atBrightness(Percent.of(25));
         solid.applyTo(ledBuffer);
+        // System.out.println("Solid color run");
     }
 
     // private void setCoolPattern()
@@ -232,6 +238,13 @@ public class LEDs extends SubsystemLance
     //     movingMask.applyTo(ledBuffer);   
     // }
 
+    private void setBlindingLight()
+    {
+        mask = LEDPattern.steps(maskSteps).scrollAtRelativeSpeed(Percent.per(Second).of(250));
+        awesomePattern = base2.mask(mask);
+        awesomePattern.applyTo(ledBuffer);
+    }
+
     //COMMANDS
 
     /**
@@ -294,6 +307,14 @@ public class LEDs extends SubsystemLance
     public Command setColorBlinkCommand(Color... colors)
     {
         return run(() -> setColorBlink(colors)).withName("Set LED Blink");
+    }
+
+    /**
+     * This command sets LEDs to be awesome :)
+     */
+    public Command setBlindingLightCommand()
+    {
+        return run(() -> setBlindingLight()).withName("Set LEDs to Blinding Lights");
     }
 
     // public Command setColorMovingMaskCommand(Color color1, Color color2, Color color3)
