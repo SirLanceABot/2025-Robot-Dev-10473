@@ -4,11 +4,15 @@ import java.lang.invoke.MethodHandles;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import javax.sound.midi.Sequence;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.motors.SparkFlexLance;
@@ -55,6 +59,7 @@ public class Pivot extends SubsystemLance
 
     private final SparkFlexLance motor = new SparkFlexLance(Constants.Pivot.MOTOR_PORT, Constants.Pivot.MOTOR_CAN_BUS, "Pivot Motor");
     private final DigitalInput limitSwitch = new DigitalInput(2);
+    private final Counter limitSwitchCounter = new Counter(limitSwitch);
 
     // private TargetPosition targetPosition = TargetPosition.kOverride;
     private final double threshold = 0.1;
@@ -294,13 +299,18 @@ public class Pivot extends SubsystemLance
 
     public BooleanSupplier isAtTop()
     {
-        return () -> !limitSwitch.get();
+        // return () -> !limitSwitch.get();
+        return () -> { System.out.println(limitSwitchCounter.get()); return limitSwitchCounter.get() > 0;};
     }
 
     public Command resetToTopCommand()
     {
-        return moveUpCommand()
-            .until(isAtTop())
+        return new FunctionalCommand( 
+            () -> limitSwitchCounter.reset(),
+            () -> moveUp(), 
+            (interupt)-> stop(), 
+            isAtTop(),
+            this)
             .withName("Reset To Top");
     }
 
