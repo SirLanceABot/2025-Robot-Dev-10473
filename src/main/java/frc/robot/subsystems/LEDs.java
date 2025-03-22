@@ -94,8 +94,8 @@ public class LEDs extends SubsystemLance
     private LEDPattern blinkPattern;
 
     private LEDPattern base2 =  LEDPattern.rainbow(255, 255);
-    private Map<Double, Color> maskSteps = Map.of(0.25, Color.kWhite, 0.5, Color.kBlack);
-    private LEDPattern mask ;
+    private Map<Double, Color> maskSteps = Map.of(0.5, Color.kWhite, 0.8, Color.kBlack);
+    private LEDPattern mask;
     private LEDPattern awesomePattern;
 
     // private LEDPattern mask = LEDPattern.steps(Map.of(0, Color.kWhite, 0.5, Color.kBlack)).scrollAtRelativeSpeed(Percent.per(Second).of(0.25));
@@ -238,9 +238,9 @@ public class LEDs extends SubsystemLance
     //     movingMask.applyTo(ledBuffer);   
     // }
 
-    private void setBlindingLight()
+    private void setEpilepticAttack()
     {
-        mask = LEDPattern.steps(maskSteps).scrollAtRelativeSpeed(Percent.per(Second).of(250));
+        mask = LEDPattern.steps(maskSteps).scrollAtRelativeSpeed(Percent.per(Second).of(300));
         awesomePattern = base2.mask(mask);
         awesomePattern.applyTo(ledBuffer);
     }
@@ -312,9 +312,9 @@ public class LEDs extends SubsystemLance
     /**
      * This command sets LEDs to be awesome :)
      */
-    public Command setBlindingLightCommand()
+    public Command setEpilepticAttackCommand()
     {
-        return run(() -> setBlindingLight()).withName("Set LEDs to Blinding Lights");
+        return run(() -> setEpilepticAttack()).withName("Set EpilepticAttack LEDs");
     }
 
     // public Command setColorMovingMaskCommand(Color color1, Color color2, Color color3)

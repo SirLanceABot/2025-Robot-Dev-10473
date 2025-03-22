@@ -101,7 +101,7 @@ public class NiyatiPTest implements Test
         // }
         else if(joystick.getRawButton(6))
         {
-            leds.setBlindingLightCommand().schedule();
+            leds.setEpilepticAttackCommand().schedule();
         }
         else 
         {

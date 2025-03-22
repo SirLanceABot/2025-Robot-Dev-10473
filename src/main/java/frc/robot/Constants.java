@@ -73,7 +73,7 @@ public final class Constants
     public static class LEDs
     {
         public static final int LED_PORT                                = 0;
-        public static final int LED_LENGTH                              = 120;
+        public static final int LED_LENGTH                              = 101;
     }
 
     public static class Pivot
